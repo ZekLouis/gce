@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Lister les matières{% endblock %}
+
+{% block content %}
+<h1>Lister les matières</h1>
+{% if not matieres %}
+	<p>Pas de matieres dans la base</p> 
+{% else %}
+	<table >
+	<tr>
+		<th>Intitulé</th>
+		<th>Nom Enseignant</th>
+		<th>Prénom Enseignant</th>
+	</tr>
+{% endif %}
+
+{% for mat in matieres %}
+	<tr>
+		<td>{{ mat.intitule }}</td>
+		{% for enseignant in enseignants %}
+			{% if mat.id == enseignant.matiere.id %}
+				
+					<td>{{ enseignant.nom }}</td>
+					<td>{{ enseignant.prenom }}</td>
+				</tr>
+				
+			{% endif %}
+		{% endfor %}
+{% endfor %}
+</table>
+{% endblock %}

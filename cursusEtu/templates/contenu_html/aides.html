@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Aides et informations sur le logiciel{% endblock %}
+
+{% block content %}
+	<h1>Aides et Infos</h1>
+	<h2>Notes</h2>
+	<p>Les notes sont importées depuis un fichier CSV.</p>
+	<h2>Étudiants</h2>
+	<p>Les étudiants sont automatiquement créés lors de l'import des notes</p>
+	<p>Les informations sur les étudiants peuvent être complétées une fois l'importation terminée</p>
+	<h2>Matières</h2>
+	<p>Les matières sont automatiquement créées lors de l'import des notes</p>
+	<p>Les matières peuvent être liées manuellement a des UE</p>
+	<h2>UE</h2>
+	<p>Les UE doivent être créés et rattachés manuellement à une ou plusieurs matières après importation</p>
+{% endblock %}

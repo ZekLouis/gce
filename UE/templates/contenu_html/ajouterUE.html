@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+	<h1>Ajouter un UE</h1>
+
+	{% if not res %} 
+		{% if not res2 %}
+		<form enctype="multipart/form-data" action="{% url "ajouterUE" %}" method="post">
+			{% csrf_token %}
+			{{ form.as_p }}
+			
+			<input type="submit" value="Valider">
+		</form>
+		{% else %}
+			<p>Ajout réussi dans la BD</p>
+		{% endif %}
+	{% else %}
+	<form enctype="multipart/form-data" action="{% url "ajouterUE" %}" method="post">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<p>semestre : {{ e.code }}</p>
+		<input type="submit" class="e" name="Valider">
+	</form>
+	{% endif %}
+
+{% endblock %}

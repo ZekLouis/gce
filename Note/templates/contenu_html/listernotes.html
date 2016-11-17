@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Notes{% endblock %}
+
+{% block content %}
+<h1>Lister les notes</h1>
+{% if not notes %}
+	<p>Pas de notes</p> 
+{% else %}
+	<table style="border:1px solid black; border-collapse : collapse;">
+	<tr>
+		<th style="border:1px solid black;">Note</th>
+		<th style="border:1px solid black;">Nom</th>
+		<th style="border:1px solid black;">Prenom</th>
+		<th style="border:1px solid black;">Matière</th>
+		<th style="border:1px solid black;">Date</th>
+	</tr>
+{% endif %}
+
+{% for note in notes %}
+	<tr>
+		<td style="border:1px solid black;">{{ note.note }}</td>
+		<td style="border:1px solid black;"><a href="listeretu/{{ note.etu_id }}">{{ note.etu.nom }}</a></td>
+		<td style="border:1px solid black;">{{ note.etu.prenom }}</td>
+		<td style="border:1px solid black;">{{ note.matiere.intitule }}</td>
+		<td style="border:1px solid black;">{{ note.date_note }}</td>
+	</tr>
+{% endfor %}
+</table>
+{% endblock %}

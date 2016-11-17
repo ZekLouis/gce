@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Lister les étudiants{% endblock %}
+
+{% block content %}
+<h1>Lister les étudiants</h1>
+{% if not etus %}
+	<p>Pas d'étudiants dans la base</p> 
+{% else %}
+	<table style="border:1px solid black; border-collapse : collapse;">
+	<tr>
+		<th style="border:1px solid black;">Nom</th>
+		<th style="border:1px solid black;">Prenom</th>
+		<th style="border:1px solid black;">Age</th>
+	</tr>
+{% endif %}
+
+{% for etu in etus %}
+	<tr>
+		<td style="border:1px solid black;"><a href="/Etudiant/listeretu/{{ etu.id }}">{{ etu.nom }}</a></td>
+		<td style="border:1px solid black;">{{ etu.prenom }}</a></td>
+		<td style="border:1px solid black;">{{ etu.age }}</td>
+	</tr>
+{% endfor %}
+</table>
+{% endblock %}

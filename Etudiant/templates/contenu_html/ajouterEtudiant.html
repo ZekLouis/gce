@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Ajouter un étudiant{% endblock %}
+
+{% block content %}
+	<h1>Ajouter un étudiant</h1>
+	{% if res %}
+		<p>Ajout réussi dans la BD</p>
+	{% else %}
+	<form enctype="multipart/form-data" action="{% url "ajouterEtudiant" %}" method="post">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<input type="submit" class="e" name="Valider">
+	</form>
+	{% endif %}
+{% endblock %}

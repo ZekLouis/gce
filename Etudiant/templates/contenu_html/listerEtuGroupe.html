@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Groupe{% endblock %}
+
+{% block content %}
+
+	{% if not groupe %}
+		<p>Pas d'étudiants dans la groupe</p> 
+	{% else %}
+		<p>{{ groupe.nom }}</p>
+		{% for etu in etus %}
+			<p>{{ etu.nom }} {{ etu.prenom }}</p>
+		{% endfor %}
+	{% endif %}
+
+{% endblock %}

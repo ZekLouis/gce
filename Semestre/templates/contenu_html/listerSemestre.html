@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Unités d'enseignements{% endblock %}
+
+{% block content %}
+
+{% if not semestre %}
+	<p>Pas d'unité d'enseignement</p> 
+{% else %}
+	<table style="border:1px solid black; border-collapse : collapse;">
+	<tr>
+		<th style="border:1px solid black;">Code</th>
+	</tr>
+{% endif %}
+
+{% for sem in semestre %}
+	<tr>
+		<td style="border:1px solid black;">{{ sem.code }}</td>
+	</tr>
+{% endfor %}
+</table>
+{% endblock %}
