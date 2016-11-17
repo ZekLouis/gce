@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^UE/',include('UE.urls')),
     url(r'^Matiere/',include('Matiere.urls')),
     url(r'^Semestre/',include('Semestre.urls')),
+    url(r'^Diplome/',include('Diplome.urls')),
     url(r'^Enseignant/',include('Enseignant.urls')),
     url(r'^aides', views.aides, name='aides'),
 ]
