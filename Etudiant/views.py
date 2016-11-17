@@ -49,7 +49,7 @@ def ajouterGroupe(request):
 			g.save()
 			res = True
 		else :
-			print "pas bon"
+			print("Erreur ajouter un groupe")
 	else :
 		form = GroupeForm() 
 	return render(request, 'contenu_html/ajouterGroupe.html', locals())

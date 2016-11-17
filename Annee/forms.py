@@ -36,5 +36,6 @@ class SelectSemestre(forms.Form):
 						(semestre.id,semestre.code ),
 			)	
 	select = forms.ChoiceField(widget=forms.Select(), choices=OPTIONS)
+	
 
 
