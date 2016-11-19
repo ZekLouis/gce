@@ -16,9 +16,9 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.conf.urls import include
-from cursusEtu import views
+from Note import views
 
 
 urlpatterns = [
-    
+    url(r'^importer_csv', views.importer_csv, name='importer_csv'),
 ]

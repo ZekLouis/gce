@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^accueil', views.accueil, name='accueil'),
     url(r'^admin/', admin.site.urls),
     url(r'^Etudiant/',include('Etudiant.urls')),
+    url(r'^Note/',include('Note.urls')),
     url(r'^UE/',include('UE.urls')),
     url(r'^Matiere/',include('Matiere.urls')),
     url(r'^Semestre/',include('Semestre.urls')),
