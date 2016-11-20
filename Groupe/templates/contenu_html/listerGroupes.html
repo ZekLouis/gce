@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Groupe{% endblock %}
+
+{% block content %}
+
+	{% if not groupe %}
+		<p>Pas de groupe dans la base</p> 
+	{% else %}
+		{% for gr in groupe %}
+			<a href="/Groupe/listerEtuGroupe/{{ gr.id }}">{{ gr.nom }}</a>
+		{% endfor %}
+	{% endif %}
+
+{% endblock %}

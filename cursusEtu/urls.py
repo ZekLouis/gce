@@ -5,6 +5,7 @@ from cursusEtu import views
 
 
 urlpatterns = [
+    url(r'^$', views.accueil, name='accueil'),
     url(r'^accueil', views.accueil, name='accueil'),
     url(r'^admin/', admin.site.urls),
     url(r'^Etudiant/',include('Etudiant.urls')),
@@ -14,5 +15,6 @@ urlpatterns = [
     url(r'^Semestre/',include('Semestre.urls')),
     url(r'^Diplome/',include('Diplome.urls')),
     url(r'^Enseignant/',include('Enseignant.urls')),
+    url(r'^Groupe/',include('Groupe.urls')),
     url(r'^aides', views.aides, name='aides'),
 ]

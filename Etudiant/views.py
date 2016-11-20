@@ -1,13 +1,16 @@
 #-*- coding: utf-8 -*-
 from django.shortcuts import render, get_object_or_404
-from Etudiant.models import Etu,Groupe
-from Etudiant.forms import EtudiantForm, RenseignerEtu, SelectEtu, GroupeForm
+from Etudiant.models import Etu
+from Etudiant.forms import EtudiantForm, RenseignerEtu, SelectEtu
+from Groupe.forms import GroupeForm
+from Groupe.models import Groupe
+from Note.models import Note
 
 # Create your views here.
 
 def listeretu(request, id):
 	etu = get_object_or_404(Etu, id=id)
-	notes = Note.objects.filter(etu__id=id)
+	notes = Note.objects.filter(etudiant__id=id)
 	return render(request, 'contenu_html/listeretu.html', locals())
 
 
@@ -34,26 +37,6 @@ def ajouterEtudiant(request):
 	return render(request, 'contenu_html/ajouterEtudiant.html', locals())
 
 
-def ajouterGroupe(request):
-	if request.method == 'POST':  
-		form = GroupeForm(request.POST)
-		if form.is_valid() :
-
-			nom = form.cleaned_data['nom']
-			numero = form.cleaned_data['numero']
-
-			g = Groupe(
-					nom=nom,
-					numero=numero,
-	                )
-			g.save()
-			res = True
-		else :
-			print("Erreur ajouter un groupe")
-	else :
-		form = GroupeForm() 
-	return render(request, 'contenu_html/ajouterGroupe.html', locals())
-
 def listeretus(request):
 	etus = Etu.objects.all()
 	return render(request, 'contenu_html/listeretus.html',{'etus': etus})
@@ -61,7 +44,8 @@ def listeretus(request):
 
 def completer_etu(request):
 	if request.method == 'POST':
-		form = SelectEtu(request.POST)
+		Etudiants = Etu.objects.all()
+		form = SelectEtu(request.POST, etus=Etudiants)
 		if form.is_valid() :
 			id_etu = form.cleaned_data['select']
 			e = get_object_or_404(Etu, id=id_etu)
@@ -71,11 +55,13 @@ def completer_etu(request):
 			print("ERREUR")
 		res = True
 	else :
-		form = SelectEtu()
+		Etudiants = Etu.objects.all()
+		form = SelectEtu(etus=Etudiants)
 	return render(request, 'contenu_html/completer_etu.html', locals())
 
 def complement_etu(request):
 	if request.method == 'POST':
+		form = RenseignerEtu(request.POST)
 		if form.is_valid() :
 			etudiant = get_object_or_404(Etu, id=request.session['id_etu'])
 			etudiant.age = form.cleaned_data['age']

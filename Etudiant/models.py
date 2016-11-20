@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from Groupe.models import Groupe
 
 # Create your models here.
 class Etu(models.Model):
@@ -25,12 +26,6 @@ class Etu(models.Model):
 	cate_socio_pro_autre_parent = models.CharField(max_length=100, null=True)
 	aide_financiere = models.CharField(max_length=100, null=True)
 	bourse = models.CharField(max_length=100, null=True)
-	gr = models.ForeignKey('Groupe', null=True)
-	def __str__(self):
-		return self.nom
-
-class Groupe(models.Model):
-	nom = models.CharField(max_length=30, null=False)
-	numero = models.IntegerField()
+	groupe = models.ForeignKey(Groupe, null=True)
 	def __str__(self):
 		return self.nom

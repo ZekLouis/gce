@@ -20,10 +20,9 @@ from Etudiant import views
 
 
 urlpatterns = [
-    url(r'^listeretus$', views.listeretus),
+    url(r'^listeretus$', views.listeretus, name='listeretus'),
     url(r'^listeretu/(?P<id>\d+)$', views.listeretu),
     url(r'^ajouterEtudiant', views.ajouterEtudiant, name='ajouterEtudiant'),
     url(r'^completer_etu', views.completer_etu, name='completer_etu'),
-    url(r'^ajouterGroupe', views.ajouterGroupe, name='ajouterGroupe'),
     url(r'^complement_etu', views.complement_etu, name='complement_etu'),
 ]
