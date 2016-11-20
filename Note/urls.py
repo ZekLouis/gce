@@ -21,4 +21,5 @@ from Note import views
 
 urlpatterns = [
     url(r'^importer_csv', views.importer_csv, name='importer_csv'),
+    url(r'^listernotes', views.listernotes, name='listernotes'),
 ]

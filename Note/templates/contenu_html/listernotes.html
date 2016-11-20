@@ -12,17 +12,15 @@
 		<th style="border:1px solid black;">Nom</th>
 		<th style="border:1px solid black;">Prenom</th>
 		<th style="border:1px solid black;">Matière</th>
-		<th style="border:1px solid black;">Date</th>
 	</tr>
 {% endif %}
 
 {% for note in notes %}
 	<tr>
-		<td style="border:1px solid black;">{{ note.note }}</td>
-		<td style="border:1px solid black;"><a href="listeretu/{{ note.etu_id }}">{{ note.etu.nom }}</a></td>
-		<td style="border:1px solid black;">{{ note.etu.prenom }}</td>
+		<td style="border:1px solid black;">{{ note.valeur }}</td>
+		<td style="border:1px solid black;"><a href="listeretu/{{ note.etudiant_id }}">{{ note.etudiant.nom }}</a></td>
+		<td style="border:1px solid black;">{{ note.etudiant.prenom }}</td>
 		<td style="border:1px solid black;">{{ note.matiere.intitule }}</td>
-		<td style="border:1px solid black;">{{ note.date_note }}</td>
 	</tr>
 {% endfor %}
 </table>

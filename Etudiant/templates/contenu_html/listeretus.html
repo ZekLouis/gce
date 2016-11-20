@@ -11,6 +11,7 @@
 		<th style="border:1px solid black;">Nom</th>
 		<th style="border:1px solid black;">Prenom</th>
 		<th style="border:1px solid black;">Age</th>
+		<th style="border:1px solid black;">Apogée</th>
 	</tr>
 {% endif %}
 
@@ -19,6 +20,7 @@
 		<td style="border:1px solid black;"><a href="/Etudiant/listeretu/{{ etu.id }}">{{ etu.nom }}</a></td>
 		<td style="border:1px solid black;">{{ etu.prenom }}</a></td>
 		<td style="border:1px solid black;">{{ etu.age }}</td>
+		<td style="border:1px solid black;">{{ etu.apogee }}</td>
 	</tr>
 {% endfor %}
 </table>

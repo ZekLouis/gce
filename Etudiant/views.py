@@ -18,12 +18,12 @@ def ajouterEtudiant(request):
 
 			nom = form.cleaned_data['nom']
 			prenom = form.cleaned_data['prenom']
-			age = form.cleaned_data['age']
+			apogee = form.cleaned_data['apogee']
 
 			e = Etu(
 					nom=nom,
 					prenom=prenom,
-					age=age,
+					apogee=apogee,
 	                )
 			e.save()
 			res = True

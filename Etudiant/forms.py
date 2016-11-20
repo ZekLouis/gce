@@ -10,7 +10,7 @@ class GroupeForm(forms.Form):
 class EtudiantForm(forms.Form):
 	nom = forms.CharField(max_length=100)
 	prenom = forms.CharField(max_length=100)
-	age = forms.IntegerField()
+	apogee = forms.IntegerField()
 
 
 class SelectEtu(forms.Form):

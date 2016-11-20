@@ -7,6 +7,6 @@ from Diplome.models import Diplome
 
 class Semestre(models.Model):
 	code = models.CharField(max_length=30,null=False)
-	diplome = models.ForeignKey('Diplome.Diplome', null=True)
+	diplome = models.ForeignKey(Diplome, null=True)
 	def __str__(self):
 		return self.code
