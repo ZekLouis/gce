@@ -8,6 +8,7 @@ from Note.models import Note
 from Matiere.models import Matiere
 
 import csv
+"""Cette fonction permet d'insérer une virgule a un index donné"""
 def insert_comma(string, index):
     return string[:index] + ',' + string[index:]
 
@@ -62,7 +63,7 @@ def traitement_eleve(ligne,notes,code_eleve,diplome):
 		print("L'étudiant",nom,prenom,apogee,"n'existe pas")
 
 # Create your views here.
-
+"""Cette fonction permet d'importer via un formulaire un fichier CSV complet exporté par signature"""
 def importer_csv(request):
 	if request.method == "POST":
 		form = FileForm(request.POST, request.FILES)
@@ -93,6 +94,7 @@ def importer_csv(request):
 		form = FileForm()
 	return render(request, 'contenu_html/select_csv.html', locals())
 
+"""Cette fonction permet de lister toutes les notes"""
 def listernotes(request):
 	notes = Note.objects.all().order_by('etudiant__nom')
 	return render(request, 'contenu_html/listernotes.html',{'notes': notes})

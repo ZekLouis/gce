@@ -6,21 +6,21 @@
 {% if not etus %}
 	<p>Pas d'étudiants dans la base</p> 
 {% else %}
-	<table style="border:1px solid black; border-collapse : collapse;">
+	<table>
 	<tr>
-		<th style="border:1px solid black;">Nom</th>
-		<th style="border:1px solid black;">Prenom</th>
-		<th style="border:1px solid black;">Age</th>
-		<th style="border:1px solid black;">Apogée</th>
+		<th>Nom</th>
+		<th>Prenom</th>
+		<th>Age</th>
+		<th>Apogée</th>
 	</tr>
 {% endif %}
 
 {% for etu in etus %}
 	<tr>
-		<td style="border:1px solid black;"><a href="listeretu/{{ etu.id }}">{{ etu.id }}</a></td>
-		<td style="border:1px solid black;">{{ etu.prenom }}</a></td>
-		<td style="border:1px solid black;">{{ etu.age }}</td>
-		<td style="border:1px solid black;">{{ etu.apogee }}</td>
+		<td><a href="listeretu/{{ etu.id }}">{{ etu.nom }}</a></td>
+		<td>{{ etu.prenom }}</a></td>
+		<td>{{ etu.age }}</td>
+		<td>{{ etu.apogee }}</td>
 	</tr>
 {% endfor %}
 </table>

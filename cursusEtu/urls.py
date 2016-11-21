@@ -6,7 +6,6 @@ from cursusEtu import views
 
 urlpatterns = [
     url(r'^$', views.accueil, name='accueil'),
-    url(r'^accueil', views.accueil, name='accueil'),
     url(r'^admin/', admin.site.urls),
     url(r'^Etudiant/',include('Etudiant.urls')),
     url(r'^Note/',include('Note.urls')),
