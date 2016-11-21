@@ -21,3 +21,7 @@ def ajouterAnnee(request):
 	else :
 		form = AnneeForm() 
 	return render(request, 'contenu_html/ajouterAnnee.html', locals())
+
+def listerAnnees(request):
+	annees = Annee.objects.all()
+	return render(request, 'contenu_html/listerAnnees.html', locals())

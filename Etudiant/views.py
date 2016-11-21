@@ -50,7 +50,7 @@ def completer_etu(request):
 			id_etu = form.cleaned_data['select']
 			e = get_object_or_404(Etu, id=id_etu)
 			request.session['id_etu'] = id_etu
-			form = RenseignerEtu()
+			form = RenseignerEtu(request.POST,nom=e.nom)
 		else :
 			print("ERREUR")
 		res = True

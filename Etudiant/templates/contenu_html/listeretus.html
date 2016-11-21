@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "templates/base.html" %}
 {% block title %}Lister les étudiants{% endblock %}
 
 {% block content %}
@@ -18,7 +18,7 @@
 {% for etu in etus %}
 	<tr>
 		<td><a href="listeretu/{{ etu.id }}">{{ etu.nom }}</a></td>
-		<td>{{ etu.prenom }}</a></td>
+		<td>{{ etu.prenom }}</td>
 		<td>{{ etu.age }}</td>
 		<td>{{ etu.apogee }}</td>
 	</tr>

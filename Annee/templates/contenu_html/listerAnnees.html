@@ -1,0 +1,23 @@
+{% extends "templates/base.html" %}
+{% block title %}Lister les Années{% endblock %}
+
+{% block content %}
+<h1>Lister les années</h1>
+{% if not annees %}
+	<p>Pas d'années dans la base</p> 
+{% else %}
+	<table>
+	<tr>
+		<th>Année</th>
+		<th>id</th>
+	</tr>
+{% endif %}
+
+{% for annee in annees %}
+	<tr>
+		<td>{{ annee.annee }}</td>
+		<td>{{ annee.id }}</td>
+	</tr>
+{% endfor %}
+</table>
+{% endblock %}
