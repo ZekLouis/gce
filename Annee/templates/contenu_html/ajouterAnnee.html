@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+	{% if res %}
+		<p>Ajout réussi dans la BD</p>
+	{% else %}
+	<h1>Ajout d'une Année</h1>
+	<form enctype="multipart/form-data" action="{% url "ajouterAnnee" %}" method="post">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<input type="submit" class="e" name="Valider">
+	</form>
+	{% endif %}
+{% endblock %}

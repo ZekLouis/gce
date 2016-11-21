@@ -16,16 +16,11 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.conf.urls import include
-from Matiere import views
+from Annee import views
 
 
 urlpatterns = [
-    url(r'^ajouterUE', views.selectionSem, name='ajouterUE'),
-    url(r'^listerUE$', views.listerUE),
-    url(r'^listermatieres', views.listermatieres),    
-    url(r'^ajouterMatiere', views.ajouterMatiere, name='ajouterMatiere'),
-    url(r'^detailUE/(?P<id>\d+)$', views.detailUE, name='detailUE'),
-    url(r'^ajouterSemestre', views.ajouterSemestre, name='ajouterSemestre'),
-    url(r'^listerSemestre', views.listerSemestre, name='listerSemestre'),
+    url(r'^ajouterAnnee', views.ajouterAnnee, name='ajouterAnnee'),
 
 ]
+

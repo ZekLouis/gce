@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^Matiere/',include('Matiere.urls')),
     url(r'^Semestre/',include('Semestre.urls')),
     url(r'^Diplome/',include('Diplome.urls')),
+     url(r'^Annee/',include('Annee.urls')),
     url(r'^Enseignant/',include('Enseignant.urls')),
     url(r'^Groupe/',include('Groupe.urls')),
     url(r'^aides', views.aides, name='aides'),
