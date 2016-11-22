@@ -9,4 +9,4 @@ class Note(models.Model):
 	etudiant = models.ForeignKey(Etu, null=True)
 	matiere = models.ForeignKey(Matiere, null=True)
 	def __str__(self):
-		return self.valeur
+		return str(self.valeur)

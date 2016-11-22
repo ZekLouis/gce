@@ -18,15 +18,15 @@
 		<p>{{ semestre }}</p>
 		{% for note in notes %}
 			<p>{{ note.valeur }}</p>
+			<p>{{ note.matiere }}</p>
 		{% endfor %}
 		
-		{% for ue in ues %}
-			<p>{{ ue }}</p>
-		{% endfor %}
+		
 
 		{% for matiere in matieres %}
 			{% for m in matiere %}
-				<p>{{ m }}</p>
+				<p>{{ m.intitule }}</p>
+				<p>{{ m.unite }}</p>
 			{% endfor %}
 		{% endfor %}
 		
