@@ -17,19 +17,8 @@
 		<p>Vous avez sélectionné l'étudiant(e) : {{ e.nom }} {{ e.prenom }}</p>
 		<p>{{ semestre }}</p>
 		{% for note in notes %}
-			<p>{{ note.valeur }}</p>
-			<p>{{ note.matiere }}</p>
+			<p> Pour la matiere {{ note.matiere }} dans l'ue {{ note.matiere.unite }} : {{ note.valeur }}</p>
 		{% endfor %}
-		
-		
-
-		{% for matiere in matieres %}
-			{% for m in matiere %}
-				<p>{{ m.intitule }}</p>
-				<p>{{ m.unite }}</p>
-			{% endfor %}
-		{% endfor %}
-		
 	{% endif %}
 
 {% endblock %}
