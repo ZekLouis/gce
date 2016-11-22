@@ -46,12 +46,8 @@ def affichageComplet(request):
 			id_etu = form.cleaned_data['select']
 			e = get_object_or_404(Etu, id=id_etu)
 			semestre = e.semestre
-			ues = UniteE.objects.all().filter(semestre=semestre)
-			matieres = []
-			for ue in ues :
-				matieres.append(Matiere.objects.all().filter(unite=ue))
-			#diplome = Diplome.objects.all().filter()
 			notes = Note.objects.all().filter(etudiant__id=id_etu)
+			matieres = Matiere.objects.all()
 			res = True
 		else:
 			print("Erreur Form")
