@@ -8,8 +8,13 @@ a{
 	text-decoration: none;		
 }
 
+table a {
+	color: blue;
+	text-decoration: underline;
+}
+
 a:visited{
-	color:#222222;
+	color:blue;
 	text-decoration: none;		
 }
 
@@ -131,7 +136,7 @@ table{
 	margin-left: 50px;
 }
 
-td,th{
+td, th{
 	padding: 5px;
 	border:1px solid black;
 }
@@ -141,4 +146,16 @@ td,th{
 	width: 200px;
 	margin-top: 10px;
 	margin-bottom: 10px;
+}
+
+.affComplet{
+
+}
+
+.affComplet td{
+	width: 50px;
+}
+
+td.colonne{
+	width: 300px;
 }

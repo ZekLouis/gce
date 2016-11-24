@@ -18,7 +18,7 @@
 {% for note in notes %}
 	<tr>
 		<td style="border:1px solid black;">{{ note.valeur }}</td>
-		<td style="border:1px solid black;"><a href="listeretu/{{ note.etudiant_id }}">{{ note.etudiant.nom }}</a></td>
+		<td style="border:1px solid black;"><a href="/Etudiant/listeretu/{{ note.etudiant_id }}">{{ note.etudiant.nom }}</a></td>
 		<td style="border:1px solid black;">{{ note.etudiant.prenom }}</td>
 		<td style="border:1px solid black;">{{ note.matiere.intitule }}</td>
 	</tr>

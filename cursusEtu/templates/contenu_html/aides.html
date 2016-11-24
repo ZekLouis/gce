@@ -3,14 +3,25 @@
 
 {% block content %}
 	<h1>Aides et Infos</h1>
+	<h2>Scénario Classique</h2>
+	<ol>
+		<li>Création d'une année</li>
+		<li>Création du diplôme</li>
+		<li>Création d'un semestre</li>
+		<li>Création des UES</li>
+		<li>Création des matières</li>
+		<li>Création des enseignants (Facultatif)</li>
+		<li>Création des étudiants</li>
+		<li>Importation des notes</li>
+	</ol>
 	<h2>Notes</h2>
 	<p>Les notes sont importées depuis un fichier CSV.</p>
 	<h2>Étudiants</h2>
-	<p>Les étudiants sont automatiquement créés lors de l'import des notes</p>
+	<p>Les étudiants doivent être créés avant l'importation des notes, si un étudiant n'est pas crée, ses notes seront ignorées.</p>
 	<p>Les informations sur les étudiants peuvent être complétées une fois l'importation terminée</p>
 	<h2>Matières</h2>
-	<p>Les matières sont automatiquement créées lors de l'import des notes</p>
+	<p>Les matières doivent être créées avant l'importation des notes, si une matière n'est pas créée, les notes seront ignorées.</p>
 	<p>Les matières peuvent être liées manuellement a des UE</p>
 	<h2>UE</h2>
-	<p>Les UE doivent être créés et rattachés manuellement à une ou plusieurs matières après importation</p>
+	<p>Les UE doivent être créées et rattachées manuellement à une ou plusieurs matières après importation</p>
 {% endblock %}

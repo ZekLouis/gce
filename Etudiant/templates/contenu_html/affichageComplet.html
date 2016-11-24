@@ -1,53 +1,53 @@
 {% extends "templates/base.html" %}
 {% block title %}Affichage complet des notes d'un étudiant{% endblock %}
 
-
 <!-- DJANGO SELECT -->
 <!-- V1 Faire afficher tous les étus dispo -->
 <!-- V2 Faire afficher les étus n'ayant pas toutes les infos de renseignées -->
 {% block content %}
 	<h1>Affichage complet des notes d'un étudiant</h1>
-	{% if not res %} 
+	{% if not res and not semestre %} 
 		<form enctype="multipart/form-data" action="{% url "affichageComplet" %}" method="post">
 			{% csrf_token %}
 			{{ form.as_p }}
 			<input type="submit" value="Valider">
 		</form>
 	{% else %}
-		<p>Vous avez sélectionné l'étudiant(e) : {{ e.nom }} {{ e.prenom }}</p>
-		<table>
-			<tr>
-				<th>Element</th>
-				<th>Note</th>
-				<th>Abscence</th>
-				<th>Coefficient</th>
-			</tr>
-			<tr>
-				<td>{{ semestre }}</td>
-			</tr>
-			{% for matieres in tab_matieres %}
-				<tr>
-					<td>{{ matieres.0.unite }}</td>
-					<td></td>
-					<td></td>
-					<td>{{ matieres.0.unite.coefficient }}</td>
-				</tr>
-				{% for matiere in matieres %}
-					<tr>
-						<td> {{ matiere.intitule }}</td>
-					{% for i in range %}
-						<!-- {% if note.matiere.intitule == matiere.intitule %}  -->
-							<td> {{ i }}</td>
-						<!-- {% elif not note and matiere.intitule %} -->
-						<!-- {% endif %} -->
-
-					{% endfor %}
-						<td></td>
-						<td>{{ matiere.coefficient }}</td>
-					</tr>
-				{% endfor %}
+		{% if not semestre %}
+			<p>L'étudiant n'a pas de semestre</p>
+		{% else %}
+			<p>Vous avez sélectionné l'étudiant(e) : {{ e.nom }} {{ e.prenom }}</p>
+			<table class="affComplet">
+			{% for l in lst %}
+				<tr class="ligne">
+					<td class="colonne">{{ l.0 }}</td>
+					<td>{{ l.1 }}</td>
+					<td>{{ l.2 }}</td>
+					<td>{{ l.3 }}</td>	
+				</tr>	
 			{% endfor %}
-		</table>
+			</table>
+		{% endif %}
 	{% endif %}
-
+<script type="text/javascript">
+	var trs = document.getElementsByClassName('ligne');
+	var tds = document.getElementsByClassName('colonne');
+	var i = 0
+	for(td in tds){
+		if(i%2 == 1){
+			trs[i].style.backgroundColor = "#e0e0e0" ;
+		}
+		if(tds[i].innerHTML.indexOf("Semestre") >= 0){
+			tds[i].style.paddingLeft = "30px";
+		}else if(tds[i].innerHTML.indexOf("UE") >= 0){
+			tds[i].style.paddingLeft = "60px";
+		}else if(tds[i].innerHTML.indexOf("Elements") >= 0){
+			tds[i].style.paddingLeft = "10px";
+		}else{
+			tds[i].style.paddingLeft = "90px";
+		}
+		i++;
+		console.log(i)
+	}
+</script>
 {% endblock %}

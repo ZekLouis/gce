@@ -1,7 +1,29 @@
 {% extends "templates/base.html" %}
-{% block title %}Informations enregistrées{% endblock %}
+{% block title %}Compléter les informations d'un étudiant{% endblock %}
 
+
+<!-- DJANGO SELECT -->
+<!-- V1 Faire afficher tous les étus dispo -->
+<!-- V2 Faire afficher les étus n'ayant pas toutes les infos de renseignées -->
 {% block content %}
-	<p>Informations enregistrées pour l'étudiant : {{ etudiant }}</p>
-	<p><a href="/">Retour à l'accueil</a></p>
+	<h1>Compléter les informations d'un étudiant</h1>
+
+	{% if not res %} 
+			{% if not res2 %}
+			<form enctype="multipart/form-data" action="{% url "complement_etu" %}" method="post">
+				{% csrf_token %}
+				{{ form.as_p }}
+				<input type="submit" value="Valider">
+			</form>
+			{% else %}
+				<p>Ajout réussi dans la BD</p>
+			{% endif %}
+		{% else %}
+			<p>Vous avez sélectionné l'étudiant(e) : {{ e.nom }} {{ e.prenom }}</p>
+			<form enctype="multipart/form-data" action="{% url "complement_etu" %}" method="post">
+				{% csrf_token %}
+				{{ form.as_p }}
+				<input type="submit" value="Sauvegarder">
+			</form>
+	{% endif %}
 {% endblock %}

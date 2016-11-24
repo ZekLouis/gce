@@ -13,8 +13,8 @@ def ajouterEnseignant(request):
 	if request.method == 'POST':
 
 		if not request.session['mat']:
-			ens = Enseignant.objects.all()
-			form = SelectMatiere(request.POST, enseignants=ens)
+			mats = Matiere.objects.all()
+			form = SelectMatiere(request.POST, matieres=mats)
 			if form.is_valid() :
 				id_mat = form.cleaned_data['select']
 				request.session['id_mat'] = id_mat
