@@ -25,7 +25,7 @@ SECRET_KEY = '$#2yutt9(k$h=8lhi6vb#k$ux$1g=pmr_f9#gc^(um59tcn_@='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['gce.fr','localhost']
 
 
 # Application definition
