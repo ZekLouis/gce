@@ -23,3 +23,7 @@ def ajouterDiplome(request):
 	else :
 		form = DiplomeForm() 
 	return render(request, 'contenu_html/ajouterDiplome.html', locals())
+
+def listerDiplomes(request):
+	dips = Diplome.objects.all()
+	return render(request, 'contenu_html/listerDiplomes.html',{'dips': dips})

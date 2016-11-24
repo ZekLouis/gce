@@ -47,9 +47,10 @@ def affichageComplet(request):
 			e = get_object_or_404(Etu, id=id_etu)
 			semestre = e.semestre
 			ues = UniteE.objects.all().filter(semestre=semestre)
-			matieres = []
+			tab_matieres = []
+			range = [1,2,3,4,5,6,7]
 			for ue in ues :
-				matieres.append(Matiere.objects.all().filter(unite=ue))
+				tab_matieres.append(Matiere.objects.all().filter(unite=ue))
 			#diplome = Diplome.objects.all().filter()
 			notes = Note.objects.all().filter(etudiant__id=id_etu)
 			res = True

@@ -25,23 +25,25 @@
 			<tr>
 				<td>{{ semestre }}</td>
 			</tr>
-			{% for mat in matieres %}
+			{% for matieres in tab_matieres %}
 				<tr>
-					<td>{{ mat.0.unite }}</td>
+					<td>{{ matieres.0.unite }}</td>
 					<td></td>
 					<td></td>
-					<td>{{ mat.0.unite.coefficient }}</td>
+					<td>{{ matieres.0.unite.coefficient }}</td>
 				</tr>
-				{% for mati in mat %}
+				{% for matiere in matieres %}
 					<tr>
-						<td> {{ mati.intitule }}</td>
-					{% for note in notes %}
-						{% if note.matiere.intitule == mati.intitule %} 
-							<td> {{ note.valeur }}</td>
-						{% endif %}
+						<td> {{ matiere.intitule }}</td>
+					{% for i in range %}
+						<!-- {% if note.matiere.intitule == matiere.intitule %}  -->
+							<td> {{ i }}</td>
+						<!-- {% elif not note and matiere.intitule %} -->
+						<!-- {% endif %} -->
+
 					{% endfor %}
 						<td></td>
-						<td>{{ mati.coefficient }}</td>
+						<td>{{ matiere.coefficient }}</td>
 					</tr>
 				{% endfor %}
 			{% endfor %}

@@ -9,10 +9,11 @@
 	</head>
 	<body>  
 		<div id="header">
-			<h1><img id="logo" src="{% static 'image/logo.png' %}" alt="Logo GCE" />Application de <label id="GCE">G</label>estion de <label id="GCE">C</label>ursus <label id="GCE">É</label>tudiant</h1>
+			<h1>Application de <label id="GCE">G</label>estion de <label id="GCE">C</label>ursus <label id="GCE">É</label>tudiant</h1>
 		</div>
 		
 		<nav id="menu">
+			<img id="logo" src="{% static 'image/logo.png' %}" alt="Logo GCE" />
 			<ul id="menu-deroulant">
 				<li>
 		            <a href="/">Accueil</a>
@@ -29,7 +30,6 @@
 		                <li><a href="/UE/ajouterUE">une UE</a></li>
 		                <li><a href="/Semestre/ajouterSemestre">un Semestre</a></li>
 		                <li><a href="/Enseignant/ajouterEnseignant">un Enseignant</a></li>
-
 		            </ul>
 		        </li>
 
@@ -43,7 +43,12 @@
 		            	<li><a href="/UE/listerUE">les UE</a></li>
 		            	<li><a href="/Semestre/listerSemestre">les Semestres</a></li>
 		            	<li><a href="/Annee/listerAnnees">les années</a></li>
+		            	<li><a href="/Diplome/listerDiplomes">les diplômes</a></li>
 		            </ul>   
+		        </li>
+
+		        <li>
+		       		<a href="/Etudiant/affichageComplet">Affichage complet</a>
 		        </li>
 
 		        <li>

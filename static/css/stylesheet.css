@@ -26,8 +26,8 @@ body{
 
 #header{
 	width:100%;
-	padding-top: 50px;
-	padding-bottom: 50px;
+	padding-top: 4px;
+	padding-bottom: 4px;
 	background-color:#222222;	
 	box-shadow:0 0 20px #000000;
 	border-bottom:solid #444444 8px;
@@ -88,16 +88,18 @@ li:hover{
 
 h1{
 	text-shadow:1px 1px 2px #333333;
-	text-align: center;
+	text-align: left;
 	color:white;
-	vertical-align: middle;
+	margin:0px;
+	margin-left: 50px;
+	font-size: 1.5em;
 }
 
 #menu{
 	background: linear-gradient(to bottom, #444444, white);
 	/*background-color:#444444;*/
 	width: 200px;
-	height: 50%;
+	height: 80%;
 	padding: 10px;
 	padding-top: 0px;
 	float: left;
@@ -110,10 +112,10 @@ h1{
 }
 
 #main{
-	margin-top: 50px;
 	width : 800px;
 	margin:auto;
 	text-align: center;
+	margin-top: 50px;
 }
 
 table{
@@ -135,7 +137,8 @@ td,th{
 }
 
 #logo{
-	height: 100px;
 	vertical-align: middle;
-	margin-right: 30px;
+	width: 200px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
