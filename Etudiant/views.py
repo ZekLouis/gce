@@ -5,6 +5,8 @@ from Etudiant.forms import EtudiantForm, RenseignerEtu, SelectEtu
 from Groupe.forms import GroupeForm
 from Groupe.models import Groupe
 from Note.models import Note
+from UE.models import UniteE
+from Matiere.models import Matiere
 
 # Create your views here.
 
@@ -36,6 +38,28 @@ def ajouterEtudiant(request):
 		form = EtudiantForm() 
 	return render(request, 'contenu_html/ajouterEtudiant.html', locals())
 
+def affichageComplet(request):
+	if request.method == 'POST':
+		Etudiants = Etu.objects.all()
+		form = SelectEtu(request.POST, etus=Etudiants)
+		if form.is_valid() :
+			id_etu = form.cleaned_data['select']
+			e = get_object_or_404(Etu, id=id_etu)
+			semestre = e.semestre
+			ues = UniteE.objects.all().filter(semestre=semestre)
+			matieres = []
+			for ue in ues :
+				matieres.append(Matiere.objects.all().filter(unite=ue))
+			#diplome = Diplome.objects.all().filter()
+			notes = Note.objects.all().filter(etudiant__id=id_etu)
+			res = True
+		else:
+			print("Erreur Form")
+	else :
+		Etudiants = Etu.objects.all()
+		form = SelectEtu(etus=Etudiants)
+	return render(request, 'contenu_html/affichageComplet.html', locals())
+
 
 def listeretus(request):
 	etus = Etu.objects.all()
@@ -50,7 +74,7 @@ def completer_etu(request):
 			id_etu = form.cleaned_data['select']
 			e = get_object_or_404(Etu, id=id_etu)
 			request.session['id_etu'] = id_etu
-			form = RenseignerEtu(request.POST,nom=e.nom)
+			form = RenseignerEtu()
 		else :
 			print("ERREUR")
 		res = True
@@ -81,6 +105,8 @@ def complement_etu(request):
 			etudiant.cate_socio_pro_autre_parent = form.cleaned_data['cate_socio_pro_autre_parent']
 			etudiant.aide_financiere = form.cleaned_data['aide_financiere']
 			etudiant.bourse = form.cleaned_data['bourse']
+			etudiant.groupe = form.cleaned_data['groupe']
+			etudiant.semestre = form.cleaned_data['semestre']
 			etudiant.save()	
 		else :
 			print("Form Non Valide")

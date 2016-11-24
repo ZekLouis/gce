@@ -7,7 +7,7 @@
 
 	{% if res %}
 		<p>Ajout réussi dans la BD</p>
-		<p><a href="/note">Retour à l'accueil</a></p>
+		<p><a href="/">Retour à l'accueil</a></p>
 	{% else %}
 		<form enctype="multipart/form-data" action="{% url "importer_csv" %}" method="post">
 			{% csrf_token %}

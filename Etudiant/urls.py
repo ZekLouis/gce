@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^ajouterEtudiant', views.ajouterEtudiant, name='ajouterEtudiant'),
     url(r'^completer_etu', views.completer_etu, name='completer_etu'),
     url(r'^complement_etu', views.complement_etu, name='complement_etu'),
+    url(r'^affichageComplet', views.affichageComplet, name='affichageComplet'),
 ]

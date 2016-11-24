@@ -1,0 +1,51 @@
+{% extends "templates/base.html" %}
+{% block title %}Affichage complet des notes d'un étudiant{% endblock %}
+
+
+<!-- DJANGO SELECT -->
+<!-- V1 Faire afficher tous les étus dispo -->
+<!-- V2 Faire afficher les étus n'ayant pas toutes les infos de renseignées -->
+{% block content %}
+	<h1>Affichage complet des notes d'un étudiant</h1>
+	{% if not res %} 
+		<form enctype="multipart/form-data" action="{% url "affichageComplet" %}" method="post">
+			{% csrf_token %}
+			{{ form.as_p }}
+			<input type="submit" value="Valider">
+		</form>
+	{% else %}
+		<p>Vous avez sélectionné l'étudiant(e) : {{ e.nom }} {{ e.prenom }}</p>
+		<table>
+			<tr>
+				<th>Element</th>
+				<th>Note</th>
+				<th>Abscence</th>
+				<th>Coefficient</th>
+			</tr>
+			<tr>
+				<td>{{ semestre }}</td>
+			</tr>
+			{% for mat in matieres %}
+				<tr>
+					<td>{{ mat.0.unite }}</td>
+					<td></td>
+					<td></td>
+					<td>{{ mat.0.unite.coefficient }}</td>
+				</tr>
+				{% for mati in mat %}
+					<tr>
+						<td> {{ mati.intitule }}</td>
+					{% for note in notes %}
+						{% if note.matiere.intitule == mati.intitule %} 
+							<td> {{ note.valeur }}</td>
+						{% endif %}
+					{% endfor %}
+						<td></td>
+						<td>{{ mati.coefficient }}</td>
+					</tr>
+				{% endfor %}
+			{% endfor %}
+		</table>
+	{% endif %}
+
+{% endblock %}
