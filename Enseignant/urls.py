@@ -19,7 +19,7 @@ from django.conf.urls import include
 from Enseignant import views
 
 
-urlpatterns = [
-    #url(r'^listerEnseignant', views.listerEnseignant),    
+urlpatterns = [    
     url(r'^ajouterEnseignant', views.ajouterEnseignant, name='ajouterEnseignant'),
+    url(r'^listerEnseignants', views.listerEnseignants, name='listerEnseignants')
 ]

@@ -45,5 +45,7 @@ def ajouterEnseignant(request):
 		form = SelectMatiere(matieres=mats)
 	return render(request, 'contenu_html/ajouterEnseignant.html', locals())
 
-
+def listerEnseignants(request):
+	ens = Enseignant.objects.all()
+	return render(request, 'contenu_html/listerEnseignants.html',{'ens': ens})
 

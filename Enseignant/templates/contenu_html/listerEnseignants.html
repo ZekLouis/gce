@@ -1,0 +1,27 @@
+{% extends "templates/base.html" %}
+{% block title %}Enseignants{% endblock %}
+
+{% block content %}
+<h1>Enseignants</h1><br>
+{% if not ens %}
+	<p>Pas d'enseignant</p> 
+{% else %}
+	<table style="border:1px solid black; border-collapse : collapse;">
+	<tr>
+		<th style="border:1px solid black;">Nom</th>
+		<th style="border:1px solid black;">Prenom</th>
+		<th style="border:1px solid black;">Matiere</th>
+
+	</tr>
+{% endif %}
+
+{% for en in ens %}
+	<tr>
+		<td style="border:1px solid black;">{{ en.nom }}</a></td>
+		<td style="border:1px solid black;">{{ en.prenom }}</td>
+		<td style="border:1px solid black;">{{ en.matiere }}</td>
+
+	</tr>
+{% endfor %}
+</table>
+{% endblock %}
