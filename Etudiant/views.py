@@ -17,21 +17,30 @@ def listeretu(request, id):
 
 
 def ajouterEtudiant(request):
+
 	if request.method == 'POST':  
 		form = EtudiantForm(request.POST)
 		if form.is_valid() :
 
-			nom = form.cleaned_data['nom']
-			prenom = form.cleaned_data['prenom']
-			apogee = form.cleaned_data['apogee']
+			verif_Exist = Etu.objects.all().filter(apogee=form.cleaned_data['apogee'])
 
-			e = Etu(
-					nom=nom,
-					prenom=prenom,
-					apogee=apogee,
-	                )
-			e.save()
-			res = True
+			if verif_Exist :
+				print("Un étudiant avec ce numéro apogee existe déjà")
+				exist = True
+
+			else :
+				nom = form.cleaned_data['nom']
+				prenom = form.cleaned_data['prenom']
+				apogee = form.cleaned_data['apogee']
+
+
+				e = Etu(
+						nom=nom,
+						prenom=prenom,
+						apogee=apogee,
+			               )
+				e.save()
+				res = True
 		else :
 			print("Erreur à l'ajout")
 	else :

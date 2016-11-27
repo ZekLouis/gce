@@ -3,6 +3,9 @@
 
 {% block content %}
 	<h1>Ajouter un étudiant</h1>
+	{% if exist %}
+		<p>Un étudiant avec ce numéro apogée existe déjà</p>
+	{% else %}
 	{% if res %}
 		<p>Ajout réussi dans la BD</p>
 	{% else %}
@@ -11,5 +14,6 @@
 		{{ form.as_p }}
 		<input type="submit" class="e" name="Valider">
 	</form>
+	{% endif %}
 	{% endif %}
 {% endblock %}
