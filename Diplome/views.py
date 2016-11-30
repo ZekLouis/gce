@@ -8,7 +8,6 @@ def ajouterDiplome(request):
 	if request.method == 'POST':  
 		form = DiplomeForm(request.POST)
 		if form.is_valid():
-
 			nom = form.cleaned_data['nom']
 			annee = form.cleaned_data['annee']
 			dip = Diplome(
