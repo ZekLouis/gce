@@ -169,7 +169,7 @@ def complement_etu(request):
 				request.session['mat'] = False
 				res2=True
 			else :
-				print("Form Non Valide")	
+				print("Form Non Valide Etudiant")	
 	else :
 		Etudiants = Etu.objects.all()
 		request.session['etu'] = False
