@@ -48,7 +48,7 @@ def genererDocuments(request):
 				# ajustement eventuel de la largeur d'une colonne
 				feuil.col(0).width = 5000
 				book.save('monsimple.xls')
-			res = True
+				res = True
 			e = get_object_or_404(Etu, id=request.session['id_etu'])   
 	else :
 		Etudiants = Etu.objects.all()
