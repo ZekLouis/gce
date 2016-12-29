@@ -16,11 +16,12 @@ from django.shortcuts import render, get_object_or_404
 # 	Anneeobj= Annee.objects.get(annee=annee)
 # 	return render(request, 'contenu_html/ajouterDiplomeCreation.html',locals())
 
+"""Cette méthode permet d'ajouter un diplome à la base"""
 def ajouterDiplome(request):
 	if request.method == 'POST':  
 		form = DiplomeForm(request.POST)
 		if form.is_valid():
-			nom = form.cleaned_data['nom']
+			intitule = form.cleaned_data['nom']
 			annee = form.cleaned_data['annee']
 			dip = Diplome(
 					nom=nom,

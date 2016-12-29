@@ -10,12 +10,13 @@ from Matiere.models import Matiere
 
 # Create your views here.
 
+"""Cette vue permet de lister les notes d'un étudiant"""
 def listeretu(request, id):
 	etu = get_object_or_404(Etu, id=id)
 	notes = Note.objects.filter(etudiant__id=id)
 	return render(request, 'contenu_html/listeretu.html', locals())
 
-
+"""Cette vue permet d'ajouter un étudiant"""
 def ajouterEtudiant(request):
 
 	if request.method == 'POST':  
@@ -47,11 +48,12 @@ def ajouterEtudiant(request):
 		form = EtudiantForm() 
 	return render(request, 'contenu_html/ajouterEtudiant.html', locals())
 
-
+"""Cette vue permet de lister tous les étudiants"""
 def listeretus(request):
 	etus = Etu.objects.all()
 	return render(request, 'contenu_html/listeretus.html',{'etus': etus})
 
+"""Cette vue permet de faire un affichage complet des notes d'un étudiant"""
 def affichageComplet(request):
 	if request.method == 'POST':
 		Etudiants = Etu.objects.all()
@@ -106,6 +108,7 @@ def affichageComplet(request):
 		form = SelectEtu(etus=Etudiants)
 	return render(request, 'contenu_html/affichageComplet.html', locals())	
 
+"""Cette vue permet de renseigner le reste des informations"""
 def complement_etu(request):
 	if request.method == 'POST':
 		if not request.session['etu']:

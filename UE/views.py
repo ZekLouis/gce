@@ -19,7 +19,7 @@ def detailUE(request, id):
 	matieres = Matiere.objects.filter(unite__id=id)
 	return render(request, 'contenu_html/detailUE.html', locals())
 
-
+"""Cette vue permet d'ajouter une UE à la base"""
 def ajouterUE(request):
 
 	if request.method == 'POST':

@@ -31,3 +31,7 @@ class Etu(models.Model):
 	semestre = models.ForeignKey(Semestre, null=True)
 	def __str__(self):
 		return self.nom
+
+class Appartient(models.Model):
+	etudiant = models.ForeignKey(Etu, null=False)
+	semestre = models.ForeignKey(Semestre, null=False)
