@@ -1,1 +1,3 @@
 # GCE
+
+pip install xlwt
