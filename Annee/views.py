@@ -14,7 +14,6 @@ def ajouterAnnee(request):
 					annee=annee,
 	                )
 			annee.save()
-
 			res = True
 		else :
 			print("ERREUR : AJOUTER Annee : VIEW ajouterAnnee : formulaire")

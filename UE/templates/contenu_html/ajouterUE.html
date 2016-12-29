@@ -13,6 +13,8 @@
 		</form>
 		{% else %}
 			<p>Ajout réussi dans la BD</p>
+			<input type="button" value="Ajouter encore une UE" onclick="document.location.href = '/UE/ajouterUE';"/>
+			<input type="button" value="Etape suivante" onclick="document.location.href = '/Matiere/ajouterMatiere';" />
 		{% endif %}
 	{% else %}
 	<form enctype="multipart/form-data" action="{% url "ajouterUE" %}" method="post">
