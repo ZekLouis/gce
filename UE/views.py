@@ -40,11 +40,12 @@ def ajouterUE(request):
 				intitule = form.cleaned_data['intitule']
 				code = form.cleaned_data['code']
 				e = get_object_or_404(Semestre, id=request.session['id_sem'])
-
+				coef = form.cleaned_data['coefficient']
 				ue = UniteE(
 						intitule=intitule,
 						code=code,
 						semestre=e,
+						coef=coef,
 		                )
 				ue.save()
 				request.session['sem'] = False

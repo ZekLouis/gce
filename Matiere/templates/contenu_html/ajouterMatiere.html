@@ -1,5 +1,5 @@
 {% extends "templates/base.html" %}
-{% block title %}Ajouter une matière{% endblock %}
+{% block title %}Ajouter une matière, dernière étape de la création de la structure{% endblock %}
 
 {% block content %}
 	<h1>Ajouter une matière</h1>
@@ -13,7 +13,6 @@
 		</form>
 		{% else %}
 			<p>Ajout réussi dans la BD</p>
-			<input type="button" value="Etape suivante" onclick="document.location.href = '/Groupe/ajouterGroupe';" />
 		<input type="button" value="Ajouter encore une matière ?" onclick="document.location.href = '/Matiere/ajouterMatiere';"/>
 		{% endif %}
 	{% else %}
