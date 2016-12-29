@@ -11,9 +11,10 @@ def ajouterSemestre(request):
 		if form.is_valid():
 
 			code = form.cleaned_data['code']
-
+			dip = form.cleaned_data['diplome']
 			sem = Semestre(
 					code=code,
+					diplome = dip,					
 	                )
 			sem.save()
 			res = True

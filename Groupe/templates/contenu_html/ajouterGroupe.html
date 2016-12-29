@@ -5,8 +5,7 @@
 	<h1>Ajouter un groupe</h1>
 	{% if res %}
 		<p>Ajout réussi dans la BD</p>
-		<input type="button" value="Ajouter encore un enseignant ?" onclick="document.location.href = '/Groupe/ajouterGroupe';"/>
-			<input type="button" value="Etape suivante" onclick="document.location.href = '/Enseignant/ajouterEnseignant';" />
+		<input type="button" value="Ajouter encore un groupe ?" onclick="document.location.href = '/Groupe/ajouterGroupe';"/>
 	{% else %}
 	<form enctype="multipart/form-data" action="{% url "ajouterGroupe" %}" method="post">
 		{% csrf_token %}
