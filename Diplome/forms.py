@@ -9,6 +9,7 @@ class DiplomeForm(forms.ModelForm):
 
 class DiplomeFormCreation(forms.Form):
 	def __init__(self,*args,**kwargs):
-		self.MonAnnee = kwargs.pop('annee')
+		monAnnee = kwargs.pop('monAnnee')
 		super(DiplomeFormCreation,self).__init__(*args,**kwargs)
-			self.fields['annee'] = forms.ChoiceField(label="Diplome", choices=[(x.plug_ip,x.nom) for x in Diplome.objects.filter(annee = MonAnnee)])
+		self.fields['monAnnee'] = forms.ChoiceField(label="Diplome",choices=[(x.plug_ip, x.nom) for x in Diplome.objects.filter(annee = monAnnee)])
+

@@ -1,15 +1,8 @@
 {% extends "templates/base.html" %}
+{% block title %}Etudiants{% endblock %}
+
 {% block content %}
-	{% if res %}
-	<p>Ajout réussi dans la BD</p>
-	<input type="button" value="Ajouter encore un diplome" onclick="document.location.href = '/Diplome/ajouterDiplomeCreation';"/>
-	<input type="button" value="Etape suivante" onclick="document.location.href = '/Semestre/ajouterSemestres';" />
-	{% else %}
-	<h1>Ajout d'un diplome</h1>
-	<form enctype="multipart/form-data" action="{% url "ajouterDiplomeCreation" %}" method="post">
-		{% csrf_token %}
-		{{ form.as_p }}
-		<input type="submit" class="e" name="Valider">
-	</form>
-	{% endif %}
+<h1>Diplome de l'année {{Anneeobj.annee}}</h1>
+
+
 {% endblock %}

@@ -1,3 +1,4 @@
+#-*- coding: utf-8 -*-
 from django.shortcuts import render
 from Semestre.models import Semestre
 from Semestre.forms import SemestreForm
