@@ -1,7 +1,9 @@
 {% extends "templates/base.html" %}
 {% block content %}
 	{% if res %}
-		<p>Ajout réussi dans la BD</p>
+	<p>Ajout réussi dans la BD</p>
+	<input type="button" value="Ajouter encore un diplome" onclick="document.location.href = '/Diplome/ajouterDiplome';"/>
+	<input type="button" value="Etape suivante" onclick="document.location.href = '/Semestre/ajouterSemestres';" />
 	{% else %}
 	<h1>Ajout d'un diplome</h1>
 	<form enctype="multipart/form-data" action="{% url "ajouterDiplome" %}" method="post">

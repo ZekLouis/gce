@@ -13,11 +13,12 @@ def insert_comma(string, index):
     return string[:index] + ',' + string[index:]
 
 """Cette fonction permet de traiter les notes d'un élève"""
-def traitement_eleve(ligne,notes,code_eleve,diplome):
+def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat):
 	nb_elements_tab = len(ligne)
 	apogee=ligne[0]
 	nom=ligne[1]
 	prenom=ligne[2]
+
 	try :
 		etudiant = Etu.objects.get(apogee=apogee)
 		print(etudiant)
@@ -50,17 +51,23 @@ def traitement_eleve(ligne,notes,code_eleve,diplome):
 				if note != "null":
 					note = note.replace(",", ".")
 					note = float(note)
-					n = Note(
-							valeur=note,
-							etudiant=etudiant,
-							matiere=matiere,
-						)
+					n, created = Note.objects.get_or_create(valeur=note,etudiant=etudiant,matiere=matiere)
+					#n = Note(
+					#		valeur=note,
+					#		etudiant=etudiant,
+					#		matiere=matiere,
+					#	)
+					if created==False:
+    						#print("La note",note,etudiant,matiere,"existait deja, elle n'a pas ete ajoutee")
+							ret_notes = ret_notes + "<p>La note "+str(note)+" "+etudiant.nom+" "+matiere.intitule+" existait deja, elle n'a pas ete ajoutee</p>"
 					n.save()
 			except Matiere.DoesNotExist :
-				print("Matiere n'existe pas")
-		print()
+				print("Matiere",notes[i],"n'existe pas")
+				ret_mat = ret_mat + "<p>La matiere "+notes[i]+" n'existe pas</p>"
 	except Etu.DoesNotExist :
 		print("L'étudiant",nom,prenom,apogee,"n'existe pas")
+		ret_etu = ret_etu + "<p>L'etudiant "+nom+" "+prenom+" "+str(apogee)+" n'existe pas</p>"
+	return ret_notes,ret_etu,ret_mat
 
 # Create your views here.
 """Cette fonction permet d'importer via un formulaire un fichier CSV complet exporté par signature"""
@@ -74,9 +81,15 @@ def importer_csv(request):
 			csvf = StringIO(fichier.read().decode('latin-1'))
 			read = csv.reader(csvf, delimiter=',')
 
+			ret_notes = ""
+
+			ret_etu = ""
+
+			ret_mat = ""
+
 			for row in read:
 				if row[0].isdigit():
-					traitement_eleve(row,code_notes,code_eleve,diplome)
+					ret_notes, ret_etu, ret_mat = traitement_eleve(row,code_notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat)
 				elif "Bilan" in row[0]:
 					print(row[0])
 				elif row[0] == "" and row[1] == "" and row[2] == "" :
@@ -85,8 +98,12 @@ def importer_csv(request):
 					diplome = row[0]
 				else:
 					code_eleve = row
-			
-					
+
+			print(ret_notes,ret_etu,ret_mat)
+			if ret_notes=="" and ret_etu=="" and ret_mat=="":
+    				perf=True
+			else:
+					perf=False
 			res = True
 		else :
 			print("ERREUR : IMPORT CSV : VIEW importer_csv : Formulaire")

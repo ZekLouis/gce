@@ -4,6 +4,8 @@
 {% block content %}
 	{% if res %}
 		<p>Ajout réussi dans la BD</p>
+		<input type="button" value="Ajouter encore un semestre" onclick="document.location.href = '/Semestre/ajouterSemestre';"/>
+		<input type="button" value="suivant" onclick="document.location.href = '/UE/ajouterUE';"/>
 	{% else %}
 	<h1>Ajout d'un semestre</h1>
 	<form enctype="multipart/form-data" action="{% url "ajouterSemestre" %}" method="post">

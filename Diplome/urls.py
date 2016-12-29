@@ -20,6 +20,8 @@ from Diplome import views
 
 
 urlpatterns = [
-    url(r'^ajouterDiplome', views.ajouterDiplome, name='ajouterDiplome'),
+   # url(r'^ajouterDiplome', views.ajouterDiplome, name='ajouterDiplome'),
     url(r'^listerDiplomes', views.listerDiplomes, name='listerDiplomes'),
+    url(r'^ajouterDiplome', views.ajouterDiplome, name='ajouterDiplome'),
+	#url(r'^ajouterDiplomeCreation/(?P<annee>\d+)$', views.ajouterDiplomeCreation, name='ajouterDiplomeCreation'),
 ]
