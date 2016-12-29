@@ -7,7 +7,7 @@ from django import forms
 
 # Create your views here.
 
-
+"""Cette vue permet d'ajouter un Enseignant"""
 def ajouterEnseignant(request):
 
 	if request.method == 'POST':
@@ -45,6 +45,7 @@ def ajouterEnseignant(request):
 		form = SelectMatiere(matieres=mats)
 	return render(request, 'contenu_html/ajouterEnseignant.html', locals())
 
+"""Cette vue permet de lister les Enseignants"""
 def listerEnseignants(request):
 	ens = Enseignant.objects.all()
 	return render(request, 'contenu_html/listerEnseignants.html',{'ens': ens})

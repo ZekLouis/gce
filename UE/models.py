@@ -9,8 +9,8 @@ from Semestre.models import Semestre
 class UniteE(models.Model):
 	intitule = models.CharField(max_length=30,null=False)
 	code = models.CharField(max_length=30,null=False)
-	semestre = models.ForeignKey(Semestre, null=True)
-	coefficient = models.FloatField(null=True)
+	semestre = models.ForeignKey(Semestre, null=False)
+	coefficient = models.FloatField(null=False)
 	def __str__(self):
 		return self.code
     

@@ -6,7 +6,7 @@ from Annee.models import Annee
 
 
 class Diplome(models.Model):
-	nom = models.CharField(max_length=30,null=False)
+	intitule = models.CharField(max_length=30,null=False)
 	annee = models.ForeignKey(Annee, null=True)
 	def __str__(self):
 		return self.nom

@@ -9,6 +9,7 @@ from django import forms
 import os
 from io import StringIO
 
+"""Cette vue permet d'ajouter un groupe à la base"""
 def ajouterGroupe(request):
 	if request.method == 'POST':  
 		form = GroupeForm(request.POST)
@@ -29,10 +30,12 @@ def ajouterGroupe(request):
 		form = GroupeForm() 
 	return render(request, 'contenu_html/ajouterGroupe.html', locals())
 
+"""Cette vue permet de lister les groupes"""
 def listerGroupes(request):
 	groupes = Groupe.objects.all()
 	return render(request, 'contenu_html/listerGroupes.html',{'groupe': groupes})
 
+"""Cette vue permet de lister les étudiants et les groupes"""
 def listerEtuGroupe(request, id):
 	etus = Etu.objects.filter(groupe=id)
 	groupe = get_object_or_404(Groupe, id=id)
