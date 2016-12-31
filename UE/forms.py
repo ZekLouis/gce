@@ -17,5 +17,5 @@ class SelectSemestre(forms.Form):
 		semestre = kwargs.pop('semestres')
 		super(SelectSemestre,self).__init__(*args,**kwargs)
 		SemChoices = [(sem.id,sem.code) for sem in semestre]
-		self.fields['select'] = forms.ChoiceField(widget=forms.Select(), choices=SemChoices)
+		self.fields['select'] = forms.ChoiceField(label = "Choix du Semestre", widget=forms.Select(), choices=SemChoices)
 

@@ -1,3 +1,4 @@
+#-*- coding: utf-8 -*-
 from django.shortcuts import render, get_object_or_404
 from UE.models import UniteE
 from Semestre.models import Semestre
@@ -19,7 +20,7 @@ def detailUE(request, id):
 	matieres = Matiere.objects.filter(unite__id=id)
 	return render(request, 'contenu_html/detailUE.html', locals())
 
-"""Cette vue permet d'ajouter une UE à la base"""
+"""Cette vue permet d ajouter une UE a la base"""
 def ajouterUE(request):
 
 	if request.method == 'POST':
@@ -45,7 +46,7 @@ def ajouterUE(request):
 						intitule=intitule,
 						code=code,
 						semestre=e,
-						coef=coef,
+						coefficientxd=coef,
 		                )
 				ue.save()
 				request.session['sem'] = False

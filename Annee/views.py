@@ -1,3 +1,4 @@
+#-*- coding: utf-8 -*-
 from django.shortcuts import render
 from Annee.models import Annee
 from Annee.forms import AnneeForm
@@ -9,7 +10,7 @@ def ajouterAnnee(request):
 		form = AnneeForm(request.POST)
 		if form.is_valid():
 
-			annee = form.cleaned_data['annee']
+			annee = form.cleaned_data['intitule']
 			annee_obj = Annee(
 					intitule=annee,
 	                )

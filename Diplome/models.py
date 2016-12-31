@@ -9,4 +9,4 @@ class Diplome(models.Model):
 	intitule = models.CharField(max_length=30,null=False)
 	annee = models.ForeignKey(Annee, null=True)
 	def __str__(self):
-		return self.nom
+		return self.intitule

@@ -1,3 +1,4 @@
+#-*- coding: utf-8 -*-
 from django.shortcuts import render
 from Diplome.models import Diplome
 from Annee.models import Annee
@@ -21,10 +22,10 @@ def ajouterDiplome(request):
 	if request.method == 'POST':  
 		form = DiplomeForm(request.POST)
 		if form.is_valid():
-			intitule = form.cleaned_data['nom']
+			intitule = form.cleaned_data['intitule']
 			annee = form.cleaned_data['annee']
 			dip = Diplome(
-					nom=nom,
+					intitule=intitule,
 					annee=annee,
 	                )
 			dip.save()
