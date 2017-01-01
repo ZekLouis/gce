@@ -12,6 +12,7 @@
 		<th>Prenom</th>
 		<th>Age</th>
 		<th>Apogée</th>
+		<th>Supprimer</th>
 	</tr>
 {% endif %}
 
@@ -21,7 +22,10 @@
 		<td>{{ etu.prenom }}</td>
 		<td>{{ etu.age }}</td>
 		<td>{{ etu.apogee }}</td>
+		<td><a href="suppretu/{{ etu.id }}">Supprimer</a></td>
 	</tr>
 {% endfor %}
 </table>
+
+<p>Attention, supprimer un étudiant supprimera toute les notes qui lui sont associées.</p>
 {% endblock %}

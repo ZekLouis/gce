@@ -25,5 +25,5 @@ urlpatterns = [
     
     url(r'^ajouterSemestre', views.ajouterSemestre, name='ajouterSemestre'),
     url(r'^listerSemestre', views.listerSemestre, name='listerSemestre'),
-
+    url(r'^supprsem/(?P<id>\d+)$', views.supprsem, name='supprsem'),
 ]

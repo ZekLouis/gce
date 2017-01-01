@@ -26,4 +26,5 @@ urlpatterns = [
     url(r'^completer_etu', views.complement_etu, name='completer_etu'),
     url(r'^complement_etu', views.complement_etu, name='complement_etu'),
     url(r'^affichageComplet', views.affichageComplet, name='affichageComplet'),
+    url(r'^suppretu/(?P<id>\d+)$', views.suppretu, name='suppretu'),
 ]

@@ -41,3 +41,9 @@ def listerDiplomes(request):
 	dips = Diplome.objects.all()
 	return render(request, 'contenu_html/listerDiplomes.html',{'dips': dips})
 
+def supprdip(request, id):
+	dip = Diplome.objects.filter(id=id)
+
+	dip.delete()
+	return render(request, 'contenu_html/supprdip.html', locals())
+

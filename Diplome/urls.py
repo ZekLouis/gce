@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^listerDiplomes', views.listerDiplomes, name='listerDiplomes'),
     url(r'^ajouterDiplome', views.ajouterDiplome, name='ajouterDiplome'),
 	#url(r'^ajouterDiplomeCreation/(?P<annee>\d+)$', views.ajouterDiplomeCreation, name='ajouterDiplomeCreation'),
+    url(r'^supprdip/(?P<id>\d+)$', views.supprdip, name='supprdip'),
 ]

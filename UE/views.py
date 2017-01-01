@@ -13,6 +13,17 @@ def listerUE(request):
 	ues = UniteE.objects.all()
 	return render(request, 'contenu_html/listerUE.html',{'ues': ues})
 
+def supprue(request, id):
+	ue = UniteE.objects.filter(id=id)
+
+	matiere = Matiere.objects.filter(unite_id=id)
+
+	if matiere :
+		matiere.delete()
+
+	ue.delete()
+	return render(request, 'contenu_html/supprue.html', locals())
+
 
 """Cette fonction permet de faire afficher les matieres et les details d'une ue"""
 def detailUE(request, id):

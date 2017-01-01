@@ -10,6 +10,7 @@
 	<tr>
 		<th style="border:1px solid black;">Nom</th>
 		<th style="border:1px solid black;">Année</th>
+		<th style="border:1px solid black;">Supprimer</th>
 	</tr>
 {% endif %}
 
@@ -17,7 +18,7 @@
 	<tr>
 		<td style="border:1px solid black;">{{ dip.nom }}</td>
 		<td style="border:1px solid black;">{{ dip.annee }}</td>
-
+		<td><a href="supprdip/{{ dip.id }}">Supprimer</a></td>
 	</tr>
 {% endfor %}
 </table>

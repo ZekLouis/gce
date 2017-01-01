@@ -22,5 +22,6 @@ from Matiere import views
 urlpatterns = [
     url(r'^listermatieres', views.listermatieres),    
     url(r'^ajouterMatiere', views.ajouterMatiere, name='ajouterMatiere'),
+    url(r'^supprmat/(?P<id>\d+)$', views.supprmat, name='supprmat'),
 
 ]
