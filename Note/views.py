@@ -115,3 +115,9 @@ def importer_csv(request):
 def listernotes(request):
 	notes = Note.objects.all().order_by('etudiant__nom')
 	return render(request, 'contenu_html/listernotes.html',{'notes': notes})
+
+def supprnote(request, id):
+	note = Diplome.objects.filter(id=id)
+
+	note.delete()
+	return render(request, 'contenu_html/supprnote.html', locals())
