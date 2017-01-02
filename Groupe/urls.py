@@ -8,5 +8,6 @@ urlpatterns = [
     url(r'^listerGroupes', views.listerGroupes, name='listerGroupes'),
     url(r'^listerEtuGroupe/(?P<id>\d+)$', views.listerEtuGroupe, name='listerEtuGroupe'),
     url(r'^supprgrp/(?P<id>\d+)$', views.supprgrp, name='supprgrp'),
+    url(r'^modifierGroupe', views.modifierGroupe, name='modifierGroupe'),
 
 ]

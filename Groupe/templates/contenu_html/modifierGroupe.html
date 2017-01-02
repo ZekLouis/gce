@@ -1,0 +1,29 @@
+{% extends "templates/base.html" %}
+{% block title %}Modifier les informations d'un groupe{% endblock %}
+
+
+<!-- DJANGO SELECT -->
+<!-- V1 Faire afficher tous les étus dispo -->
+<!-- V2 Faire afficher les étus n'ayant pas toutes les infos de renseignées -->
+{% block content %}
+	<h1>Modifier les informations d'un groupe</h1>
+
+	{% if not res %} 
+			{% if not res2 %}
+			<form enctype="multipart/form-data" action="{% url "modifierGroupe" %}" method="post">
+				{% csrf_token %}
+				{{ form.as_p }}
+				<input type="submit" value="Valider">
+			</form>
+			{% else %}
+				<p>Ajout réussi dans la BD</p>
+			{% endif %}
+		{% else %}
+			<p>Vous avez sélectionné le groupe(g) : {{ g.nom }} {{ g.numero }}</p>
+			<form enctype="multipart/form-data" action="{% url "modifierGroupe" %}" method="post">
+				{% csrf_token %}
+				{{ form.as_p }}
+				<input type="submit" value="Sauvegarder">
+			</form>
+	{% endif %}
+{% endblock %}
