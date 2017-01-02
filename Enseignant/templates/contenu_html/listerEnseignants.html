@@ -11,6 +11,7 @@
 		<th style="border:1px solid black;">Nom</th>
 		<th style="border:1px solid black;">Prenom</th>
 		<th style="border:1px solid black;">Matiere</th>
+		<th style="border:1px solid black;">Supprimer</th>
 
 	</tr>
 {% endif %}
@@ -20,7 +21,7 @@
 		<td style="border:1px solid black;">{{ en.nom }}</a></td>
 		<td style="border:1px solid black;">{{ en.prenom }}</td>
 		<td style="border:1px solid black;">{{ en.matiere }}</td>
-
+		<td><a href="supprens/{{ en.id }}">Supprimer</a></td>
 	</tr>
 {% endfor %}
 </table>

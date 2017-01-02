@@ -35,6 +35,16 @@ def listerGroupes(request):
 	groupes = Groupe.objects.all()
 	return render(request, 'contenu_html/listerGroupes.html',{'groupe': groupes})
 
+
+def supprgrp(request, id):
+	groupe = get_object_or_404(Groupe, id=id)
+	etus = Etu.objects.filter(groupe=id)
+	groupe.delete()
+
+	if etus :
+		etus.delete()
+	return render(request, 'contenu_html/supprgrp.html', locals())
+
 """Cette vue permet de lister les étudiants et les groupes"""
 def listerEtuGroupe(request, id):
 	etus = Etu.objects.filter(groupe=id)

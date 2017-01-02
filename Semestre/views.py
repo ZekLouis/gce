@@ -29,3 +29,9 @@ def ajouterSemestre(request):
 def listerSemestre(request):
 	semestre = Semestre.objects.all()
 	return render(request, 'contenu_html/listerSemestre.html',{'semestre': semestre})
+
+def supprsem(request, id):
+	semestre = Semestre.objects.filter(id=id)
+
+	semestre.delete()
+	return render(request, 'contenu_html/supprsem.html', locals())

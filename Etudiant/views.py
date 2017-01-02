@@ -16,6 +16,14 @@ def listeretu(request, id):
 	notes = Note.objects.filter(etudiant__id=id)
 	return render(request, 'contenu_html/listeretu.html', locals())
 
+def suppretu(request, id):
+	etu = get_object_or_404(Etu, id=id)
+	notes = Note.objects.filter(etudiant__id=id)
+	etu.delete()
+	notes.delete()
+	return render(request, 'contenu_html/suppretu.html', locals())
+
+
 """Cette vue permet d'ajouter un étudiant"""
 def ajouterEtudiant(request):
 

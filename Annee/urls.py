@@ -22,6 +22,6 @@ from Annee import views
 urlpatterns = [
     url(r'^ajouterAnnee', views.ajouterAnnee, name='ajouterAnnee'),
     url(r'^listerAnnees', views.listerAnnees, name='listerAnnees'),
-
+    url(r'^supprann/(?P<id>\d+)$', views.supprann, name='supprann'),
 ]
 

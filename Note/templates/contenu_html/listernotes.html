@@ -12,6 +12,7 @@
 		<th style="border:1px solid black;">Nom</th>
 		<th style="border:1px solid black;">Prenom</th>
 		<th style="border:1px solid black;">Matière</th>
+		<th style="border:1px solid black;">Supprimer</th>
 	</tr>
 {% endif %}
 
@@ -21,6 +22,7 @@
 		<td style="border:1px solid black;"><a href="/Etudiant/listeretu/{{ note.etudiant_id }}">{{ note.etudiant.nom }}</a></td>
 		<td style="border:1px solid black;">{{ note.etudiant.prenom }}</td>
 		<td style="border:1px solid black;">{{ note.matiere.intitule }}</td>
+		<td style="border:1px solid black;"><a href="/Etudiant/listeretu/{{ note.etudiant_id }}">{{ Supprimer }}</a></td>
 	</tr>
 {% endfor %}
 </table>

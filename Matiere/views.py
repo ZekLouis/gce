@@ -14,6 +14,16 @@ def listermatieres(request):
 	enseignants = Enseignant.objects.all()
 	return render(request, 'contenu_html/listermatieres.html', locals())
 
+def supprmat(request, id):
+	matiere = Matiere.objects.filter(id=id)
+	enseignant = Enseignant.objects.filter(matiere=id)
+
+	if enseignant :
+		enseignant.delete()
+
+	matiere.delete()
+	return render(request, 'contenu_html/supprmat.html', locals())
+
 
 def ajouterMatiere(request):
 

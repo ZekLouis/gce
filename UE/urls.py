@@ -24,5 +24,6 @@ urlpatterns = [
     url(r'^listerUE$', views.listerUE, name='listerUE'),
     url(r'^detailUE/(?P<id>\d+)$', views.detailUE, name='detailUE'),
     url(r'^ajouterUE', views.ajouterUE, name='ajouterUE'),
+    url(r'^supprue/(?P<id>\d+)$', views.supprue, name='supprue'),
     
 ]

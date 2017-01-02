@@ -21,5 +21,6 @@ from Enseignant import views
 
 urlpatterns = [    
     url(r'^ajouterEnseignant', views.ajouterEnseignant, name='ajouterEnseignant'),
-    url(r'^listerEnseignants', views.listerEnseignants, name='listerEnseignants')
+    url(r'^listerEnseignants', views.listerEnseignants, name='listerEnseignants'),
+    url(r'^supprens/(?P<id>\d+)$', views.supprens, name='supprens'),
 ]

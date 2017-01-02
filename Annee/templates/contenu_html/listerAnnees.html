@@ -10,6 +10,7 @@
 	<tr>
 		<th>Année</th>
 		<th>id</th>
+		<th>Supprimer</th>
 	</tr>
 {% endif %}
 
@@ -17,6 +18,7 @@
 	<tr>
 		<td>{{ annee.annee }}</td>
 		<td>{{ annee.id }}</td>
+		<td><a href="supprann/{{ annee.id }}">Supprimer</a></td>
 	</tr>
 {% endfor %}
 </table>

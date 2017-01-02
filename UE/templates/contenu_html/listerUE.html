@@ -11,6 +11,7 @@
 		<th style="border:1px solid black;">Intitule</th>
 		<th style="border:1px solid black;">Code</th>
 		<th style="border:1px solid black;">Semestre</th>
+		<th style="border:1px solid black;">Supprimer</th>
 
 	</tr>
 {% endif %}
@@ -20,8 +21,9 @@
 		<td style="border:1px solid black;"><a href="detailUE/{{ ue.id }}">{{ ue.intitule }}</a></td>
 		<td style="border:1px solid black;">{{ ue.code }}</td>
 		<td style="border:1px solid black;">{{ ue.semestre }}</td>
-
+		<td><a href="supprue/{{ ue.id }}">Supprimer</a></td>
 	</tr>
 {% endfor %}
 </table>
+<p>Attention, supprimer une UE supprimera toute les matières qui lui sont associées.</p>
 {% endblock %}

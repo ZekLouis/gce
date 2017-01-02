@@ -26,3 +26,9 @@ def ajouterAnnee(request):
 def listerAnnees(request):
 	annees = Annee.objects.all()
 	return render(request, 'contenu_html/listerAnnees.html', locals())
+
+def supprann(request, id):
+	annee = Annee.objects.filter(id=id)
+
+	annee.delete()
+	return render(request, 'contenu_html/supprann.html', locals())

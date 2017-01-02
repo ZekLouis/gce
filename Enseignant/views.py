@@ -51,3 +51,8 @@ def listerEnseignants(request):
 	ens = Enseignant.objects.all()
 	return render(request, 'contenu_html/listerEnseignants.html',{'ens': ens})
 
+def supprens(request, id):
+	ens = Enseignant.objects.filter(id=id)
+	ens.delete()
+	return render(request, 'contenu_html/supprens.html', locals())
+
