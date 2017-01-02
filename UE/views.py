@@ -46,7 +46,7 @@ def ajouterUE(request):
 						intitule=intitule,
 						code=code,
 						semestre=e,
-						coefficientxd=coef,
+						coefficient=coef,
 		                )
 				ue.save()
 				request.session['sem'] = False

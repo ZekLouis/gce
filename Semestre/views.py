@@ -12,8 +12,10 @@ def ajouterSemestre(request):
 
 			code = form.cleaned_data['code']
 			dip = form.cleaned_data['diplome']
+			intitule = form.cleaned_data['intitule']
 			sem = Semestre(
 					code=code,
+					intitule=intitule,
 					diplome = dip,					
 	                )
 			sem.save()
