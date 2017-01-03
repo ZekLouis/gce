@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from Matiere.models import Matiere
 from UE.models import UniteE
 from Enseignant.models import Enseignant
-from Matiere.forms import MatiereForm,  SelectUE
+from Matiere.forms import MatiereForm,  SelectUE, SelectMat, RenseignerMat
 from django import forms
 
 # Create your views here.
@@ -66,7 +66,41 @@ def ajouterMatiere(request):
 
 
 
-
+def modifierMatiere(request):
+	if request.method == 'POST':
+		if not request.session['mat']:
+			Matieres = Matiere.objects.all()
+			form = SelectMat(request.POST, matieres=Matieres)
+			if form.is_valid() :
+				id_mat = form.cleaned_data['select']
+				request.session['id_mat'] = id_mat
+				request.session['mat'] = True
+			res = True
+			m = get_object_or_404(Matiere, id=request.session['id_mat'])
+			form = RenseignerMat(matiere=m)
+		else:
+			m = get_object_or_404(Matiere, id=request.session['id_mat'])
+			form = RenseignerMat(request.POST, matiere=m)
+			if form.is_valid() :
+				matiere = get_object_or_404(Matiere, id=request.session['id_mat'])
+				if form.cleaned_data['intitule']:
+					matiere.intitule = form.cleaned_data['intitule']
+				if form.cleaned_data['coefficient']:
+					matiere.coefficient = form.cleaned_data['coefficient']
+				if form.cleaned_data['code']:
+					matiere.code = form.cleaned_data['code']
+				#if form.cleaned_data['unite']:
+					#matiere.unite = form.cleaned_data['unite']
+				matiere.save()	
+				#request.session['mat'] = False
+				res2=True
+			else :
+				print("Form Non Valide")	
+	else :
+		Matieres = Matiere.objects.all()
+		request.session['mat'] = False
+		form = SelectMat(matieres=Matieres)
+	return render(request, 'contenu_html/modifierMatiere.html', locals())
 
 
 
