@@ -89,8 +89,8 @@ def modifierMatiere(request):
 					matiere.coefficient = form.cleaned_data['coefficient']
 				if form.cleaned_data['code']:
 					matiere.code = form.cleaned_data['code']
-				#if form.cleaned_data['unite']:
-					#matiere.unite = form.cleaned_data['unite']
+				if form.cleaned_data['unite']:
+					matiere.unite = form.cleaned_data['unite']
 				matiere.save()	
 				#request.session['mat'] = False
 				res2=True
