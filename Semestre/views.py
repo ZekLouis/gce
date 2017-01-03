@@ -1,7 +1,8 @@
 #-*- coding: utf-8 -*-
 from django.shortcuts import render
 from Semestre.models import Semestre
-from Semestre.forms import SemestreForm
+from Semestre.forms import SemestreForm, SelectSem, RenseignerSem
+from django.shortcuts import render, get_object_or_404
 # Create your views here.
 
 
@@ -35,3 +36,37 @@ def supprsem(request, id):
 
 	semestre.delete()
 	return render(request, 'contenu_html/supprsem.html', locals())
+
+def modifierSemestre(request):
+	if request.method == 'POST':
+		if not request.session['sem']:
+			Semestres = Semestre.objects.all()
+			form = SelectSem(request.POST, semestres=Semestres)
+			if form.is_valid() :
+				id_sem = form.cleaned_data['select']
+				request.session['id_sem'] = id_sem
+				request.session['sem'] = True
+			res = True
+			s = get_object_or_404(Semestre, id=request.session['id_sem'])
+			form = RenseignerSem(semestre=s)
+		else:
+			s = get_object_or_404(Semestre, id=request.session['id_sem'])
+			form = RenseignerSem(request.POST, semestre=s)
+			if form.is_valid() :
+				semestre = get_object_or_404(Semestre, id=request.session['id_sem'])
+				if form.cleaned_data['intitule']:
+					semestre.intitule = form.cleaned_data['intitule']
+				if form.cleaned_data['code']:
+					semestre.code = form.cleaned_data['code']
+				if form.cleaned_data['diplome']:
+					semestre.diplome = form.cleaned_data['diplome']
+				semestre.save()	
+				#request.session['mat'] = False
+				res2=True
+			else :
+				print("Form Non Valide")	
+	else :
+		Semestres = Semestre.objects.all()
+		request.session['sem'] = False
+		form = SelectSem(semestres=Semestres)
+	return render(request, 'contenu_html/modifierSemestre.html', locals())
