@@ -2,7 +2,7 @@
 from django.shortcuts import render, get_object_or_404
 from Matiere.models import Matiere
 from Enseignant.forms import EnseignantForm, SelectMatiere
-from Enseignant.forms import Enseignant
+from Enseignant.forms import Enseignant, SelectEns, RenseignerEns
 
 from django import forms
 
@@ -56,3 +56,36 @@ def supprens(request, id):
 	ens.delete()
 	return render(request, 'contenu_html/supprens.html', locals())
 
+def modifierEnseignant(request):
+	if request.method == 'POST':
+		if not request.session['ens']:
+			Enseignants = Enseignant.objects.all()
+			form = SelectEns(request.POST, enseignants=Enseignants)
+			if form.is_valid() :
+				id_ens = form.cleaned_data['select']
+				request.session['id_ens'] = id_ens
+				request.session['ens'] = True
+			res = True
+			e = get_object_or_404(Enseignant, id=request.session['id_ens'])
+			form = RenseignerEns(enseignant=e)
+		else:
+			e = get_object_or_404(Enseignant, id=request.session['id_ens'])
+			form = RenseignerEns(request.POST, enseignant=e)
+			if form.is_valid() :
+				enseignant = get_object_or_404(Enseignant, id=request.session['id_ens'])
+				if form.cleaned_data['nom']:
+					enseignant.nom = form.cleaned_data['nom']
+				if form.cleaned_data['prenom']:
+					enseignant.prenom = form.cleaned_data['prenom']
+				if form.cleaned_data['matiere']:
+					enseignant.matiere = form.cleaned_data['matiere']
+				enseignant.save()	
+				#request.session['mat'] = False
+				res2=True
+			else :
+				print("Form Non Valide")	
+	else :
+		Enseignants = Enseignant.objects.all()
+		request.session['ens'] = False
+		form = SelectEns(enseignants=Enseignants)
+	return render(request, 'contenu_html/modifierEnseignant.html', locals())
