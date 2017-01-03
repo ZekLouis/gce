@@ -1,7 +1,8 @@
 #-*- coding: utf-8 -*-
 from django.shortcuts import render
 from Annee.models import Annee
-from Annee.forms import AnneeForm
+from Annee.forms import AnneeForm, SelectAnn, RenseignerAnn
+from django.shortcuts import render, get_object_or_404
 # Create your views here.
 
 """Cette vue permet d'ajouter une année à la base"""
@@ -32,3 +33,33 @@ def supprann(request, id):
 
 	annee.delete()
 	return render(request, 'contenu_html/supprann.html', locals())
+
+def modifierAnnee(request):
+	if request.method == 'POST':
+		if not request.session['ann']:
+			Annees = Annee.objects.all()
+			form = SelectAnn(request.POST, annees=Annees)
+			if form.is_valid() :
+				id_ann = form.cleaned_data['select']
+				request.session['id_ann'] = id_ann
+				request.session['ann'] = True
+			res = True
+			a = get_object_or_404(Annee, id=request.session['id_ann'])
+			form = RenseignerAnn(annee=a)
+		else:
+			a = get_object_or_404(Annee, id=request.session['id_ann'])
+			form = RenseignerAnn(request.POST, annee=a)
+			if form.is_valid() :
+				annee = get_object_or_404(Annee, id=request.session['id_ann'])
+				if form.cleaned_data['intitule']:
+					annee.intitule = form.cleaned_data['intitule']
+				annee.save()	
+				#request.session['mat'] = False
+				res2=True
+			else :
+				print("Form Non Valide")	
+	else :
+		Annees = Annee.objects.all()
+		request.session['ann'] = False
+		form = SelectAnn(annees=Annees)
+	return render(request, 'contenu_html/modifierAnnee.html', locals())
