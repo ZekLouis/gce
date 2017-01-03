@@ -3,7 +3,7 @@ from django.shortcuts import render
 from Diplome.models import Diplome
 from Annee.models import Annee
 from Diplome.forms import DiplomeForm
-from Diplome.forms import DiplomeFormCreation
+from Diplome.forms import DiplomeFormCreation, SelectDip, RenseignerDip
 from Annee.forms import AnneeForm
 from UE.models import UniteE
 from UE.forms import UEForm
@@ -47,3 +47,34 @@ def supprdip(request, id):
 	dip.delete()
 	return render(request, 'contenu_html/supprdip.html', locals())
 
+def modifierDiplome(request):
+	if request.method == 'POST':
+		if not request.session['dip']:
+			Diplomes = Diplome.objects.all()
+			form = SelectDip(request.POST, diplomes=Diplomes)
+			if form.is_valid() :
+				id_dip = form.cleaned_data['select']
+				request.session['id_dip'] = id_dip
+				request.session['dip'] = True
+			res = True
+			d = get_object_or_404(Diplome, id=request.session['id_dip'])
+			form = RenseignerDip(diplome=d)
+		else:
+			d = get_object_or_404(Diplome, id=request.session['id_dip'])
+			form = RenseignerDip(request.POST, diplome=d)
+			if form.is_valid() :
+				diplome = get_object_or_404(Diplome, id=request.session['id_dip'])
+				if form.cleaned_data['intitule']:
+					diplome.nom = form.cleaned_data['intitule']
+				if form.cleaned_data['annee']:
+					diplome.prenom = form.cleaned_data['annee']
+				diplome.save()	
+				#request.session['mat'] = False
+				res2=True
+			else :
+				print("Form Non Valide")	
+	else :
+		Diplomes = Diplome.objects.all()
+		request.session['dip'] = False
+		form = SelectDip(diplomes=Diplomes)
+	return render(request, 'contenu_html/modifierDiplome.html', locals())
