@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from UE.models import UniteE
 from Semestre.models import Semestre
 from Matiere.models import Matiere
-from UE.forms import UEForm, SelectSemestre
+from UE.forms import UEForm, SelectSemestre,SelectUE,RenseignerUe
 
 
 # Create your views here.
@@ -70,3 +70,38 @@ def ajouterUE(request):
 		form = SelectSemestre(semestres = sem)
 	return render(request, 'contenu_html/ajouterUE.html', locals())
 
+def modifierUe(request):
+	if request.method == 'POST':
+		if not request.session['ue']:
+			Unites = UniteE.objects.all()
+			form = SelectUE(request.POST, ues=Unites)
+			if form.is_valid() :
+				id_ue = form.cleaned_data['select']
+				request.session['id_ue'] = id_ue
+				request.session['ue'] = True
+			res = True
+			u = get_object_or_404(UniteE, id=request.session['id_ue'])
+			form = RenseignerUe(ue=u)
+		else:
+			u = get_object_or_404(UniteE, id=request.session['id_ue'])
+			form = RenseignerUe(request.POST, ue=u)
+			if form.is_valid() :
+				unite = get_object_or_404(UniteE, id=request.session['id_ue'])
+				if form.cleaned_data['intitule']:
+					unite.intitule = form.cleaned_data['intitule']
+				if form.cleaned_data['coefficient']:
+					unite.coefficient = form.cleaned_data['coefficient']
+				if form.cleaned_data['code']:
+					unite.code = form.cleaned_data['code']
+				if form.cleaned_data['semestre']:
+					unite.unite = form.cleaned_data['semestre']
+				unite.save()	
+				#request.session['mat'] = False
+				res2=True
+			else :
+				print("Form Non Valide")	
+	else :
+		Unites = UniteE.objects.all()
+		request.session['ue'] = False
+		form = SelectUE(ues=Unites)
+	return render(request, 'contenu_html/modifierUe.html', locals())
