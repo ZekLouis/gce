@@ -23,4 +23,5 @@ urlpatterns = [
     url(r'^importer_csv', views.importer_csv, name='importer_csv'),
     url(r'^listernotes', views.listernotes, name='listernotes'),
     url(r'^supprnote/(?P<id>\d+)$', views.supprnote, name='supprnote'),
+    url(r'^modifierNote', views.modifierNote, name='modifierNote'),
 ]

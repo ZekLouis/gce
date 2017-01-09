@@ -2,7 +2,7 @@
 from django.shortcuts import render, get_object_or_404
 from io import StringIO
 from django import forms
-from Note.forms import FileForm
+from Note.forms import FileForm, SelectNote, RenseignerNote
 from Etudiant.models import Etu
 from Note.models import Note
 from Matiere.models import Matiere
@@ -121,3 +121,41 @@ def supprnote(request, id):
 
 	note.delete()
 	return render(request, 'contenu_html/supprnote.html', locals())
+
+def modifierNote(request):
+	if request.method == 'POST':
+		if not request.session['note']:
+			Notes = Note.objects.all()
+			form = SelectNote(request.POST, notes=Notes)
+			if form.is_valid() :
+				id_note = form.cleaned_data['select']
+				request.session['id_note'] = id_note
+				request.session['note'] = True
+			res = True
+			n = get_object_or_404(Note, id=request.session['id_note'])
+			form = RenseignerNote(note=n)
+		else:
+			n = get_object_or_404(Note, id=request.session['id_note'])
+			form = RenseignerNote(request.POST, note=n)
+			if form.is_valid() :
+				note = get_object_or_404(Note, id=request.session['id_note'])
+				if form.cleaned_data['valeur']:
+					note.valeur = form.cleaned_data['valeur']
+				#if form.cleaned_data['etudiant']:
+				#	note.etudiant = form.cleaned_data['etudiant']
+				#if form.cleaned_data['annee']:
+				#	note.annee = form.cleaned_data['annee']
+				#if form.cleaned_data['ue']:
+				#	note.ue = form.cleaned_data['ue']
+				#if form.cleaned_data['matiere']:
+				#	note.matiere = form.cleaned_data['matiere']
+				note.save()	
+				#request.session['mat'] = False
+				res2=True
+			else :
+				print("Form Non Valide")	
+	else :
+		Notes = Note.objects.all()
+		request.session['note'] = False
+		form = SelectNote(notes=Notes)
+	return render(request, 'contenu_html/modifierNote.html', locals())
