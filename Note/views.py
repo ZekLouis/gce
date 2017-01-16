@@ -4,7 +4,7 @@ from io import StringIO
 from django import forms
 from Note.forms import FileForm, SelectNote, RenseignerNote
 from Etudiant.models import Etu
-from Note.models import Note,ResultatSemestre
+from Note.models import Note,Resultat_Semestre
 from Matiere.models import Matiere
 import csv
 
