@@ -8,7 +8,7 @@ from Annee.models import Annee
 from Semestre.models import Semestre
 from UE.models import UniteE
 
-class RES_Semestre(models.Model):
+class ResultatSemestre(models.Model):
 	annee = models.ForeignKey(Annee, null=False)
 	etudiant = models.ForeignKey(Etu, null=False)
 	semestre = models.ForeignKey(Semestre, null=False)
@@ -16,6 +16,8 @@ class RES_Semestre(models.Model):
 	resultat = models.CharField(max_length=15, null=False)
 	resultat_pre_jury = models.CharField(max_length=15, null=False)
 	resultat_jury = models.CharField(max_length=15, null=False)
+	def __str__(self):
+		return str(self.semestre)
 
 
 class Note(models.Model):

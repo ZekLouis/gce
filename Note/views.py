@@ -4,10 +4,14 @@ from io import StringIO
 from django import forms
 from Note.forms import FileForm, SelectNote, RenseignerNote
 from Etudiant.models import Etu
-from Note.models import Note
+from Note.models import Note,ResultatSemestre
 from Matiere.models import Matiere
-
 import csv
+
+def resultat(request):
+	string = "salut"
+	return render(request, 'contenu_html/listerResultat.html', locals())
+
 """Cette fonction permet d'insérer une virgule a un index donné"""
 def insert_comma(string, index):
     return string[:index] + ',' + string[index:]
@@ -159,3 +163,5 @@ def modifierNote(request):
 		request.session['note'] = False
 		form = SelectNote(notes=Notes)
 	return render(request, 'contenu_html/modifierNote.html', locals())
+
+
