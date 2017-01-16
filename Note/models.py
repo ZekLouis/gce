@@ -22,7 +22,7 @@ class Resultat_Semestre(models.Model):
 class Note(models.Model):
 	valeur = models.FloatField()
 	etudiant = models.ForeignKey(Etu, null=False)
-	annee = models.ForeignKey(Annee, null=False)
+	annee = models.ForeignKey(Annee, null=True)
 	matiere = models.ForeignKey(Matiere, null=False)
 	def __str__(self):
 		return str(self.valeur)
