@@ -21,6 +21,7 @@ from Etudiant import views
 
 urlpatterns = [
     url(r'^listeretus$', views.listeretus, name='listeretus'),
+    url(r'^suppall$', views.suppall, name='suppall'),
     url(r'^importer_etu$', views.importer_etu, name='importer_etu'),
     url(r'^listeretu/(?P<id>\d+)$', views.listeretu),
     url(r'^ajouterEtudiant', views.ajouterEtudiant, name='ajouterEtudiant'),

@@ -5,6 +5,7 @@
 	<h1>Importer des étudiants</h1>
 	{% if res %}
 		<p>Ajout des étudiants réussi</p>
+        <p>{{ nb_etu }} étudiant(s) créés</p>
 		<p><a href="/">Retour à l'accueil</a></p>
 	{% else %}
 		<form enctype="multipart/form-data" action="{% url "importer_etu" %}" method="post">

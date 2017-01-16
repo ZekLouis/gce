@@ -8,6 +8,11 @@ from Note.models import Note,Resultat_Semestre
 from Matiere.models import Matiere
 import csv
 
+"""Cette vue permet de supprimer tous les étudiants"""
+def suppall(request):
+	Note.objects.all().delete()
+	return listernotes(request)
+
 def resultat(request):
 	string = "salut"
 	return render(request, 'contenu_html/listerResultat.html', locals())
