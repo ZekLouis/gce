@@ -9,14 +9,14 @@
 	<table>
 	<tr>
 		<th>Année</th>
-		<th>id</th>
+		<th>Id</th>
 		<th>Supprimer</th>
 	</tr>
 {% endif %}
 
 {% for annee in annees %}
 	<tr>
-		<td>{{ annee.annee }}</td>
+		<td>{{ annee.intitule }}</td>
 		<td>{{ annee.id }}</td>
 		<td><a href="supprann/{{ annee.id }}">Supprimer</a></td>
 	</tr>

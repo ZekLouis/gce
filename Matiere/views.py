@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from Matiere.models import Matiere
-from UE.models import UniteE
+from UE.models import UE
 from Enseignant.models import Enseignant
 from Matiere.forms import MatiereForm,  SelectUE, SelectMat, RenseignerMat
 from django import forms
@@ -8,12 +8,13 @@ from django import forms
 # Create your views here.
 
 
-
+"""Cette vue permet de lister les matieres"""
 def listermatieres(request):
 	matieres = Matiere.objects.all()
 	enseignants = Enseignant.objects.all()
 	return render(request, 'contenu_html/listermatieres.html', locals())
 
+"""Cette vue permet de supprimer une matiere"""
 def supprmat(request, id):
 	matiere = Matiere.objects.filter(id=id)
 	enseignant = Enseignant.objects.filter(matiere=id)
@@ -24,20 +25,20 @@ def supprmat(request, id):
 	matiere.delete()
 	return render(request, 'contenu_html/supprmat.html', locals())
 
-
+"""Cette vue permet d'ajouter une matiere"""
 def ajouterMatiere(request):
 
 	if request.method == 'POST':
 
 		if not request.session['ue']:
-			unites =  UniteE.objects.all()
+			unites =  UE.objects.all()
 			form = SelectUE(request.POST, ues=unites)
 			if form.is_valid() :
 				id_ue = form.cleaned_data['select']
 				request.session['id_ue'] = id_ue
 				request.session['ue'] = True
 				res = True
-			e = get_object_or_404(UniteE, id=request.session['id_ue'])
+			e = get_object_or_404(UE, id=request.session['id_ue'])
 			form=MatiereForm()
 		else:
 			form = MatiereForm(request.POST)
@@ -45,27 +46,27 @@ def ajouterMatiere(request):
 				intitule = form.cleaned_data['intitule']
 				code = form.cleaned_data['code']
 				coefficient = form.cleaned_data['coefficient']
-				e = get_object_or_404(UniteE, id=request.session['id_ue'])
+				e = get_object_or_404(UE, id=request.session['id_ue'])
 
 				mat = Matiere(
 						intitule=intitule,
 						code=code,
 						coefficient = coefficient,
-						unite=e,
+						ue=e,
 		                )
 				mat.save()
 				request.session['ue'] = False
 				res2=True
 			else :
-				print("ERREUR")	
+				print("ERREUR : AJOUTER Matiere : VIEW ajouterMatiere : formulaire")	
 	else :
-		unites =  UniteE.objects.all()
+		unites =  UE.objects.all()
 		request.session['ue'] = False
 		form = SelectUE(ues=unites)
 	return render(request, 'contenu_html/ajouterMatiere.html', locals())
 
 
-
+"""Cette vue permet de modifier une matiere"""
 def modifierMatiere(request):
 	if request.method == 'POST':
 		if not request.session['mat']:
@@ -95,7 +96,7 @@ def modifierMatiere(request):
 				#request.session['mat'] = False
 				res2=True
 			else :
-				print("Form Non Valide")	
+				print("ERREUR : MODIFIER Matiere : VIEW modifierMatiere : formulaire")	
 	else :
 		Matieres = Matiere.objects.all()
 		request.session['mat'] = False

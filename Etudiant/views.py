@@ -5,8 +5,12 @@ from Etudiant.forms import EtudiantForm, RenseignerEtu, SelectEtu
 from Groupe.forms import GroupeForm
 from Groupe.models import Groupe
 from Note.models import Note
-from UE.models import UniteE
+from Note.models import Resultat_Semestre
+from UE.models import UE
+from Note.forms import FileForm
 from Matiere.models import Matiere
+import csv
+from io import StringIO
 
 # Create your views here.
 
@@ -16,6 +20,7 @@ def listeretu(request, id):
 	notes = Note.objects.filter(etudiant__id=id)
 	return render(request, 'contenu_html/listeretu.html', locals())
 
+"""Cette vue permet de supprimer un etudiant"""
 def suppretu(request, id):
 	etu = get_object_or_404(Etu, id=id)
 	notes = Note.objects.filter(etudiant__id=id)
@@ -23,6 +28,10 @@ def suppretu(request, id):
 	notes.delete()
 	return render(request, 'contenu_html/suppretu.html', locals())
 
+"""Cette vue permet de supprimer tous les étudiants"""
+def suppall(request):
+	Etu.objects.all().delete()
+	return listeretus(request)
 
 """Cette vue permet d'ajouter un étudiant"""
 def ajouterEtudiant(request):
@@ -51,7 +60,7 @@ def ajouterEtudiant(request):
 				e.save()
 				res = True
 		else :
-			print("Erreur à l'ajout")
+			print("ERREUR : AJOUTER Etudiant : VIEW ajouterEtudiant : formulaire")
 	else :
 		form = EtudiantForm() 
 	return render(request, 'contenu_html/ajouterEtudiant.html', locals())
@@ -66,17 +75,20 @@ def affichageComplet(request):
 	if request.method == 'POST':
 		Etudiants = Etu.objects.all()
 		form = SelectEtu(request.POST, etus=Etudiants)
-		if form.is_valid() :
+		if form.is_valid() :	
+			print("salut")
 			id_etu = form.cleaned_data['select']
-			e = get_object_or_404(Etu, id=id_etu)
+			etudian = Etu.objects.get(id=id_etu)
+			e = Resultat_Semestre.objects.get(etudiant = etudian)
 			semestre = e.semestre
+			print(e)
 			if semestre:
-				ues = UniteE.objects.all().filter(semestre=semestre)
+				ues = UE.objects.all().filter(semestre=semestre)
 				tab_matieres = []
 				for ue in ues :
-					tab_matieres.append(Matiere.objects.all().filter(unite=ue))
+					tab_matieres.append(Matiere.objects.all().filter(ue=ue))
 				notes = Note.objects.all().filter(etudiant__id=id_etu)
-				lignes = UniteE.objects.all().filter(semestre=semestre).count() + 2
+				lignes = UE.objects.all().filter(semestre=semestre).count() + 2
 				for matieres in tab_matieres :
 					for matiere in matieres :
 						lignes += 1
@@ -93,8 +105,8 @@ def affichageComplet(request):
 				i =1
 				for matieres in tab_matieres :
 					i += 1
-					lst[i][0]=matieres[0].unite
-					lst[i][3]= matieres[0].unite.coefficient 
+					lst[i][0]=matieres[0].ue
+					lst[i][3]= matieres[0].ue.coefficient 
 					for matiere in matieres :
 						i += 1
 						lst[i][0]= matiere.intitule
@@ -109,12 +121,46 @@ def affichageComplet(request):
 			else:
 				semestre = False
 		else:
-			print("Erreur Form")
+			print("ERREUR : AFFICHAGE Complte : VIEW affichageComplet : formulaire")
 	else :
 		semestre = False
 		Etudiants = Etu.objects.all()
 		form = SelectEtu(etus=Etudiants)
-	return render(request, 'contenu_html/affichageComplet.html', locals())	
+	return render(request, 'contenu_html/affichageComplet.html', locals())
+
+def importer_etu(request):
+    	if request.method == "POST":
+    		form = FileForm(request.POST, request.FILES)
+		if form.is_valid() :
+			fichier = form.cleaned_data['fichier']
+	
+			import csv
+			csvf = StringIO(fichier.read().decode('latin-1'))
+			read = csv.reader(csvf, delimiter=',')
+			nb_etu = 0
+			for row in read:
+				if row[0].isdigit():
+					nom = row[1]
+					prenom = row[2]
+					apogee = row[0]
+
+					e, created = Etu.objects.get_or_create(
+							nom=nom,
+							prenom=prenom,
+							apogee=apogee,
+							)
+					if created==True:
+						nb_etu = nb_etu + 1
+					e.save()
+				else:
+					code_eleve = row
+
+			res = True
+		else :
+			print("ERREUR : IMPORT CSV : VIEW importer_csv : Formulaire")
+	else :
+		form = FileForm()
+	return render(request, 'contenu_html/importer_etudiant.html', locals())
 
 """Cette vue permet de renseigner le reste des informations"""
 def complement_etu(request):
@@ -180,7 +226,7 @@ def complement_etu(request):
 				request.session['mat'] = False
 				res2=True
 			else :
-				print("Form Non Valide")	
+				print("ERREUR : MODIFIER Etudiant : VIEW complement_etu : formulaire")	
 	else :
 		Etudiants = Etu.objects.all()
 		request.session['etu'] = False

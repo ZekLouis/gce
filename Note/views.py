@@ -4,9 +4,15 @@ from io import StringIO
 from django import forms
 from Note.forms import FileForm, SelectNote, RenseignerNote
 from Etudiant.models import Etu
-from Note.models import Note,ResultatSemestre
+from Annee.models import Annee
+from Note.models import Note,Resultat_Semestre
 from Matiere.models import Matiere
 import csv
+
+"""Cette vue permet de supprimer tous les étudiants"""
+def suppall(request):
+	Note.objects.all().delete()
+	return listernotes(request)
 
 def resultat(request):
 	string = "salut"
@@ -55,7 +61,9 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat):
 				if note != "null":
 					note = note.replace(",", ".")
 					note = float(note)
-					n, created = Note.objects.get_or_create(valeur=note,etudiant=etudiant,matiere=matiere)
+					an, cr = Annee.objects.get_or_create(intitule = "2017")
+					an.save()
+					n, created = Note.objects.get_or_create(valeur=note,etudiant=etudiant,matiere=matiere,annee=an)
 					#n = Note(
 					#		valeur=note,
 					#		etudiant=etudiant,
@@ -120,12 +128,14 @@ def listernotes(request):
 	notes = Note.objects.all().order_by('etudiant__nom')
 	return render(request, 'contenu_html/listernotes.html',{'notes': notes})
 
+"""Cette vue permet de supprimer une note"""
 def supprnote(request, id):
 	note = Diplome.objects.filter(id=id)
 
 	note.delete()
 	return render(request, 'contenu_html/supprnote.html', locals())
 
+"""Cette vue permet de modifier une note"""
 def modifierNote(request):
 	if request.method == 'POST':
 		if not request.session['note']:
@@ -150,7 +160,7 @@ def modifierNote(request):
 				note_temp.save()	
 				res2=True
 			else :
-				print("Form Non Valide")	
+				print("ERREUR : MODIFIER Note : VIEW modifierNote : formulaire")	
 	else :
 		Notes = list(set(Note.objects.values_list('etudiant_id', 'etudiant__nom')))
 		request.session['note'] = False

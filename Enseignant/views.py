@@ -39,7 +39,7 @@ def ajouterEnseignant(request):
 				request.session['mat'] = False
 				res2=True
 			else :
-				print("ERREUR")	
+				print("ERREUR : AJOUTER Enseignant : VIEW ajouterEnseignant : formulaire")	
 	else :
 		mats = Matiere.objects.all()
 		request.session['mat'] = False
@@ -51,11 +51,13 @@ def listerEnseignants(request):
 	ens = Enseignant.objects.all()
 	return render(request, 'contenu_html/listerEnseignants.html',{'ens': ens})
 
+"""Cette vue permet de supprimer un enseignant"""
 def supprens(request, id):
 	ens = Enseignant.objects.filter(id=id)
 	ens.delete()
 	return render(request, 'contenu_html/supprens.html', locals())
 
+"""Cette vue permet de modifier un enseignant"""
 def modifierEnseignant(request):
 	if request.method == 'POST':
 		if not request.session['ens']:
@@ -83,7 +85,7 @@ def modifierEnseignant(request):
 				#request.session['mat'] = False
 				res2=True
 			else :
-				print("Form Non Valide")	
+				print("ERREUR : MODIFIER Enseignant : VIEW modifierEnseignant : formulaire")	
 	else :
 		Enseignants = Enseignant.objects.all()
 		request.session['ens'] = False

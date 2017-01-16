@@ -28,12 +28,14 @@ def listerAnnees(request):
 	annees = Annee.objects.all()
 	return render(request, 'contenu_html/listerAnnees.html', locals())
 
+"""Cette vue permet de supprimer une annee"""
 def supprann(request, id):
 	annee = Annee.objects.filter(id=id)
 
 	annee.delete()
 	return render(request, 'contenu_html/supprann.html', locals())
 
+"""Cette vue permet de modifier une annee"""
 def modifierAnnee(request):
 	if request.method == 'POST':
 		if not request.session['ann']:
@@ -57,7 +59,7 @@ def modifierAnnee(request):
 				#request.session['mat'] = False
 				res2=True
 			else :
-				print("Form Non Valide")	
+				print("ERREUR : MODIFIER Annee : VIEW modifierAnnee : formulaire")	
 	else :
 		Annees = Annee.objects.all()
 		request.session['ann'] = False

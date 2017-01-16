@@ -6,7 +6,7 @@ from Semestre.models import Semestre
 # Create your models here.
 
 
-class UniteE(models.Model):
+class UE(models.Model):
 	intitule = models.CharField(max_length=30,null=False)
 	code = models.CharField(max_length=30,null=False)
 	semestre = models.ForeignKey(Semestre, null=False)

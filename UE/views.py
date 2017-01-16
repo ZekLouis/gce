@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
 from django.shortcuts import render, get_object_or_404
-from UE.models import UniteE
+from UE.models import UE
 from Semestre.models import Semestre
 from Matiere.models import Matiere
 from UE.forms import UEForm, SelectSemestre,SelectUE,RenseignerUe
@@ -10,11 +10,12 @@ from UE.forms import UEForm, SelectSemestre,SelectUE,RenseignerUe
 
 """Cette fonction permet de faire afficher toutes les UE"""
 def listerUE(request):
-	ues = UniteE.objects.all()
+	ues = UE.objects.all()
 	return render(request, 'contenu_html/listerUE.html',{'ues': ues})
 
+"""Cette fonction permet de supprimer une ue"""
 def supprue(request, id):
-	ue = UniteE.objects.filter(id=id)
+	ue = UE.objects.filter(id=id)
 
 	matiere = Matiere.objects.filter(unite_id=id)
 
@@ -27,7 +28,7 @@ def supprue(request, id):
 
 """Cette fonction permet de faire afficher les matieres et les details d'une ue"""
 def detailUE(request, id):
-	ue = get_object_or_404(UniteE, id=id)
+	ue = get_object_or_404(UE, id=id)
 	matieres = Matiere.objects.filter(unite__id=id)
 	return render(request, 'contenu_html/detailUE.html', locals())
 
@@ -53,7 +54,7 @@ def ajouterUE(request):
 				code = form.cleaned_data['code']
 				e = get_object_or_404(Semestre, id=request.session['id_sem'])
 				coef = form.cleaned_data['coefficient']
-				ue = UniteE(
+				ue = UE(
 						intitule=intitule,
 						code=code,
 						semestre=e,
@@ -70,23 +71,24 @@ def ajouterUE(request):
 		form = SelectSemestre(semestres = sem)
 	return render(request, 'contenu_html/ajouterUE.html', locals())
 
+"""Cette vue permet de modifier une ue"""
 def modifierUe(request):
 	if request.method == 'POST':
 		if not request.session['ue']:
-			Unites = UniteE.objects.all()
+			Unites = UE.objects.all()
 			form = SelectUE(request.POST, ues=Unites)
 			if form.is_valid() :
 				id_ue = form.cleaned_data['select']
 				request.session['id_ue'] = id_ue
 				request.session['ue'] = True
 			res = True
-			u = get_object_or_404(UniteE, id=request.session['id_ue'])
+			u = get_object_or_404(UE, id=request.session['id_ue'])
 			form = RenseignerUe(ue=u)
 		else:
-			u = get_object_or_404(UniteE, id=request.session['id_ue'])
+			u = get_object_or_404(UE, id=request.session['id_ue'])
 			form = RenseignerUe(request.POST, ue=u)
 			if form.is_valid() :
-				unite = get_object_or_404(UniteE, id=request.session['id_ue'])
+				unite = get_object_or_404(UE, id=request.session['id_ue'])
 				if form.cleaned_data['intitule']:
 					unite.intitule = form.cleaned_data['intitule']
 				if form.cleaned_data['coefficient']:
@@ -99,9 +101,9 @@ def modifierUe(request):
 				#request.session['mat'] = False
 				res2=True
 			else :
-				print("Form Non Valide")	
+				print("ERREUR : MODIFIER Ue : VIEW modifierUe : formulaire ")	
 	else :
-		Unites = UniteE.objects.all()
+		Unites = UE.objects.all()
 		request.session['ue'] = False
 		form = SelectUE(ues=Unites)
 	return render(request, 'contenu_html/modifierUe.html', locals())
