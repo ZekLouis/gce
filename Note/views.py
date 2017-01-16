@@ -4,6 +4,7 @@ from io import StringIO
 from django import forms
 from Note.forms import FileForm, SelectNote, RenseignerNote, ResultatJury
 from Etudiant.forms import SelectEtu
+from UE.forms import SelectSemestre
 from Etudiant.models import Etu
 from Note.models import Note,Resultat_Semestre
 from Matiere.models import Matiere
@@ -219,3 +220,45 @@ def modifierNote(request):
 	return render(request, 'contenu_html/modifierNote.html', locals())
 
 
+
+def renseignerResultat(request):
+	if request.method == 'POST':
+		u = Semestre.objects.all()
+		form = SelectSemestre(request.POST, semestres=u)
+		if form.is_valid() :
+			semes = form.cleaned_data['select']
+			semestre = Semestre.objects.get(id=semes)
+		etus = Etu.objects.all()
+		ues  = UE.objects.filter(semestre=semes)
+		
+		for etu in etus:
+			notes = Note.objects.all().filter(etudiant=etu)
+			moy = 0
+			coeff = 0
+			for ue in ues:
+				matieres = Matiere.objects.filter(ue=ue)
+				for matiere in matieres :
+					for note in notes :
+						if note.matiere.intitule == matiere.intitule :
+							note = Note.objects.get(etudiant=etu, matiere=matiere)
+							print(note)
+
+							moy += (note.valeur*matiere.coefficient)
+							coeff += matiere.coefficient
+				moyG = moy/coeff
+				resultatSem = Resultat_Semestre.objects.get(etudiant=etu, semestre=semes)
+				if moyG < 8:
+					jury = "Barre"
+				elif moyG<10 and moyG >= 8:
+					jury = "NVAL"
+				else:
+					jury = "VAL"
+				res = Resultat_Semestre(
+					note_calc = moyG,
+					resultat = jury,
+				)
+				res.save()	
+	else :
+		u = Semestre.objects.all()
+		form = SelectSemestre(semestres=u)
+	return render(request, 'contenu_html/listerResultat.html',locals())

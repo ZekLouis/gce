@@ -3,5 +3,9 @@
 
 {% block content %}
 <h1>Lister les resutlats</h1>
-
+<form enctype="multipart/form-data" action="{% url "renseignerResultat" %}" method="post">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<input type="submit" class="e" name="Valider">
+	</form>
 {% endblock %}
