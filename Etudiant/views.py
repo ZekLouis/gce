@@ -6,7 +6,10 @@ from Groupe.forms import GroupeForm
 from Groupe.models import Groupe
 from Note.models import Note
 from UE.models import UE
+from Note.forms import FileForm
 from Matiere.models import Matiere
+import csv
+from io import StringIO
 
 # Create your views here.
 
@@ -116,7 +119,41 @@ def affichageComplet(request):
 		semestre = False
 		Etudiants = Etu.objects.all()
 		form = SelectEtu(etus=Etudiants)
-	return render(request, 'contenu_html/affichageComplet.html', locals())	
+	return render(request, 'contenu_html/affichageComplet.html', locals())
+
+def importer_etu(request):
+    	if request.method == "POST":
+    		form = FileForm(request.POST, request.FILES)
+		if form.is_valid() :
+			fichier = form.cleaned_data['fichier']
+	
+			import csv
+			csvf = StringIO(fichier.read().decode('latin-1'))
+			read = csv.reader(csvf, delimiter=',')
+			nb_etu = 0
+			for row in read:
+				if row[0].isdigit():
+					nom = row[1]
+					prenom = row[2]
+					apogee = row[0]
+
+					e, created = Etu.objects.get_or_create(
+							nom=nom,
+							prenom=prenom,
+							apogee=apogee,
+							)
+					if created==True:
+						nb_etu = nb_etu + 1
+					e.save()
+				else:
+					code_eleve = row
+
+			res = True
+		else :
+			print("ERREUR : IMPORT CSV : VIEW importer_csv : Formulaire")
+	else :
+		form = FileForm()
+	return render(request, 'contenu_html/importer_etudiant.html', locals())
 
 """Cette vue permet de renseigner le reste des informations"""
 def complement_etu(request):

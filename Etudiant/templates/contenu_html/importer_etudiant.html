@@ -1,0 +1,16 @@
+{% extends "templates/base.html" %}
+{% block title %}Importer des étudiants{% endblock %}
+
+{% block content %}
+	<h1>Importer des étudiants</h1>
+	{% if res %}
+		<p>Ajout des étudiants réussi</p>
+		<p><a href="/">Retour à l'accueil</a></p>
+	{% else %}
+		<form enctype="multipart/form-data" action="{% url "importer_etu" %}" method="post">
+			{% csrf_token %}
+			{{ form.as_p }}
+			<input type="submit" name="Valider">
+		</form>
+	{% endif %}
+{% endblock %}
