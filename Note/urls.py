@@ -25,6 +25,6 @@ urlpatterns = [
     url(r'^listernotes', views.listernotes, name='listernotes'),
     url(r'^supprnote/(?P<id>\d+)$', views.supprnote, name='supprnote'),
     url(r'^modifierNote', views.modifierNote, name='modifierNote'),
-    url(r'^resultat', views.resultat, name='resultat'),
-
+    url(r'^resultatJury', views.resultatJury, name='resultatJury'),
+    url(r'^listerResultat', views.renseignerResultat, name='renseignerResultat'),
 ]

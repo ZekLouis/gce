@@ -2,7 +2,9 @@
 from django.shortcuts import render, get_object_or_404
 from io import StringIO
 from django import forms
-from Note.forms import FileForm, SelectNote, RenseignerNote
+from Note.forms import FileForm, SelectNote, RenseignerNote, ResultatJury
+from Etudiant.forms import SelectEtu
+from UE.forms import SelectSemestre
 from Etudiant.models import Etu
 from Note.models import Note,Resultat_Semestre
 from Matiere.models import Matiere
@@ -12,14 +14,33 @@ from UE.models import UE
 import csv
 import datetime
 
+#Cette vue permet d'afficher les résultats jury pour un étudiant
+def resultatJury(request):
+	if request.method == 'POST':
+			Etudiants = Etu.objects.all()
+			form = SelectEtu(request.POST, etus=Etudiants)
+			if form.is_valid() :
+				id_etu = form.cleaned_data['select']
+				request.session['id_etu'] = id_etu
+				request.session['etu'] = True
+				res = True
+				resultatsJury = Resultat_Semestre.objects.filter(etudiant_id=request.session['id_etu'])
+			else :
+				print("ERREUR : MODIFIER Diplome : VIEW modifierDiplome : formulaire")	
+	else :
+		Etudiants = Etu.objects.all()
+		request.session['etu'] = False
+		form = SelectEtu(etus=Etudiants)
+	return render(request, 'contenu_html/resultatJury.html', locals())
+
+
+
 """Cette vue permet de supprimer tous les étudiants"""
 def suppall(request):
 	Note.objects.all().delete()
 	return listernotes(request)
 
-def resultat(request):
-	string = "salut"
-	return render(request, 'contenu_html/listerResultat.html', locals())
+
 
 """Cette fonction permet d'insérer une virgule a un index donné"""
 def insert_comma(string, index):
@@ -211,3 +232,49 @@ def modifierNote(request):
 	return render(request, 'contenu_html/modifierNote.html', locals())
 
 
+
+def renseignerResultat(request):
+	if request.method == 'POST':
+		u = Semestre.objects.all()
+		form = SelectSemestre(request.POST, semestres=u)
+		if form.is_valid() :
+			semes = form.cleaned_data['select']
+			semestre = Semestre.objects.get(id=semes)
+		etus = Etu.objects.all()
+		ues  = UE.objects.filter(semestre=semes)
+		
+		for etu in etus:
+			try:
+				res = Resultat_Semestre.objects.get(etudiant=etu,semestre = semes)
+				if res is not None:
+					notes = Note.objects.all().filter(etudiant=etu)
+					moy = 0
+					coeff = 0
+					for ue in ues:
+						matieres = Matiere.objects.filter(ue=ue)
+						for matiere in matieres :
+							for note in notes :
+								if note.matiere.intitule == matiere.intitule :
+									note = Note.objects.get(etudiant=etu, matiere=matiere)
+									print(note)
+
+									moy += (note.valeur*matiere.coefficient)
+									coeff += matiere.coefficient
+						moyG = moy/coeff
+						resultatSem = Resultat_Semestre.objects.get(etudiant=etu, semestre=semes)
+						if moyG < 8:
+							jury = "Barre"
+						elif moyG<10 and moyG >= 8:
+							jury = "NVAL"
+						else:
+							jury = "VAL"
+						resultatSem.note_calc = moyG
+						resultatSem.resultat = jury
+						
+						resultatSem.save()
+			except Resultat_Semestre.DoesNotExist:
+				print("probleme")
+	else :
+		u = Semestre.objects.all()
+		form = SelectSemestre(semestres=u)
+	return render(request, 'contenu_html/listerResultat.html',locals())
