@@ -1,0 +1,40 @@
+{% extends "templates/base.html" %}
+{% block title %}Résultat Jury{% endblock %}
+
+{% block content %}
+<h1>Résultat Jury</h1>
+	{% if not res %} 
+			<form enctype="multipart/form-data" action="{% url "resultatJury" %}" method="post">
+			{% csrf_token %}
+			{{ form.as_p }}
+			<input type="submit" value="Sauvegarder">
+	</form>
+			
+	{% else %}
+	<table style="border:1px solid black; border-collapse : collapse;">
+	<tr>
+		<th style="border:1px solid black;">Année</th>
+		<th style="border:1px solid black;">Semestre</th>
+		<th style="border:1px solid black;">Note</th>
+		<th style="border:1px solid black;">Note caulculée</th>
+		<th style="border:1px solid black;">Résultat</th>
+		<th style="border:1px solid black;">Résultat pré jury</th>
+		<th style="border:1px solid black;">Résultat jury</th>
+	</tr>
+
+	{% for resultat in resultatsJury %}
+	<tr>
+		<td style="border:1px solid black;">{{ resultat.annee }}</td>
+		<td style="border:1px solid black;">{{ resultat.semestre }}</td>
+		<td style="border:1px solid black;">{{ resultat.note }}</td>
+		<td style="border:1px solid black;">{{ resultat.note_calc }}</td>
+		<td style="border:1px solid black;">{{ resultat.resultat }}</td>
+		<td style="border:1px solid black;">{{ resultat.resultat_pre_jury }}</td>
+		<td style="border:1px solid black;">{{ resultat.resultat_jury }}</td>
+
+	</tr>
+	{% endfor %}
+	</table>
+
+	{% endif %}
+{% endblock %}
