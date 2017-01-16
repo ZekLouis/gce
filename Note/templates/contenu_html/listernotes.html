@@ -21,9 +21,17 @@
 		<td style="border:1px solid black;">{{ note.valeur }}</td>
 		<td style="border:1px solid black;"><a href="/Etudiant/listeretu/{{ note.etudiant_id }}">{{ note.etudiant.nom }}</a></td>
 		<td style="border:1px solid black;">{{ note.etudiant.prenom }}</td>
-		<td style="border:1px solid black;">{{ note.matiere.intitule }}</td>
+		<td style="border:1px solid black;">{{ note.matiere }}</td>
 		<td style="border:1px solid black;"><a href="supprnote/{{ note.etudiant.id }}">Supprimer</a></td>
 	</tr>
 {% endfor %}
 </table>
+<script>
+	function suppresion(){
+		if(confirm("Voulez-vous vraiment supprimer les notes ?")){
+			window.location = "suppall"
+		}
+	}
+</script>
+<p><a onclick="suppresion();">Supprimer toutes les notes</a></p>
 {% endblock %}

@@ -30,6 +30,10 @@ def suppretu(request, id):
 	notes.delete()
 	return render(request, 'contenu_html/suppretu.html', locals())
 
+"""Cette vue permet de supprimer tous les étudiants"""
+def suppall(request):
+	Etu.objects.all().delete()
+	return listeretus(request)
 
 """Cette vue permet d'ajouter un étudiant"""
 def ajouterEtudiant(request):

@@ -4,10 +4,18 @@ from io import StringIO
 from django import forms
 from Note.forms import FileForm, SelectNote, RenseignerNote
 from Etudiant.models import Etu
-from Annee.models import Annee
 from Note.models import Note,Resultat_Semestre
 from Matiere.models import Matiere
+from Semestre.models import Semestre
+from Annee.models import Annee
+from UE.models import UE
 import csv
+import datetime
+
+"""Cette vue permet de supprimer tous les étudiants"""
+def suppall(request):
+	Note.objects.all().delete()
+	return listernotes(request)
 
 def resultat(request):
 	string = "salut"
@@ -23,6 +31,13 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat):
 	apogee=ligne[0]
 	nom=ligne[1]
 	prenom=ligne[2]
+
+	#Création de l'année 
+	now = datetime.datetime.now()
+	year = now.year
+	yearMoins = year-1
+	annee, cr = Annee.objects.get_or_create(intitule=str(yearMoins) +"-"+str(year))
+	annee.save()
 
 	try :
 		etudiant = Etu.objects.get(apogee=apogee)
@@ -52,25 +67,46 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat):
 				note = ligne[i]
 
 			try :
-				matiere = Matiere.objects.get(code=notes[i])
-				if note != "null":
+				#si on lit un chaine contenant par "Semestre"	
+				if "Semestre" in notes[i] :
+					semestre = Semestre.objects.get(code=notes[i])
 					note = note.replace(",", ".")
 					note = float(note)
-					an, cr = Annee.objects.get_or_create(intitule = "2017")
-					an.save()
-					n, created = Note.objects.get_or_create(valeur=note,etudiant=etudiant,matiere=matiere,annee=an)
-					#n = Note(
-					#		valeur=note,
-					#		etudiant=etudiant,
-					#		matiere=matiere,
-					#	)
-					if created==False:
-    						#print("La note",note,etudiant,matiere,"existait deja, elle n'a pas ete ajoutee")
-							ret_notes = ret_notes + "<p>La note "+str(note)+" "+etudiant.nom+" "+matiere.intitule+" existait deja, elle n'a pas ete ajoutee</p>"
-					n.save()
+					ResSem = Resultat_Semestre.objects.get_or_create(
+						annee = annee,
+						etudiant = etudiant,
+						semestre = semestre,
+						note= note,
+						note_calc = 0.0,
+						resultat = "",
+						resultat_pre_jury= "",
+						resultat_jury= ""
+					)
+				#si on lit un chaine contenants par "UE"	
+				elif "UE" in notes[i]:
+					ue = UE.objects.get(code=notes[i])
+				else:		
+					matiere = Matiere.objects.get(code=notes[i])
+					if note != "null":
+						note = note.replace(",", ".")
+						note = float(note)
+						n, created = Note.objects.get_or_create(valeur=note,etudiant=etudiant,matiere=matiere,annee=annee)
+						#n = Note(
+						#		valeur=note,
+						#		etudiant=etudiant,
+						#		matiere=matiere,
+						#	)
+						if created==False:
+								#print("La note",note,etudiant,matiere,"existait deja, elle n'a pas ete ajoutee")
+								ret_notes = ret_notes + "<p>La note "+str(note)+" "+etudiant.nom+" "+matiere.intitule+" existait deja, elle n'a pas ete ajoutee</p>"
+						n.save()
 			except Matiere.DoesNotExist :
-				print("Matiere",notes[i],"n'existe pas")
 				ret_mat = ret_mat + "<p>La matiere "+notes[i]+" n'existe pas</p>"
+			except Semestre.DoesNotExist :
+				ret_mat = ret_mat + "<p>Le semestre "+notes[i]+" n'existe pas</p>"
+			except UE.DoesNotExist :
+				ret_mat = ret_mat + "<p>L'UE "+notes[i]+" n'existe pas</p>"
+
 	except Etu.DoesNotExist :
 		print("L'étudiant",nom,prenom,apogee,"n'existe pas")
 		ret_etu = ret_etu + "<p>L'etudiant "+nom+" "+prenom+" "+str(apogee)+" n'existe pas</p>"
@@ -134,37 +170,30 @@ def supprnote(request, id):
 def modifierNote(request):
 	if request.method == 'POST':
 		if not request.session['note']:
-			Notes = Note.objects.all()
+			Notes = list(set(Note.objects.values_list('etudiant_id','etudiant__nom' )))
 			form = SelectNote(request.POST, notes=Notes)
 			if form.is_valid() :
-				id_note = form.cleaned_data['select']
-				request.session['id_note'] = id_note
+				etudiant = form.cleaned_data['select']
+				request.session['etudiant'] = etudiant
 				request.session['note'] = True
 			res = True
-			n = get_object_or_404(Note, id=request.session['id_note'])
-			form = RenseignerNote(note=n)
+			NOTES = Note.objects.filter(etudiant_id=request.session['etudiant'])
+			form = RenseignerNote(notes=NOTES)
+	
 		else:
-			n = get_object_or_404(Note, id=request.session['id_note'])
-			form = RenseignerNote(request.POST, note=n)
+			NOTES = Note.objects.filter(etudiant_id=request.session['etudiant'])
+			form = RenseignerNote(request.POST, notes=NOTES)
 			if form.is_valid() :
-				note = get_object_or_404(Note, id=request.session['id_note'])
-				if form.cleaned_data['valeur']:
-					note.valeur = form.cleaned_data['valeur']
-				#if form.cleaned_data['etudiant']:
-				#	note.etudiant = form.cleaned_data['etudiant']
-				#if form.cleaned_data['annee']:
-				#	note.annee = form.cleaned_data['annee']
-				#if form.cleaned_data['ue']:
-				#	note.ue = form.cleaned_data['ue']
-				#if form.cleaned_data['matiere']:
-				#	note.matiere = form.cleaned_data['matiere']
-				note.save()	
-				#request.session['mat'] = False
+				for note in NOTES:
+					note_temp = get_object_or_404(Note, id=note.id)
+					if form.cleaned_data[note_temp.matiere.code]:
+						note_temp.valeur = form.cleaned_data[note.matiere.code]
+				note_temp.save()	
 				res2=True
 			else :
 				print("ERREUR : MODIFIER Note : VIEW modifierNote : formulaire")	
 	else :
-		Notes = Note.objects.all()
+		Notes = list(set(Note.objects.values_list('etudiant_id', 'etudiant__nom')))
 		request.session['note'] = False
 		form = SelectNote(notes=Notes)
 	return render(request, 'contenu_html/modifierNote.html', locals())
