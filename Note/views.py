@@ -2,7 +2,8 @@
 from django.shortcuts import render, get_object_or_404
 from io import StringIO
 from django import forms
-from Note.forms import FileForm, SelectNote, RenseignerNote
+from Note.forms import FileForm, SelectNote, RenseignerNote, ResultatJury
+from Etudiant.forms import SelectEtu
 from Etudiant.models import Etu
 from Note.models import Note,Resultat_Semestre
 from Matiere.models import Matiere
@@ -12,14 +13,33 @@ from UE.models import UE
 import csv
 import datetime
 
+#Cette vue permet d'afficher les résultats jury pour un étudiant
+def resultatJury(request):
+	if request.method == 'POST':
+			Etudiants = Etu.objects.all()
+			form = SelectEtu(request.POST, etus=Etudiants)
+			if form.is_valid() :
+				id_etu = form.cleaned_data['select']
+				request.session['id_etu'] = id_etu
+				request.session['etu'] = True
+				res = True
+				resultatsJury = Resultat_Semestre.objects.filter(etudiant_id=request.session['id_etu'])
+			else :
+				print("ERREUR : MODIFIER Diplome : VIEW modifierDiplome : formulaire")	
+	else :
+		Etudiants = Etu.objects.all()
+		request.session['etu'] = False
+		form = SelectEtu(request.POST, etus=Etudiants)
+	return render(request, 'contenu_html/resultatJury.html', locals())
+
+
+
 """Cette vue permet de supprimer tous les étudiants"""
 def suppall(request):
 	Note.objects.all().delete()
 	return listernotes(request)
 
-def resultat(request):
-	string = "salut"
-	return render(request, 'contenu_html/listerResultat.html', locals())
+
 
 """Cette fonction permet d'insérer une virgule a un index donné"""
 def insert_comma(string, index):
