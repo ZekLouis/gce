@@ -16,6 +16,8 @@ class Resultat_Semestre(models.Model):
 	resultat = models.CharField(max_length=15, null=False)
 	resultat_pre_jury = models.CharField(max_length=15, null=False)
 	resultat_jury = models.CharField(max_length=15, null=False)
+	def __str__(self):
+		return str(self.semestre)
 
 class Note(models.Model):
 	valeur = models.FloatField()
