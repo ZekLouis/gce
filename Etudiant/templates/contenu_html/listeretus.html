@@ -26,6 +26,14 @@
 	</tr>
 {% endfor %}
 </table>
+<script>
+	function suppression(){
+		if(confirm("Voulez-vous vraiment supprimer les étudiants ?")){
+			window.location = "suppall"
+		}
+	}
+</script>
+<p><a onclick="suppression();">Supprimer tous les étudiants</a></p>
 
-<p>Attention, supprimer un étudiant supprimera toute les notes qui lui sont associées.</p>
+<p>Attention, supprimer un étudiant supprimera toutes les notes qui lui sont associées.</p>
 {% endblock %}

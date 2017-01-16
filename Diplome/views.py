@@ -23,10 +23,8 @@ def ajouterDiplome(request):
 		form = DiplomeForm(request.POST)
 		if form.is_valid():
 			intitule = form.cleaned_data['intitule']
-			annee = form.cleaned_data['annee']
 			dip = Diplome(
 					intitule=intitule,
-					annee=annee,
 	                )
 			dip.save()
 
