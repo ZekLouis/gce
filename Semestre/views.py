@@ -5,7 +5,7 @@ from Semestre.forms import SemestreForm, SelectSem, RenseignerSem
 from django.shortcuts import render, get_object_or_404
 # Create your views here.
 
-
+"""Cette vue permet d'ajouter un semestre"""
 def ajouterSemestre(request):
 	if request.method == 'POST':  
 		form = SemestreForm(request.POST)
@@ -27,16 +27,19 @@ def ajouterSemestre(request):
 		form = SemestreForm() 
 	return render(request, 'contenu_html/ajouterSemestre.html', locals())
 
+"""Cette vue permet de lister les semestres"""
 def listerSemestre(request):
 	semestre = Semestre.objects.all()
 	return render(request, 'contenu_html/listerSemestre.html',{'semestre': semestre})
 
+"""Cette vue permet de supprimer un semestre"""
 def supprsem(request, id):
 	semestre = Semestre.objects.filter(id=id)
 
 	semestre.delete()
 	return render(request, 'contenu_html/supprsem.html', locals())
 
+"""Cette vue permet de modifier un semestre"""
 def modifierSemestre(request):
 	if request.method == 'POST':
 		if not request.session['sem']:
@@ -64,7 +67,7 @@ def modifierSemestre(request):
 				#request.session['mat'] = False
 				res2=True
 			else :
-				print("Form Non Valide")	
+				print("ERREUR : MODIFIER Semestre : VIEW modifierSemestre : formulaire")	
 	else :
 		Semestres = Semestre.objects.all()
 		request.session['sem'] = False

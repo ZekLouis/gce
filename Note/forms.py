@@ -4,7 +4,7 @@ from Etudiant.models import Etu
 from Matiere.models import Matiere
 from Annee.models import Annee
 from Semestre.models import Semestre
-from UE.models import UniteE
+from UE.models import UE
 
 class FileForm(forms.Form):
 	fichier = forms.FileField()

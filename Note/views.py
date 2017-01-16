@@ -116,12 +116,14 @@ def listernotes(request):
 	notes = Note.objects.all().order_by('etudiant__nom')
 	return render(request, 'contenu_html/listernotes.html',{'notes': notes})
 
+"""Cette vue permet de supprimer une note"""
 def supprnote(request, id):
 	note = Diplome.objects.filter(id=id)
 
 	note.delete()
 	return render(request, 'contenu_html/supprnote.html', locals())
 
+"""Cette vue permet de modifier une note"""
 def modifierNote(request):
 	if request.method == 'POST':
 		if not request.session['note']:
@@ -153,7 +155,7 @@ def modifierNote(request):
 				#request.session['mat'] = False
 				res2=True
 			else :
-				print("Form Non Valide")	
+				print("ERREUR : MODIFIER Note : VIEW modifierNote : formulaire")	
 	else :
 		Notes = Note.objects.all()
 		request.session['note'] = False

@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
 from django import forms
-from UE.models import UniteE
+from UE.models import UE
 from Matiere.models import Matiere
 
 

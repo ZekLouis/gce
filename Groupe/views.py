@@ -25,7 +25,7 @@ def ajouterGroupe(request):
 			g.save()
 			res = True
 		else :
-			print("ERREUR : AJOUT GROUPE : VIEW ajouterGroupe")
+			print("ERREUR : AJOUT GROUPE : VIEW ajouterGroupe : formulaire")
 	else :
 		form = GroupeForm() 
 	return render(request, 'contenu_html/ajouterGroupe.html', locals())
@@ -35,12 +35,11 @@ def listerGroupes(request):
 	groupes = Groupe.objects.all()
 	return render(request, 'contenu_html/listerGroupes.html',{'groupe': groupes})
 
-
+"""Cette vue permet de supprimer un groupe"""
 def supprgrp(request, id):
 	groupe = get_object_or_404(Groupe, id=id)
 	etus = Etu.objects.filter(groupe=id)
 	groupe.delete()
-
 	if etus :
 		etus.delete()
 	return render(request, 'contenu_html/supprgrp.html', locals())
@@ -51,6 +50,7 @@ def listerEtuGroupe(request, id):
 	groupe = get_object_or_404(Groupe, id=id)
 	return render(request, 'contenu_html/listerEtuGroupe.html', locals())
 
+"""Cette vue permet de modifier un groupe"""
 def modifierGroupe(request):
 	if request.method == 'POST':
 		if not request.session['grp']:
@@ -76,7 +76,7 @@ def modifierGroupe(request):
 				#request.session['mat'] = False
 				res2=True
 			else :
-				print("Form Non Valide")	
+				print("ERREUR : MODIFIER Groupe : VIEW modifierGroupe : formulaire")	
 	else :
 		Groupes = Groupe.objects.all()
 		request.session['grp'] = False

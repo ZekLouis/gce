@@ -5,7 +5,7 @@ from Annee.models import Annee
 from Diplome.forms import DiplomeForm
 from Diplome.forms import DiplomeFormCreation, SelectDip, RenseignerDip
 from Annee.forms import AnneeForm
-from UE.models import UniteE
+from UE.models import UE
 from UE.forms import UEForm
 from Semestre.models import Semestre
 from Semestre.forms import SemestreForm
@@ -37,16 +37,19 @@ def ajouterDiplome(request):
 		form = DiplomeForm() 
 	return render(request, 'contenu_html/ajouterDiplome.html', locals())
 
+"""Cette vue permet de lister les differents diplomes"""
 def listerDiplomes(request):
 	dips = Diplome.objects.all()
 	return render(request, 'contenu_html/listerDiplomes.html',{'dips': dips})
 
+"""Cette vue permet de supprimer un diplome"""
 def supprdip(request, id):
 	dip = Diplome.objects.filter(id=id)
 
 	dip.delete()
 	return render(request, 'contenu_html/supprdip.html', locals())
 
+"""Cette vue permet de modifier un diplome"""
 def modifierDiplome(request):
 	if request.method == 'POST':
 		if not request.session['dip']:
@@ -72,7 +75,7 @@ def modifierDiplome(request):
 				#request.session['mat'] = False
 				res2=True
 			else :
-				print("Form Non Valide")	
+				print("ERREUR : MODIFIER Diplome : VIEW modifierDiplome : formulaire")	
 	else :
 		Diplomes = Diplome.objects.all()
 		request.session['dip'] = False

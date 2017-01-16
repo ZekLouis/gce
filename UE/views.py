@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
 from django.shortcuts import render, get_object_or_404
-from UE.models import UniteE
+from UE.models import UE
 from Semestre.models import Semestre
 from Matiere.models import Matiere
 from UE.forms import UEForm, SelectSemestre,SelectUE,RenseignerUe
@@ -13,6 +13,7 @@ def listerUE(request):
 	ues = UniteE.objects.all()
 	return render(request, 'contenu_html/listerUE.html',{'ues': ues})
 
+"""Cette fonction permet de supprimer une ue"""
 def supprue(request, id):
 	ue = UniteE.objects.filter(id=id)
 
@@ -70,6 +71,7 @@ def ajouterUE(request):
 		form = SelectSemestre(semestres = sem)
 	return render(request, 'contenu_html/ajouterUE.html', locals())
 
+"""Cette vue permet de modifier une ue"""
 def modifierUe(request):
 	if request.method == 'POST':
 		if not request.session['ue']:
@@ -99,7 +101,7 @@ def modifierUe(request):
 				#request.session['mat'] = False
 				res2=True
 			else :
-				print("Form Non Valide")	
+				print("ERREUR : MODIFIER Ue : VIEW modifierUe : formulaire ")	
 	else :
 		Unites = UniteE.objects.all()
 		request.session['ue'] = False
