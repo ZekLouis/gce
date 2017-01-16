@@ -4,10 +4,13 @@ from io import StringIO
 from django import forms
 from Note.forms import FileForm, SelectNote, RenseignerNote
 from Etudiant.models import Etu
-from Annee.models import Annee
 from Note.models import Note,Resultat_Semestre
 from Matiere.models import Matiere
+from Semestre.models import Semestre
+from Annee.models import Annee
+from UE.models import UE
 import csv
+import datetime
 
 def resultat(request):
 	string = "salut"
@@ -23,7 +26,10 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat):
 	apogee=ligne[0]
 	nom=ligne[1]
 	prenom=ligne[2]
-
+	now = datetime.datetime.now()
+	year = now.year
+	yearMoins = year-1
+	
 	try :
 		etudiant = Etu.objects.get(apogee=apogee)
 		print(etudiant)
@@ -52,25 +58,37 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat):
 				note = ligne[i]
 
 			try :
-				matiere = Matiere.objects.get(code=notes[i])
-				if note != "null":
-					note = note.replace(",", ".")
-					note = float(note)
-					an, cr = Annee.objects.get_or_create(intitule = "2017")
-					an.save()
-					n, created = Note.objects.get_or_create(valeur=note,etudiant=etudiant,matiere=matiere,annee=an)
-					#n = Note(
-					#		valeur=note,
-					#		etudiant=etudiant,
-					#		matiere=matiere,
-					#	)
-					if created==False:
-    						#print("La note",note,etudiant,matiere,"existait deja, elle n'a pas ete ajoutee")
-							ret_notes = ret_notes + "<p>La note "+str(note)+" "+etudiant.nom+" "+matiere.intitule+" existait deja, elle n'a pas ete ajoutee</p>"
-					n.save()
+				#si on lit un chaine débutant par "UE"	
+				if "Semestre" in notes[i] :
+					semestre = Semestre.objects.get(code=notes[i])
+
+				#si on lit un chaine débutant par "UE"	
+				elif "UE" in notes[i]:
+					ue = UE.objects.get(code=notes[i])
+				else:		
+					matiere = Matiere.objects.get(code=notes[i])
+					if note != "null":
+						note = note.replace(",", ".")
+						note = float(note)
+						annee, cr = Annee.objects.get_or_create(intitule=str(yearMoins) +"-"+str(year))
+						annee.save()
+						n, created = Note.objects.get_or_create(valeur=note,etudiant=etudiant,matiere=matiere,annee=annee)
+						#n = Note(
+						#		valeur=note,
+						#		etudiant=etudiant,
+						#		matiere=matiere,
+						#	)
+						if created==False:
+								#print("La note",note,etudiant,matiere,"existait deja, elle n'a pas ete ajoutee")
+								ret_notes = ret_notes + "<p>La note "+str(note)+" "+etudiant.nom+" "+matiere.intitule+" existait deja, elle n'a pas ete ajoutee</p>"
+						n.save()
 			except Matiere.DoesNotExist :
-				print("Matiere",notes[i],"n'existe pas")
 				ret_mat = ret_mat + "<p>La matiere "+notes[i]+" n'existe pas</p>"
+			except Semestre.DoesNotExist :
+				ret_mat = ret_mat + "<p>Le semestre "+notes[i]+" n'existe pas</p>"
+			except UE.DoesNotExist :
+				ret_mat = ret_mat + "<p>L'UE "+notes[i]+" n'existe pas</p>"
+
 	except Etu.DoesNotExist :
 		print("L'étudiant",nom,prenom,apogee,"n'existe pas")
 		ret_etu = ret_etu + "<p>L'etudiant "+nom+" "+prenom+" "+str(apogee)+" n'existe pas</p>"
