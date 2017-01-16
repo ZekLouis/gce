@@ -6,8 +6,10 @@ from Groupe.forms import GroupeForm
 from Groupe.models import Groupe
 from Note.models import Note
 from Note.models import Resultat_Semestre
+from Semestre.models import Semestre
 from UE.models import UE
 from Note.forms import FileForm
+from UE.forms import SelectSemestre
 from Matiere.models import Matiere
 import csv
 from io import StringIO
@@ -70,61 +72,73 @@ def listeretus(request):
 	etus = Etu.objects.all()
 	return render(request, 'contenu_html/listeretus.html',{'etus': etus})
 
+
 """Cette vue permet de faire un affichage complet des notes d'un étudiant"""
 def affichageComplet(request):
 	if request.method == 'POST':
-		Etudiants = Etu.objects.all()
-		form = SelectEtu(request.POST, etus=Etudiants)
-		if form.is_valid() :	
-			print("salut")
-			id_etu = form.cleaned_data['select']
-			etudian = Etu.objects.get(id=id_etu)
-			e = Resultat_Semestre.objects.get(etudiant = etudian)
-			semestre = e.semestre
-			print(e)
-			if semestre:
-				ues = UE.objects.all().filter(semestre=semestre)
-				tab_matieres = []
-				for ue in ues :
-					tab_matieres.append(Matiere.objects.all().filter(ue=ue))
-				notes = Note.objects.all().filter(etudiant__id=id_etu)
-				lignes = UE.objects.all().filter(semestre=semestre).count() + 2
-				for matieres in tab_matieres :
-					for matiere in matieres :
-						lignes += 1
-
-				
-				colonnes = 4
-				lst = [[""] * colonnes for _ in range(lignes)]
-				lst[0][0] = "Elements"
-				lst[0][1] = "Note"
-				lst[0][2] = "Abscence"
-				lst[0][3] = "Coefficient"
-				lst[1][0] = semestre.code
-				#Debut du tableau final
-				i =1
-				for matieres in tab_matieres :
-					i += 1
-					lst[i][0]=matieres[0].ue
-					lst[i][3]= matieres[0].ue.coefficient 
-					for matiere in matieres :
-						i += 1
-						lst[i][0]= matiere.intitule
-						for note in notes :
-							if note.matiere.intitule == matiere.intitule :
-								lst[i][1] = note.valeur
-							if lst[i][1] == "" :
-								lst[i][1] = "-"
-							lst[i][2]= ""
-							lst[i][3]= matiere.coefficient
-				res = True
-			else:
-				semestre = False
+		if not request.session['sem']:
+			Etudiants = Etu.objects.all()
+			form = SelectEtu(request.POST, etus=Etudiants)
+			if form.is_valid() :
+				id_etu = form.cleaned_data['select']
+				request.session['id_etu'] = id_etu
+				request.session['sem'] = True
+			u = Semestre.objects.all()
+			form = SelectSemestre(semestres=u)
 		else:
-			print("ERREUR : AFFICHAGE Complte : VIEW affichageComplet : formulaire")
+			u = Semestre.objects.all()
+			form = SelectSemestre(request.POST, semestres=u)
+			if form.is_valid() :
+				semes = form.cleaned_data['select']
+				semestre = Semestre.objects.get(id=semes)
+				if semestre:
+					ues = UE.objects.all().filter(semestre=semestre)
+					tab_matieres = []
+					for ue in ues :
+						tab_matieres.append(Matiere.objects.all().filter(ue=ue))
+					notes = Note.objects.all().filter(etudiant__id=request.session['id_etu'])
+					lignes = UE.objects.all().filter(semestre=semestre).count() + 2
+					for matieres in tab_matieres :
+						for matiere in matieres :
+							lignes += 1
+					colonnes = 4
+					lst = [[""] * colonnes for _ in range(lignes)]
+					lst[0][0] = "Elements"
+					lst[0][1] = "Note"
+					lst[0][2] = "Abscence"
+					lst[0][3] = "Coefficient"
+					lst[1][0] = semestre.code
+					#Debut du tableau final
+					i =1
+					coeff = 0
+					moy = 0
+					for matieres in tab_matieres :
+						i += 1
+						lst[i][0]=matieres[0].ue
+						lst[i][3]= matieres[0].ue.coefficient 
+						for matiere in matieres :
+							i += 1
+							lst[i][0]= matiere.intitule
+							for note in notes :
+								if note.matiere.intitule == matiere.intitule :
+									lst[i][1] = note.valeur
+									moy += (note.valeur*matiere.coefficient)
+									coeff += matiere.coefficient
+								if lst[i][1] == "" :
+									lst[i][1] = "-"
+								lst[i][2]= ""
+								lst[i][3]= matiere.coefficient
+					lst[1][1] = moy/coeff
+					res = True
+					e = Etu.objects.get(id=request.session['id_etu'])
+				else:
+					semestre=False		
+			else:
+				print("ERREUR : AFFICHAGE Complte : VIEW affichageComplet : formulaire")
 	else :
 		semestre = False
 		Etudiants = Etu.objects.all()
+		request.session['sem'] = False
 		form = SelectEtu(etus=Etudiants)
 	return render(request, 'contenu_html/affichageComplet.html', locals())
 
