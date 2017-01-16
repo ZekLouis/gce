@@ -3,13 +3,13 @@
 	{% if res %}
 		<p>Ajout réussi dans la BD</p>
 		<input type="button" value="Ajouter une nouvelle année" onclick="document.location.href = '/Annee/ajouterAnnee';" />
-		<input type="button" value="Etape suivante" onclick="document.location.href = '/Diplome/ajouterDiplome';" />
+		<input type="button" value="Étape suivante" onclick="document.location.href = '/Diplome/ajouterDiplome';" />
 	{% else %}
 	<h1>Ajout d'une Année</h1>
 	<form enctype="multipart/form-data" action="{% url "ajouterAnnee" %}" method="post">
 		{% csrf_token %}
 		{{ form.as_p }}
-		<input type="submit" class="e" name="valider"">
+		<input type="submit" class="e" name="valider">
 	</form>
 	{% endif %}
 {% endblock %}
