@@ -5,7 +5,7 @@ from Etudiant.forms import EtudiantForm, RenseignerEtu, SelectEtu
 from Groupe.forms import GroupeForm
 from Groupe.models import Groupe
 from Note.models import Note
-from UE.models import UniteE
+from UE.models import UE
 from Matiere.models import Matiere
 
 # Create your views here.
@@ -16,6 +16,7 @@ def listeretu(request, id):
 	notes = Note.objects.filter(etudiant__id=id)
 	return render(request, 'contenu_html/listeretu.html', locals())
 
+"""Cette vue permet de supprimer un etudiant"""
 def suppretu(request, id):
 	etu = get_object_or_404(Etu, id=id)
 	notes = Note.objects.filter(etudiant__id=id)
@@ -51,7 +52,7 @@ def ajouterEtudiant(request):
 				e.save()
 				res = True
 		else :
-			print("Erreur à l'ajout")
+			print("ERREUR : AJOUTER Etudiant : VIEW ajouterEtudiant : formulaire")
 	else :
 		form = EtudiantForm() 
 	return render(request, 'contenu_html/ajouterEtudiant.html', locals())
@@ -110,7 +111,7 @@ def affichageComplet(request):
 			else:
 				semestre = False
 		else:
-			print("Erreur Form")
+			print("ERREUR : AFFICHAGE Complte : VIEW affichageComplet : formulaire")
 	else :
 		semestre = False
 		Etudiants = Etu.objects.all()
@@ -181,7 +182,7 @@ def complement_etu(request):
 				request.session['mat'] = False
 				res2=True
 			else :
-				print("Form Non Valide")	
+				print("ERREUR : MODIFIER Etudiant : VIEW complement_etu : formulaire")	
 	else :
 		Etudiants = Etu.objects.all()
 		request.session['etu'] = False

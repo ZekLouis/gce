@@ -9,7 +9,7 @@ from Note.models import Note
 from Etudiant.forms import SelectEtu
 # Create your views here.
 
-
+"""Cette vue permet de generer les documents"""
 def genererDocuments(request):
 	if request.method == 'POST':  
 		if not request.session['etu']:

@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 
 from django.db import models
 from Groupe.models import Groupe
-from Semestre.models import Semestre
 
 # Create your models here.
 class Etu(models.Model):
@@ -28,10 +27,5 @@ class Etu(models.Model):
 	aide_financiere = models.CharField(max_length=100, null=True)
 	bourse = models.CharField(max_length=100, null=True)
 	groupe = models.ForeignKey(Groupe, null=True)
-	semestre = models.ForeignKey(Semestre, null=True)
 	def __str__(self):
 		return self.nom
-
-class Appartient(models.Model):
-	etudiant = models.ForeignKey(Etu, null=False)
-	semestre = models.ForeignKey(Semestre, null=False)

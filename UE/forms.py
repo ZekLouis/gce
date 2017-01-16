@@ -1,12 +1,12 @@
 #-*- coding: utf-8 -*-
 from django import forms
-from UE.models import UniteE
+from UE.models import UE
 from Semestre.models import Semestre
 
 
 class UEForm(forms.ModelForm):
 	class Meta : 
-		model = UniteE
+		model = UE
 		fields = '__all__'
 		exclude = ['semestre']
 
