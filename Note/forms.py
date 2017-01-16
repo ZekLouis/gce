@@ -13,37 +13,18 @@ class SelectNote(forms.Form):
 	def __init__(self,*args,**kwargs):
 		notes = kwargs.pop('notes')
 		super(SelectNote,self).__init__(*args,**kwargs)
-		NoteChoices = [(note.id,note.etudiant) for note in notes]
+		NoteChoices = [(note[0],note[1]) for note in notes]
 		self.fields['select'] = forms.ChoiceField(widget=forms.Select(), choices=NoteChoices)
 
 class RenseignerNote(forms.Form):
-	
 	def __init__(self,*args,**kwargs):
-		note = kwargs.pop('note')
+		notes = kwargs.pop('notes')
 		super(RenseignerNote,self).__init__(*args,**kwargs)
 
-		if note.valeur is None:
-			self.fields['valeur']  = forms.CharField(max_length=100,required=False)
-		else:
-			self.fields['valeur'] = forms.CharField(max_length=100,required=False ,widget=forms.TextInput(attrs={'value': note.valeur}))
-
-
-	#	if note.etudiant is None:
-	#		self.fields['etudiant'] = forms.ModelChoiceField(queryset=Etu.objects.all(),required=False)
-	#	else:
-	#		self.fields['etudiant']  = forms.ModelChoiceField(queryset=Etu.objects.all().exclude(id=note.etudiant.id), empty_label=note.etudiant,required=False)
-#
-#		if note.annee is None:
-#			self.fields['annee'] = forms.ModelChoiceField(queryset=Annee.objects.all(),required=False)
-#		else:
-#			self.fields['annee']  = forms.ModelChoiceField(queryset=Annee.objects.all().exclude(id=note.annee.id), empty_label=note.annee,required=False)
-#
-#		if note.ue is None:
-#			self.fields['ue'] = forms.ModelChoiceField(queryset=UniteE.objects.all(),required=False)
-#		else:
-#			self.fields['ue']  = forms.ModelChoiceField(queryset=UniteE.objects.all().exclude(id=note.ue.id), empty_label=note.ue,required=False)
-#
-#		if note.matiere is None:
-#			self.fields['matiere'] = forms.ModelChoiceField(queryset=Matiere.objects.all(),required=False)
-#		else:
-#			self.fields['matiere']  = forms.ModelChoiceField(queryset=Matiere.objects.all().exclude(id=note.matiere.id), empty_label=note.matiere,required=False)
+		for note in notes:
+			print(note)
+			if note.valeur is None:
+				self.fields[note.matiere.code]  = forms.CharField(max_length=100,required=False)
+			else:
+				self.fields[note.matiere.code] = forms.CharField(max_length=100,required=False ,widget=forms.TextInput(attrs={'value': note.valeur}))
+		
