@@ -30,7 +30,7 @@ def resultatJury(request):
 	else :
 		Etudiants = Etu.objects.all()
 		request.session['etu'] = False
-		form = SelectEtu(request.POST, etus=Etudiants)
+		form = SelectEtu(etus=Etudiants)
 	return render(request, 'contenu_html/resultatJury.html', locals())
 
 
