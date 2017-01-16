@@ -66,7 +66,8 @@ def affichageComplet(request):
 	if request.method == 'POST':
 		Etudiants = Etu.objects.all()
 		form = SelectEtu(request.POST, etus=Etudiants)
-		if form.is_valid() :
+		if form.is_valid() :	
+			print("salut")
 			id_etu = form.cleaned_data['select']
 			e = get_object_or_404(Etu, id=id_etu)
 			semestre = e.semestre
