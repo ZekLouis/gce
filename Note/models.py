@@ -8,7 +8,7 @@ from Annee.models import Annee
 from Semestre.models import Semestre
 from UE.models import UniteE
 
-class Note_Semestre(models.Model):
+class RES_Semestre(models.Model):
 	annee = models.ForeignKey(Annee, null=False)
 	etudiant = models.ForeignKey(Etu, null=False)
 	semestre = models.ForeignKey(Semestre, null=False)
@@ -17,11 +17,6 @@ class Note_Semestre(models.Model):
 	resultat_pre_jury = models.CharField(max_length=15, null=False)
 	resultat_jury = models.CharField(max_length=15, null=False)
 
-class Note_UE(models.Model):
-	annee = models.ForeignKey(Annee, null=False)
-	etudiant = models.ForeignKey(Etu, null=False)
-	ue = models.ForeignKey(UniteE, null=False)
-	note = models.FloatField()
 
 class Note(models.Model):
 	valeur = models.FloatField()
