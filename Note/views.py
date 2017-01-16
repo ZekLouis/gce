@@ -51,10 +51,14 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat):
 	apogee=ligne[0]
 	nom=ligne[1]
 	prenom=ligne[2]
+
+	#Création de l'année 
 	now = datetime.datetime.now()
 	year = now.year
 	yearMoins = year-1
-	
+	annee, cr = Annee.objects.get_or_create(intitule=str(yearMoins) +"-"+str(year))
+	annee.save()
+
 	try :
 		etudiant = Etu.objects.get(apogee=apogee)
 		print(etudiant)
@@ -83,11 +87,22 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat):
 				note = ligne[i]
 
 			try :
-				#si on lit un chaine débutant par "UE"	
+				#si on lit un chaine contenant par "Semestre"	
 				if "Semestre" in notes[i] :
 					semestre = Semestre.objects.get(code=notes[i])
-
-				#si on lit un chaine débutant par "UE"	
+					note = note.replace(",", ".")
+					note = float(note)
+					ResSem = Resultat_Semestre.objects.get_or_create(
+						annee = annee,
+						etudiant = etudiant,
+						semestre = semestre,
+						note= note,
+						note_calc = 0.0,
+						resultat = "",
+						resultat_pre_jury= "",
+						resultat_jury= ""
+					)
+				#si on lit un chaine contenants par "UE"	
 				elif "UE" in notes[i]:
 					ue = UE.objects.get(code=notes[i])
 				else:		
@@ -95,8 +110,6 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat):
 					if note != "null":
 						note = note.replace(",", ".")
 						note = float(note)
-						annee, cr = Annee.objects.get_or_create(intitule=str(yearMoins) +"-"+str(year))
-						annee.save()
 						n, created = Note.objects.get_or_create(valeur=note,etudiant=etudiant,matiere=matiere,annee=annee)
 						#n = Note(
 						#		valeur=note,
