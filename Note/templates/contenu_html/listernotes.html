@@ -26,5 +26,12 @@
 	</tr>
 {% endfor %}
 </table>
-<p><a href="suppall">Supprimer toutes les notes</a></p>
+<script>
+	function suppresion(){
+		if(confirm("Voulez-vous vraiment supprimer les notes ?")){
+			window.location = "suppall"
+		}
+	}
+</script>
+<p><a onclick="suppresion();">Supprimer toutes les notes</a></p>
 {% endblock %}
