@@ -232,32 +232,36 @@ def renseignerResultat(request):
 		ues  = UE.objects.filter(semestre=semes)
 		
 		for etu in etus:
-			notes = Note.objects.all().filter(etudiant=etu)
-			moy = 0
-			coeff = 0
-			for ue in ues:
-				matieres = Matiere.objects.filter(ue=ue)
-				for matiere in matieres :
-					for note in notes :
-						if note.matiere.intitule == matiere.intitule :
-							note = Note.objects.get(etudiant=etu, matiere=matiere)
-							print(note)
+			try:
+				res = Resultat_Semestre.objects.get(etudiant=etu,semestre = semes)
+				if res is not None:
+					notes = Note.objects.all().filter(etudiant=etu)
+					moy = 0
+					coeff = 0
+					for ue in ues:
+						matieres = Matiere.objects.filter(ue=ue)
+						for matiere in matieres :
+							for note in notes :
+								if note.matiere.intitule == matiere.intitule :
+									note = Note.objects.get(etudiant=etu, matiere=matiere)
+									print(note)
 
-							moy += (note.valeur*matiere.coefficient)
-							coeff += matiere.coefficient
-				moyG = moy/coeff
-				resultatSem = Resultat_Semestre.objects.get(etudiant=etu, semestre=semes)
-				if moyG < 8:
-					jury = "Barre"
-				elif moyG<10 and moyG >= 8:
-					jury = "NVAL"
-				else:
-					jury = "VAL"
-				res = Resultat_Semestre(
-					note_calc = moyG,
-					resultat = jury,
-				)
-				res.save()	
+									moy += (note.valeur*matiere.coefficient)
+									coeff += matiere.coefficient
+						moyG = moy/coeff
+						resultatSem = Resultat_Semestre.objects.get(etudiant=etu, semestre=semes)
+						if moyG < 8:
+							jury = "Barre"
+						elif moyG<10 and moyG >= 8:
+							jury = "NVAL"
+						else:
+							jury = "VAL"
+						resultatSem.note_calc = moyG
+						resultatSem.resultat = jury
+						
+						resultatSem.save()
+			except Resultat_Semestre.DoesNotExist:
+				print("probleme")
 	else :
 		u = Semestre.objects.all()
 		form = SelectSemestre(semestres=u)
