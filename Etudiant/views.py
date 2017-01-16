@@ -5,6 +5,7 @@ from Etudiant.forms import EtudiantForm, RenseignerEtu, SelectEtu
 from Groupe.forms import GroupeForm
 from Groupe.models import Groupe
 from Note.models import Note
+from Note.models import Resultat_Semestre
 from UE.models import UE
 from Note.forms import FileForm
 from Matiere.models import Matiere
@@ -77,15 +78,17 @@ def affichageComplet(request):
 		if form.is_valid() :	
 			print("salut")
 			id_etu = form.cleaned_data['select']
-			e = get_object_or_404(Etu, id=id_etu)
+			etudian = Etu.objects.get(id=id_etu)
+			e = Resultat_Semestre.objects.get(etudiant = etudian)
 			semestre = e.semestre
+			print(e)
 			if semestre:
-				ues = UniteE.objects.all().filter(semestre=semestre)
+				ues = UE.objects.all().filter(semestre=semestre)
 				tab_matieres = []
 				for ue in ues :
-					tab_matieres.append(Matiere.objects.all().filter(unite=ue))
+					tab_matieres.append(Matiere.objects.all().filter(ue=ue))
 				notes = Note.objects.all().filter(etudiant__id=id_etu)
-				lignes = UniteE.objects.all().filter(semestre=semestre).count() + 2
+				lignes = UE.objects.all().filter(semestre=semestre).count() + 2
 				for matieres in tab_matieres :
 					for matiere in matieres :
 						lignes += 1
@@ -102,8 +105,8 @@ def affichageComplet(request):
 				i =1
 				for matieres in tab_matieres :
 					i += 1
-					lst[i][0]=matieres[0].unite
-					lst[i][3]= matieres[0].unite.coefficient 
+					lst[i][0]=matieres[0].ue
+					lst[i][3]= matieres[0].ue.coefficient 
 					for matiere in matieres :
 						i += 1
 						lst[i][0]= matiere.intitule

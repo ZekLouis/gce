@@ -4,6 +4,7 @@ from io import StringIO
 from django import forms
 from Note.forms import FileForm, SelectNote, RenseignerNote
 from Etudiant.models import Etu
+from Annee.models import Annee
 from Note.models import Note,Resultat_Semestre
 from Matiere.models import Matiere
 import csv
@@ -60,7 +61,9 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat):
 				if note != "null":
 					note = note.replace(",", ".")
 					note = float(note)
-					n, created = Note.objects.get_or_create(valeur=note,etudiant=etudiant,matiere=matiere)
+					an, cr = Annee.objects.get_or_create(intitule = "2017")
+					an.save()
+					n, created = Note.objects.get_or_create(valeur=note,etudiant=etudiant,matiere=matiere,annee=an)
 					#n = Note(
 					#		valeur=note,
 					#		etudiant=etudiant,
