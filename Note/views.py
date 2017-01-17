@@ -2,7 +2,7 @@
 from django.shortcuts import render, get_object_or_404
 from io import StringIO
 from django import forms
-from Note.forms import FileForm, SelectNote, RenseignerNote, ResultatJury
+from Note.forms import FileForm, SelectNote, RenseignerNote
 from Etudiant.forms import SelectEtu
 from UE.forms import SelectSemestre
 from Etudiant.models import Etu
