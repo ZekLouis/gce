@@ -6,7 +6,7 @@ from Note.forms import FileForm, SelectNote, RenseignerNote
 from Etudiant.forms import SelectEtu
 from UE.forms import SelectSemestre
 from Etudiant.models import Etu
-from Note.models import Note,Resultat_Semestre
+from Note.models import Note,Resultat_Semestre,Resultat_UE
 from Matiere.models import Matiere
 from Semestre.models import Semestre
 from Annee.models import Annee
@@ -101,31 +101,44 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,re
 						etudiant = etudiant,
 						semestre = semestre,
 						note= note,
-						note_calc = 0.0,
+						note_calc = 0.0,#note qui sera modifiée dans une autre vue
 						resultat = "",
 						resultat_pre_jury= "",
 						resultat_jury= ""
 					)
 				#si on lit un chaine contenants par "UE"	
 				elif "UE" in notes[i]:
+					#on commence par récupérer l'ue à l'aide de son code 
 					ue = UE.objects.get(code=notes[i])
-				else:		
+					note = note.replace(",", ".")
+					note = float(note)
+					#on peut maintenant récupérer toutes les informations 
+					Resultat_UE.objects.get_or_create(
+						annee = annee,
+						etudiant = etudiant,
+						ue = ue,
+						note= note,
+						note_calc = 0.0,#note qui sera modifiée dans une autre vue
+					)	
+
+				else:	
+					#on commence par créer la matière	
 					matiere = Matiere.objects.get(code=notes[i])
 					if note != "null":
 						note = note.replace(",", ".")
 						note = float(note)
 						n, created = Note.objects.get_or_create(valeur=note,etudiant=etudiant,matiere=matiere,annee=annee)
-						#n = Note(
-						#		valeur=note,
-						#		etudiant=etudiant,
-						#		matiere=matiere,
-						#	)
+						
 						if created==False:
+<<<<<<< HEAD
 								#print("La note",note,etudiant,matiere,"existait deja, elle n'a pas ete ajoutee")
 								compteur_note_error = compteur_note_error + 1
 								ret_notes.add("La note "+str(note)+" "+etudiant.nom+" "+matiere.intitule+" existait deja, elle n'a pas ete ajoutee")
 						else:
     							compteur_note = compteur_note +1
+=======
+								ret_notes.add(str(note)+" "+etudiant.nom+" "+matiere.intitule)
+>>>>>>> 041978665398bf727066eaf6a0d6e3cf66c011e9
 						n.save()
 			except Matiere.DoesNotExist :
 				ret_mat.add("La matiere "+notes[i]+" n'existe pas")
@@ -270,11 +283,12 @@ def renseignerResultat(request):
 							jury = "VAL"
 						resultatSem.note_calc = moyG
 						resultatSem.resultat = jury
-						
+						res=False
 						resultatSem.save()
 			except Resultat_Semestre.DoesNotExist:
 				print("probleme")
 	else :
+		res=True
 		u = Semestre.objects.all()
 		form = SelectSemestre(semestres=u)
 	return render(request, 'contenu_html/listerResultat.html',locals())
