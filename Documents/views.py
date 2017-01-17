@@ -1,7 +1,9 @@
 #-*- coding: utf-8 -*-
 from django.shortcuts import render, get_object_or_404
 
-#from xlwt import Workbook
+from xlutils.copy import copy # http://pypi.python.org/pypi/xlutils
+from xlrd import open_workbook # http://pypi.python.org/pypi/xlrd
+from xlwt import easyxf
 from Etudiant.models import Etu
 from Etudiant.models import Etu
 from Matiere.models import Matiere
@@ -19,8 +21,41 @@ def genererDocuments(request):
 				id_etu = form.cleaned_data['select']
 				request.session['id_etu'] = id_etu
 				request.session['etu'] = True
-			book = Workbook()
-			for etu in Etudiants:
+			#book = Workbook()
+			
+			book = open_workbook('DocJury/S2.xls',formatting_info=True)
+			book.sheet_by_index(0)
+			newFeuille = copy(book)
+			etus = Etu.objects.all()
+			ligne = 7
+			cp =0
+			for etu in etus:
+				colonne = 0
+				newFeuille.get_sheet(0).write(ligne,colonne,cp)
+				colonne +=1
+				newFeuille.get_sheet(0).write(ligne,colonne,etu.apogee)
+				colonne +=1
+				newFeuille.get_sheet(0).write(ligne,colonne,etu.nom)
+				colonne +=1
+				newFeuille.get_sheet(0).write(ligne,colonne,etu.prenom)
+				colonne +=1
+				newFeuille.get_sheet(0).write(ligne,colonne,"12,5")
+				colonne +=1
+				newFeuille.get_sheet(0).write(ligne,colonne,"12,5")
+				colonne +=1
+				newFeuille.get_sheet(0).write(ligne,colonne,"12,5")
+				ligne += 1
+				cp+=1
+			newFeuille.save('output.xls')
+	else :
+		Etudiants = Etu.objects.all()
+		request.session['etu'] = False
+		form = SelectEtu(etus=Etudiants)
+	return render(request, 'contenu_html/genererDocuments.html', locals())
+
+
+
+'''for etu in Etudiants:
     			# creation de la feuille 
 				feuil = book.add_sheet(etu.nom)
 
@@ -48,12 +83,7 @@ def genererDocuments(request):
 					i+=1
 				# ajustement eventuel de la largeur d'une colonne
 				feuil.col(0).width = 5000
-				book.save('monsimple.xls')
+				#book.save('DocJury/S2.xls')
 				res = True
-			e = get_object_or_404(Etu, id=request.session['id_etu'])   
-	else :
-		Etudiants = Etu.objects.all()
-		request.session['etu'] = False
-		form = SelectEtu(etus=Etudiants)
-	return render(request, 'contenu_html/genererDocuments.html', locals())
+			e = get_object_or_404(Etu, id=request.session['id_etu'])'''
 
