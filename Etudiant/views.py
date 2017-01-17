@@ -14,8 +14,6 @@ from Matiere.models import Matiere
 import csv
 from io import StringIO
 
-# Create your views here.
-
 """Cette vue permet de lister les notes d'un étudiant"""
 def listeretu(request, id):
 	etu = get_object_or_404(Etu, id=id)
