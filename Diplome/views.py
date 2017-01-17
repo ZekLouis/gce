@@ -67,8 +67,6 @@ def modifierDiplome(request):
 				diplome = get_object_or_404(Diplome, id=request.session['id_dip'])
 				if form.cleaned_data['intitule']:
 					diplome.intitule = form.cleaned_data['intitule']
-				if form.cleaned_data['annee']:
-					diplome.annee = form.cleaned_data['annee']
 				diplome.save()	
 				#request.session['mat'] = False
 				res2=True

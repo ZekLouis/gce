@@ -52,10 +52,10 @@ class RenseignerMat(forms.Form):
 		else:
 			self.fields['coefficient'] = forms.CharField(max_length=100,required=False, widget=forms.TextInput(attrs={'value': mat.coefficient}))
 
-		if mat.unite is None:
-			self.fields['unite'] = forms.ModelChoiceField(queryset=UniteE.objects.all(),required=False)
+		if mat.ue is None:
+			self.fields['unite'] = forms.ModelChoiceField(queryset=UE.objects.all(),required=False)
 		else:
-			self.fields['unite']  = forms.ModelChoiceField(queryset=UniteE.objects.all().exclude(id=mat.unite.id), empty_label=mat.unite,required=False)
+			self.fields['unite']  = forms.ModelChoiceField(queryset=UE.objects.all().exclude(id=mat.ue.id), empty_label=mat.ue,required=False)
 
 
 
