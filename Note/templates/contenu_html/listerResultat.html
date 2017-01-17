@@ -2,10 +2,14 @@
 {% block title %}Notes{% endblock %}
 
 {% block content %}
-<h1>Lister les resutlats</h1>
-<form enctype="multipart/form-data" action="{% url "renseignerResultat" %}" method="post">
-		{% csrf_token %}
-		{{ form.as_p }}
-		<input type="submit" class="e" name="Valider">
-	</form>
+	{% if res %}
+		<h1>Lister les resutlats</h1>
+		<form enctype="multipart/form-data" action="{% url "renseignerResultat" %}" method="post">
+				{% csrf_token %}
+				{{ form.as_p }}
+				<input type="submit" class="e" name="Valider">
+		</form>
+	{% else %}
+		<h1/>Les resultats du semestre ont bien été inséré</h1>
+	{% endif %}
 {% endblock %}
