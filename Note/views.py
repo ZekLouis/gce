@@ -1,8 +1,9 @@
 #-*- coding: utf-8 -*-
 from django.shortcuts import render, get_object_or_404
+from django.core.urlresolvers import reverse
 from io import StringIO
 from django import forms
-from Note.forms import FileForm, SelectNote, RenseignerNote
+from Note.forms import FileForm, SelectNote, RenseignerNote,CompleterResultat
 from Etudiant.forms import SelectEtu
 from UE.forms import SelectSemestre
 from Etudiant.models import Etu
@@ -289,7 +290,23 @@ def renseignerResultat(request):
 		form = SelectSemestre(semestres=u)
 	return render(request, 'contenu_html/listerResultat.html',locals())
 
-
-
-	def completerResultat(request, id):
-		return render(request, 'contenu_html/completerResultat.html', locals())	
+def completerResultat(request, id):
+	if request.method == 'POST':
+		etu= Etu.objects.get(id=id)
+		resSem= Resultat_Semestre.objects.get(etudiant=etu)
+		form = CompleterResultat(request.POST,res = resSem)
+		if form.is_valid() :
+			if form.cleaned_data['Resultat pre-jury']:
+				resSem.resultat_pre_jury = form.cleaned_data['Resultat pre-jury']
+			if form.cleaned_data['Resultat jury']:
+				resSem.resultat_jury = form.cleaned_data['Resultat jury']
+			resSem.save()
+			res=True	
+		else:
+			print("ERREUR : Completer resultat: VIEW modifieResultats : formulaire")	
+	else :
+		res=False
+		etu= Etu.objects.get(id=id)
+		resSem= Resultat_Semestre.objects.get(etudiant=etu)
+		form = CompleterResultat(res = resSem)
+	return render(request, 'contenu_html/completerResultat.html', locals())	

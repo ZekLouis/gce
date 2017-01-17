@@ -1,0 +1,19 @@
+{% extends "templates/base.html" %}
+{% block title %}Résultat Jury{% endblock %}
+
+{% block content %}
+    
+    {% if not res %} 
+         <p>Vous avez sélectionné l'étudiant: {{ etu.nom }}</p>
+
+         <form enctype="multipart/form-data" action="{% url "completerResultat" etu.id %}" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Sauvegarder">
+        </form>
+		{% else %}
+			<p>Ajout réussi dans la bd</p>
+
+
+	{% endif %}
+{% endblock %}
