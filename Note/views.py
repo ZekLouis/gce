@@ -97,16 +97,15 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,re
 					semestre = Semestre.objects.get(code=notes[i])
 					note = note.replace(",", ".")
 					note = float(note)
-					ResSem = Resultat_Semestre.objects.get_or_create(
+					ResSem, create = Resultat_Semestre.objects.get_or_create(
 						annee = annee,
 						etudiant = etudiant,
 						semestre = semestre,
-						note= note,
-						note_calc = 0.0,#note qui sera modifiée dans une autre vue
-						resultat = "",
-						resultat_pre_jury= "",
-						resultat_jury= ""
+						note= note
 					)
+					if not create:
+    						ResSem.note = note
+					ResSem.save()
 				#si on lit un chaine contenants par "UE"	
 				elif "UE" in notes[i]:
 					#on commence par récupérer l'ue à l'aide de son code 
@@ -114,14 +113,13 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,re
 					note = note.replace(",", ".")
 					note = float(note)
 					#on peut maintenant récupérer toutes les informations 
-					Resultat_UE.objects.get_or_create(
+					Res_Ue, create = Resultat_UE.objects.get_or_create(
 						annee = annee,
 						etudiant = etudiant,
 						ue = ue,
-						note= note,
-						note_calc = 0.0,#note qui sera modifiée dans une autre vue
+						note= note#note qui sera modifiée dans une autre vue
 					)	
-
+					Res_Ue.save()
 				else:	
 					#on commence par créer la matière	
 					matiere = Matiere.objects.get(code=notes[i])
@@ -254,32 +252,38 @@ def renseignerResultat(request):
 		ues  = UE.objects.filter(semestre=semes)
 		
 		for etu in etus:
+			moy = 0
+			coeff = 0
 			try:
 				res = Resultat_Semestre.objects.get(etudiant=etu,semestre = semes)
+				
 				if res is not None:
 					notes = Note.objects.all().filter(etudiant=etu)
-					moy = 0
-					coeff = 0
+					
 					for ue in ues:
 						matieres = Matiere.objects.filter(ue=ue)
 						for matiere in matieres :
 							for note in notes :
 								if note.matiere.intitule == matiere.intitule :
 									note = Note.objects.get(etudiant=etu, matiere=matiere)
+									print(note)
+									print(matiere.coefficient)
 									moy += (note.valeur*matiere.coefficient)
 									coeff += matiere.coefficient
-						moyG = moy/coeff
-						resultatSem = Resultat_Semestre.objects.get(etudiant=etu, semestre=semes)
-						if moyG < 8:
-							jury = "Barre"
-						elif moyG<10 and moyG >= 8:
-							jury = "NVAL"
-						else:
-							jury = "VAL"
-						resultatSem.note_calc = moyG
-						resultatSem.resultat = jury
-						res=False
-						resultatSem.save()
+									print(coeff)
+					print(moy)
+					moyG = moy/coeff
+					resultatSem = Resultat_Semestre.objects.get(etudiant=etu, semestre=semes)
+					if moyG < 8:
+						jury = "Barre"
+					elif moyG<10 and moyG >= 8:
+						jury = "NVAL"
+					else:
+						jury = "VAL"
+					resultatSem.note_calc = moyG
+					resultatSem.resultat = jury
+					res=False
+					resultatSem.save()
 			except Resultat_Semestre.DoesNotExist:
 				print("probleme")
 	else :

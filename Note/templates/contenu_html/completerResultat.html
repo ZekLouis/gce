@@ -13,7 +13,7 @@
          <form enctype="multipart/form-data" action="{% url "completerResultat" etu.id %}" method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <input type="submit" value="Sauvegarder">
+            <input type="submit" value="Valider">
         </form>
 		{% else %}
 			<p>Ajout réussi dans la bd</p>
