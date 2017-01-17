@@ -143,8 +143,8 @@ def affichageComplet(request):
 	return render(request, 'contenu_html/affichageComplet.html', locals())
 
 def importer_etu(request):
-    	if request.method == "POST":
-    		form = FileForm(request.POST, request.FILES)
+	if request.method == "POST":
+		form = FileForm(request.POST, request.FILES)
 		if form.is_valid() :
 			fichier = form.cleaned_data['fichier']
 	

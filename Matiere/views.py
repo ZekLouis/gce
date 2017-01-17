@@ -91,7 +91,7 @@ def modifierMatiere(request):
 				if form.cleaned_data['code']:
 					matiere.code = form.cleaned_data['code']
 				if form.cleaned_data['unite']:
-					matiere.unite = form.cleaned_data['unite']
+					matiere.ue = form.cleaned_data['unite']
 				matiere.save()	
 				#request.session['mat'] = False
 				res2=True
