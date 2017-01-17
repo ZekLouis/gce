@@ -14,7 +14,7 @@ from UE.models import UE
 import csv
 import datetime
 
-#Cette vue permet d'afficher les résultats jury pour un étudiant
+"""Cette vue permet d'afficher les résultats jury pour un étudiant"""
 def resultatJury(request):
 	if request.method == 'POST':
 			Etudiants = Etu.objects.all()
@@ -26,7 +26,7 @@ def resultatJury(request):
 				res = True
 				resultatsJury = Resultat_Semestre.objects.filter(etudiant_id=request.session['id_etu'])
 			else :
-				print("ERREUR : MODIFIER Diplome : VIEW modifierDiplome : formulaire")	
+				print("ERREUR : resultatJury : VIEW resultatJury : formulaire")	
 	else :
 		Etudiants = Etu.objects.all()
 		request.session['etu'] = False
@@ -47,7 +47,7 @@ def insert_comma(string, index):
     return string[:index] + ',' + string[index:]
 
 """Cette fonction permet de traiter les notes d'un élève"""
-def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,ret_ue,ret_sem,compteur_eleve_error,nb_ligne,compteur_note_error,compteur_note):
+def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,ret_ue,ret_sem,compteur_eleve_error,nb_ligne,compteur_note_error,compteur_note,compteur_eleve):
 	nb_elements_tab = len(ligne)
 	apogee=ligne[0]
 	nom=ligne[1]
@@ -62,6 +62,8 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,re
 
 	try :
 		etudiant = Etu.objects.get(apogee=apogee)
+		if(etudiant):
+    			compteur_eleve = compteur_eleve+1
 		print(etudiant)
 		print(code_eleve[0],apogee,code_eleve[1],nom,code_eleve[2],prenom)
 		print("Diplome : " + diplome)
@@ -75,22 +77,18 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,re
 				#Cas ou il n'y a pas de notes
 				# print(notes[i],"null")
 				note = "null"
-				compteur_note_error = compteur_note_error + 1
 			elif len(ligne[i]) == 5 and "," not in ligne[i]:
 				#Cas ou la note fait 5 char de long ex :"12369"
 				note = insert_comma(ligne[i],2)
-				compteur_note = compteur_note +1
 				# print(notes[i],note)
 			elif len(ligne[i]) == 4 and "," not in ligne[i]:
 				#Cas ou la note fait 4 char de long ex :"8563"
 				note = insert_comma(ligne[i],1)
-				compteur_note = compteur_note+1
 				# print(notes[i],note)
 			else:
 				#Cas classique ex :""4,5""
 				# print(notes[i],ligne[i])
 				note = ligne[i]
-				compteur_note = compteur_note +1
 
 			try :
 				#si on lit un chaine contenant par "Semestre"	
@@ -132,7 +130,11 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,re
 						n, created = Note.objects.get_or_create(valeur=note,etudiant=etudiant,matiere=matiere,annee=annee)
 						
 						if created==False:
-								ret_notes.add(str(note)+" "+etudiant.nom+" "+matiere.intitule)
+								#print("La note",note,etudiant,matiere,"existait deja, elle n'a pas ete ajoutee")
+								compteur_note_error = compteur_note_error + 1
+								ret_notes.add("La note "+str(note)+" "+etudiant.nom+" "+matiere.intitule+" existait deja, elle n'a pas ete ajoutee")
+						else:
+    							compteur_note = compteur_note +1
 						n.save()
 			except Matiere.DoesNotExist :
 				ret_mat.add("La matiere "+notes[i]+" n'existe pas")
@@ -144,7 +146,7 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,re
 		print("L'étudiant",nom,prenom,apogee,"n'existe pas")
 		ret_etu.add("L'etudiant "+nom+" "+prenom+" "+str(apogee)+" n'existe pas")
 		compteur_eleve_error=compteur_eleve_error+1
-	return ret_notes,ret_etu,ret_mat,ret_ue,ret_sem,compteur_eleve_error,nb_ligne,compteur_note_error,compteur_note
+	return ret_notes,ret_etu,ret_mat,ret_ue,ret_sem,compteur_eleve_error,nb_ligne,compteur_note_error,compteur_note,compteur_eleve
 
 # Create your views here.
 """Cette fonction permet d'importer via un formulaire un fichier CSV complet exporté par signature"""
@@ -172,8 +174,7 @@ def importer_csv(request):
 
 			for row in read:
 				if row[0].isdigit():
-					compteur_eleve = compteur_eleve+1
-					ret_notes, ret_etu, ret_mat,ret_ue,ret_sem,compteur_eleve_error,nb_ligne,compteur_note_error,compteur_note = traitement_eleve(row,code_notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,ret_ue,ret_sem,compteur_eleve_error,nb_ligne,compteur_note_error,compteur_note)
+					ret_notes, ret_etu, ret_mat,ret_ue,ret_sem,compteur_eleve_error,nb_ligne,compteur_note_error,compteur_note,compteur_eleve = traitement_eleve(row,code_notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,ret_ue,ret_sem,compteur_eleve_error,nb_ligne,compteur_note_error,compteur_note,compteur_eleve)
 				elif "Bilan" in row[0]:
 					print(row[0])
 				elif row[0] == "" and row[1] == "" and row[2] == "" :
