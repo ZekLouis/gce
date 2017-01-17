@@ -7,6 +7,7 @@ from Matiere.models import Matiere
 from Annee.models import Annee
 from Semestre.models import Semestre
 from UE.models import UE
+
 class Resultat_Semestre(models.Model):
 	annee = models.ForeignKey(Annee, null=False)
 	etudiant = models.ForeignKey(Etu, null=False)

@@ -142,7 +142,7 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,re
 				ret_ue.add("L'UE "+notes[i]+" n'existe pas")
 	except Etu.DoesNotExist :
 		print("L'étudiant",nom,prenom,apogee,"n'existe pas")
-		ret_etu = ret_etu.append("L'etudiant "+nom+" "+prenom+" "+str(apogee)+" n'existe pas")
+		ret_etu.add("L'etudiant "+nom+" "+prenom+" "+str(apogee)+" n'existe pas")
 		compteur_eleve_error=compteur_eleve_error+1
 	return ret_notes,ret_etu,ret_mat,ret_ue,ret_sem,compteur_eleve_error,nb_ligne,compteur_note_error,compteur_note
 
