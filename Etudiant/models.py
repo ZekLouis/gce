@@ -3,7 +3,8 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from Groupe.models import Groupe
+from Annee.models import Annee
+from Semestre.models import Semestre
 
 # Create your models here.
 class Etu(models.Model):
@@ -26,6 +27,16 @@ class Etu(models.Model):
 	cate_socio_pro_autre_parent = models.CharField(max_length=100, null=True)
 	aide_financiere = models.CharField(max_length=100, null=True)
 	bourse = models.CharField(max_length=100, null=True)
-	groupe = models.ForeignKey(Groupe, null=True)
 	def __str__(self):
 		return self.nom
+
+class Promotion(models.Model):
+	annee =  models.ForeignKey(Annee, null=False)
+	semestre = models.ForeignKey(Semestre, null=False)
+	intitule = models.CharField(max_length=100, null=True)
+	def __str__(self):
+		return self.intitule
+
+class Appartient(models.Model):
+	promotion = models.ForeignKey(Promotion, null=False)	
+	etudiant = models.ForeignKey(Etu, null=False)	

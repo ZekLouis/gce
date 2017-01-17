@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*-
 from django.shortcuts import render, get_object_or_404
-from Etudiant.models import Etu
-from Etudiant.forms import EtudiantForm, RenseignerEtu, SelectEtu
+from Etudiant.models import Etu, Promotion, Appartient
+from Etudiant.forms import EtudiantForm, RenseignerEtu, SelectEtu, PromotionForm, SelectPromo
 from Groupe.forms import GroupeForm
 from Groupe.models import Groupe
 from Note.models import Note
@@ -142,39 +142,83 @@ def affichageComplet(request):
 		form = SelectEtu(etus=Etudiants)
 	return render(request, 'contenu_html/affichageComplet.html', locals())
 
-def importer_etu(request):
-	if request.method == "POST":
-		form = FileForm(request.POST, request.FILES)
-		if form.is_valid() :
-			fichier = form.cleaned_data['fichier']
-	
-			import csv
-			csvf = StringIO(fichier.read().decode('latin-1'))
-			read = csv.reader(csvf, delimiter=',')
-			nb_etu = 0
-			for row in read:
-				if row[0].isdigit():
-					nom = row[1]
-					prenom = row[2]
-					apogee = row[0]
 
-					e, created = Etu.objects.get_or_create(
-							nom=nom,
-							prenom=prenom,
-							apogee=apogee,
-							)
-					if created==True:
-						nb_etu = nb_etu + 1
-					e.save()
-				else:
-					code_eleve = row
+def ajouter_promotion(request):
+	if request.method == 'POST':  
+		form = PromotionForm(request.POST)
+		if form.is_valid():
 
+			annee = form.cleaned_data['annee']
+			semestre = form.cleaned_data['semestre']
+			intitule = form.cleaned_data['intitule']
+			promo = Promotion(
+					annee=annee,
+					intitule=intitule,
+					semestre = semestre,					
+					)
+			promo.save()
 			res = True
 		else :
-			print("ERREUR : IMPORT CSV : VIEW importer_csv : Formulaire")
+			print("ERREUR : AJOUTER Promotion : VIEW ajouterPromotion : formulaire")
 	else :
-		form = FileForm()
+		form = PromotionForm()
+	return render(request, 'contenu_html/ajouter_promotion.html', locals())
+
+
+def importer_etu(request):
+	if request.method == 'POST':
+		if not request.session['promo']:
+			promotions = Promotion.objects.all()
+			form = SelectPromo(request.POST, promotions=promotions)
+			if form.is_valid() :
+				id_promo = form.cleaned_data['select']
+				request.session['id_promo'] = id_promo
+				request.session['promo'] = True
+			res = True
+			p = get_object_or_404(Promotion, id=request.session['id_promo'])
+			form = FileForm()
+		else:
+			p = get_object_or_404(Promotion, id=request.session['id_promo'])
+			form = FileForm(request.POST, request.FILES)
+			if form.is_valid() :
+				fichier = form.cleaned_data['fichier']
+	
+				import csv
+				csvf = StringIO(fichier.read().decode('latin-1'))
+				read = csv.reader(csvf, delimiter=',')
+				nb_etu = 0
+				for row in read:
+					if row[0].isdigit():
+						nom = row[1]
+						prenom = row[2]
+						apogee = row[0]
+
+						e, created = Etu.objects.get_or_create(
+								nom=nom,
+								prenom=prenom,
+								apogee=apogee,
+								)
+						appartient, createdBis = Appartient.objects.get_or_create(
+								etudiant=e,
+								promotion=p,
+
+						)
+						if created==True:
+							nb_etu = nb_etu + 1
+						e.save()
+						appartient.save()
+					else:
+						code_eleve = row
+				res2=True
+			else :
+				print("ERREUR : IMPORT CSV : VIEW importer_csv : Formulaire")
+	else :
+		promotions = Promotion.objects.all()
+		request.session['promo'] = False
+		form = SelectPromo(promotions=promotions)
 	return render(request, 'contenu_html/importer_etudiant.html', locals())
+	
+		
 
 """Cette vue permet de renseigner le reste des informations"""
 def complement_etu(request):
