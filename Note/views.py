@@ -6,7 +6,7 @@ from Note.forms import FileForm, SelectNote, RenseignerNote
 from Etudiant.forms import SelectEtu
 from UE.forms import SelectSemestre
 from Etudiant.models import Etu
-from Note.models import Note,Resultat_Semestre
+from Note.models import Note,Resultat_Semestre,Resultat_UE
 from Matiere.models import Matiere
 from Semestre.models import Semestre
 from Annee.models import Annee
@@ -103,28 +103,36 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,re
 						etudiant = etudiant,
 						semestre = semestre,
 						note= note,
-						note_calc = 0.0,
+						note_calc = 0.0,#note qui sera modifiée dans une autre vue
 						resultat = "",
 						resultat_pre_jury= "",
 						resultat_jury= ""
 					)
 				#si on lit un chaine contenants par "UE"	
 				elif "UE" in notes[i]:
+					#on commence par récupérer l'ue à l'aide de son code 
 					ue = UE.objects.get(code=notes[i])
-				else:		
+					note = note.replace(",", ".")
+					note = float(note)
+					#on peut maintenant récupérer toutes les informations 
+					Resultat_UE.objects.get_or_create(
+						annee = annee,
+						etudiant = etudiant,
+						ue = ue,
+						note= note,
+						note_calc = 0.0,#note qui sera modifiée dans une autre vue
+					)	
+
+				else:	
+					#on commence par créer la matière	
 					matiere = Matiere.objects.get(code=notes[i])
 					if note != "null":
 						note = note.replace(",", ".")
 						note = float(note)
 						n, created = Note.objects.get_or_create(valeur=note,etudiant=etudiant,matiere=matiere,annee=annee)
-						#n = Note(
-						#		valeur=note,
-						#		etudiant=etudiant,
-						#		matiere=matiere,
-						#	)
+						
 						if created==False:
-								#print("La note",note,etudiant,matiere,"existait deja, elle n'a pas ete ajoutee")
-								ret_notes.add("La note "+str(note)+" "+etudiant.nom+" "+matiere.intitule+" existait deja, elle n'a pas ete ajoutee")
+								ret_notes.add(str(note)+" "+etudiant.nom+" "+matiere.intitule)
 						n.save()
 			except Matiere.DoesNotExist :
 				ret_mat.add("La matiere "+notes[i]+" n'existe pas")
