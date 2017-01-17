@@ -2,7 +2,7 @@
 from django.shortcuts import render, get_object_or_404
 from io import StringIO
 from django import forms
-from Note.forms import FileForm, SelectNote, RenseignerNote, ResultatJury
+from Note.forms import FileForm, SelectNote, RenseignerNote
 from Etudiant.forms import SelectEtu
 from UE.forms import SelectSemestre
 from Etudiant.models import Etu
@@ -47,7 +47,7 @@ def insert_comma(string, index):
     return string[:index] + ',' + string[index:]
 
 """Cette fonction permet de traiter les notes d'un élève"""
-def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat):
+def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,ret_ue,ret_sem,compteur_eleve_error,nb_ligne,compteur_note_error,compteur_note):
 	nb_elements_tab = len(ligne)
 	apogee=ligne[0]
 	nom=ligne[1]
@@ -67,6 +67,7 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat):
 		print("Diplome : " + diplome)
 		#Il faudra get l'élève ici avec son num apogée
 		for i in range(3,nb_elements_tab):
+			nb_ligne=nb_ligne+1
 			print(notes[i])
 			#On ajoutera ici chaque note à l'étudiant
 			#Le tableau notes contient le code de la note et ligne la note
@@ -74,18 +75,22 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat):
 				#Cas ou il n'y a pas de notes
 				# print(notes[i],"null")
 				note = "null"
+				compteur_note_error = compteur_note_error + 1
 			elif len(ligne[i]) == 5 and "," not in ligne[i]:
 				#Cas ou la note fait 5 char de long ex :"12369"
 				note = insert_comma(ligne[i],2)
+				compteur_note = compteur_note +1
 				# print(notes[i],note)
 			elif len(ligne[i]) == 4 and "," not in ligne[i]:
 				#Cas ou la note fait 4 char de long ex :"8563"
 				note = insert_comma(ligne[i],1)
+				compteur_note = compteur_note+1
 				# print(notes[i],note)
 			else:
 				#Cas classique ex :""4,5""
 				# print(notes[i],ligne[i])
 				note = ligne[i]
+				compteur_note = compteur_note +1
 
 			try :
 				#si on lit un chaine contenant par "Semestre"	
@@ -119,19 +124,19 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat):
 						#	)
 						if created==False:
 								#print("La note",note,etudiant,matiere,"existait deja, elle n'a pas ete ajoutee")
-								ret_notes = ret_notes + "<p>La note "+str(note)+" "+etudiant.nom+" "+matiere.intitule+" existait deja, elle n'a pas ete ajoutee</p>"
+								ret_notes.add("La note "+str(note)+" "+etudiant.nom+" "+matiere.intitule+" existait deja, elle n'a pas ete ajoutee")
 						n.save()
 			except Matiere.DoesNotExist :
-				ret_mat = ret_mat + "<p>La matiere "+notes[i]+" n'existe pas</p>"
+				ret_mat.add("La matiere "+notes[i]+" n'existe pas")
 			except Semestre.DoesNotExist :
-				ret_mat = ret_mat + "<p>Le semestre "+notes[i]+" n'existe pas</p>"
+				ret_sem.add("Le semestre "+notes[i]+" n'existe pas")
 			except UE.DoesNotExist :
-				ret_mat = ret_mat + "<p>L'UE "+notes[i]+" n'existe pas</p>"
-
+				ret_ue.add("L'UE "+notes[i]+" n'existe pas")
 	except Etu.DoesNotExist :
 		print("L'étudiant",nom,prenom,apogee,"n'existe pas")
-		ret_etu = ret_etu + "<p>L'etudiant "+nom+" "+prenom+" "+str(apogee)+" n'existe pas</p>"
-	return ret_notes,ret_etu,ret_mat
+		ret_etu = ret_etu.append("L'etudiant "+nom+" "+prenom+" "+str(apogee)+" n'existe pas")
+		compteur_eleve_error=compteur_eleve_error+1
+	return ret_notes,ret_etu,ret_mat,ret_ue,ret_sem,compteur_eleve_error,nb_ligne,compteur_note_error,compteur_note
 
 # Create your views here.
 """Cette fonction permet d'importer via un formulaire un fichier CSV complet exporté par signature"""
@@ -140,20 +145,27 @@ def importer_csv(request):
 		form = FileForm(request.POST, request.FILES)
 		if form.is_valid() :
 			fichier = form.cleaned_data['fichier']
-	
+			
 			import csv
 			csvf = StringIO(fichier.read().decode('latin-1'))
 			read = csv.reader(csvf, delimiter=',')
 
-			ret_notes = ""
+			nb_ligne = 0
+			compteur_eleve=0
+			compteur_eleve_error=0
+			compteur_note=0
+			compteur_note_error=0
 
-			ret_etu = ""
-
-			ret_mat = ""
+			ret_notes = set()
+			ret_etu = set()
+			ret_mat = set()
+			ret_ue = set()
+			ret_sem = set()
 
 			for row in read:
 				if row[0].isdigit():
-					ret_notes, ret_etu, ret_mat = traitement_eleve(row,code_notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat)
+					compteur_eleve = compteur_eleve+1
+					ret_notes, ret_etu, ret_mat,ret_ue,ret_sem,compteur_eleve_error,nb_ligne,compteur_note_error,compteur_note = traitement_eleve(row,code_notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,ret_ue,ret_sem,compteur_eleve_error,nb_ligne,compteur_note_error,compteur_note)
 				elif "Bilan" in row[0]:
 					print(row[0])
 				elif row[0] == "" and row[1] == "" and row[2] == "" :
@@ -162,9 +174,9 @@ def importer_csv(request):
 					diplome = row[0]
 				else:
 					code_eleve = row
-
+	
 			print(ret_notes,ret_etu,ret_mat)
-			if ret_notes=="" and ret_etu=="" and ret_mat=="":
+			if len(ret_notes)==0 and len(ret_etu)==0 and len(ret_mat)==0:
     				perf=True
 			else:
 					perf=False

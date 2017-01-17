@@ -27,13 +27,3 @@ class RenseignerNote(forms.Form):
 				self.fields[note.matiere.code]  = forms.CharField(max_length=100,required=False)
 			else:
 				self.fields[note.matiere.code] = forms.CharField(max_length=100,required=False ,widget=forms.TextInput(attrs={'value': note.valeur}))
-
-class ResultatJury(forms.Form):
-	def __init__(self,*args,**kwargs):
-		etudiant = kwargs.pop('etudiant')
-		super(ResultatJury,self).__init__(*args,**kwargs)
-
-		if etudiant.nom is None:
-			self.fields['nom']  = forms.CharField(max_length=100,required=False)
-		else:
-			self.fields['nom'] = forms.CharField(max_length=100,required=False ,widget=forms.TextInput(attrs={'value': etudiant.nom}))

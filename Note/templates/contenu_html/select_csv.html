@@ -6,10 +6,56 @@
 		{% if perf %}
 			<p>Ajout réussi dans la BD</p>
 		{% else %}
-			<p>Ajout partiellement réussi :</p>
-			{{ ret_etu | safe }}
-			{{ ret_mat | safe }}
-			{{ ret_notes | safe }}
+		<h2>Résultat de l'import ....</h2>
+		<table class="tab general">
+			<th>Nombre de notes ajoutées</th>
+			<th>Nombre de notes non renseignées </th>
+			<th>Nombre d'élèves ajoutées</th>
+			<th>Nombre d'élèves qui n'existent pas</th>
+
+			<tr>
+				<td>Il y a {{ compteur_note }} notes qui ont été ajoutées</td>
+				<td>Il y a {{ compteur_note_error }} notes qui ne sont pas renseignées </td>
+				<td>Il y a {{ compteur_eleve }} élève(s) existants dont leur notes on été prises en compte</td>
+				<td>Il y a {{ compteur_eleve_error }} élève(s) qui n'existent pas</td>
+			</tr>
+		</table>	
+
+		<table class="tab sem" id="tabSem">
+			<th>Erreurs liées aux semestres </th>	
+		{% for sem in ret_sem %}		
+			<tr><td>{{ sem }}</td></tr>
+		{% endfor %}	
+		</table>
+
+		<table class="tab ue">
+			<th>Erreurs liées aux Unités d'enseignements </th>	
+		{% for ue in ret_ue %}		
+			<tr><td>{{ ue }} n'existe pas</td></tr>
+		{% endfor %}	
+		</table>
+
+		<table class="tab mat">
+			<th>Erreurs liées aux matières </th>	
+		{% for mat in ret_mat %}		
+			<tr><td>{{ mat }}</td></tr>
+		{% endfor %}	
+		</table>
+
+		<table class="tab etu">
+			<th>Erreurs liées aux étudiants </th>	
+		{% for etu in ret_etu %}		
+			<tr><td>{{ etu }}</td></tr>
+		{% endfor %}	
+		</table>
+
+		<table class="tab notes">
+			<th>Erreurs liées aux notes </th>	
+		{% for note in ret_notes %}		
+			<tr><td>{{ note }}</td></tr>
+		{% endfor %}	
+		</table>
+
 		{% endif %}
 		<p><a href="/accueil">Retour à l'accueil</a></p>
 	{% else %}

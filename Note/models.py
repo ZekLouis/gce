@@ -6,7 +6,7 @@ from Etudiant.models import Etu
 from Matiere.models import Matiere
 from Annee.models import Annee
 from Semestre.models import Semestre
-
+from UE.models import UE
 class Resultat_Semestre(models.Model):
 	annee = models.ForeignKey(Annee, null=False)
 	etudiant = models.ForeignKey(Etu, null=False)
@@ -16,6 +16,15 @@ class Resultat_Semestre(models.Model):
 	resultat = models.CharField(max_length=15, null=True)
 	resultat_pre_jury = models.CharField(max_length=15, null=True)
 	resultat_jury = models.CharField(max_length=15, null=True)
+	def __str__(self):
+		return str(self.etudiant)
+
+class Resultat_UE(models.Model):
+	annee = models.ForeignKey(Annee, null=False)
+	etudiant = models.ForeignKey(Etu, null=False)
+	ue = models.ForeignKey(UE, null=False)
+	note = models.FloatField()
+	note_calc = models.FloatField(null=True)
 	def __str__(self):
 		return str(self.etudiant)
 
