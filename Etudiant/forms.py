@@ -129,8 +129,3 @@ class RenseignerEtu(forms.Form):
 			self.fields['groupe'] = forms.ModelChoiceField(queryset=Groupe.objects.all(),required=False)
 		else:
 			self.fields['groupe']  = forms.ModelChoiceField(queryset=Groupe.objects.all().exclude(id=etu.groupe.id), empty_label=etu.groupe,required=False)
-
-		if etu.semestre is None:
-			self.fields['semestre'] = forms.ModelChoiceField(queryset=Semestre.objects.all(),required=False)
-		else:
-			self.fields['semestre']  = forms.ModelChoiceField(queryset=Semestre.objects.all().exclude(id=etu.semestre.id), empty_label=etu.semestre,required=False)

@@ -234,8 +234,6 @@ def complement_etu(request):
 					etudiant.bourse = form.cleaned_data['bourse']
 				if form.cleaned_data['groupe'] is not None :
 					etudiant.groupe = form.cleaned_data['groupe']
-				if form.cleaned_data['semestre'] is not None :
-					etudiant.semestre = form.cleaned_data['semestre']
 				etudiant.save()	
 				request.session['mat'] = False
 				res2=True
