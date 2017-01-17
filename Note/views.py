@@ -266,8 +266,6 @@ def renseignerResultat(request):
 							for note in notes :
 								if note.matiere.intitule == matiere.intitule :
 									note = Note.objects.get(etudiant=etu, matiere=matiere)
-									print(note)
-
 									moy += (note.valeur*matiere.coefficient)
 									coeff += matiere.coefficient
 						moyG = moy/coeff
