@@ -32,7 +32,4 @@ class RenseignerDip(forms.Form):
 		else:
 			self.fields['intitule'] = forms.CharField(max_length=100,required=False ,widget=forms.TextInput(attrs={'value': dip.intitule}))
 
-		if dip.annee is None:
-			self.fields['annee'] = forms.ModelChoiceField(queryset=Annee.objects.all(),required=False)
-		else:
-			self.fields['annee']  = forms.ModelChoiceField(queryset=Annee.objects.all().exclude(id=dip.annee.id), empty_label=dip.annee,required=False)
+	

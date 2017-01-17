@@ -41,19 +41,18 @@ class RenseignerUe(forms.Form):
 		else:
 			self.fields['intitule'] = forms.CharField(max_length=100,required=False ,widget=forms.TextInput(attrs={'value': ue.intitule}))
 
+		if ue.coefficient is None:
+			self.fields['coefficient']  = forms.CharField(max_length=100,required=False)
+		else:
+			self.fields['coefficient'] = forms.CharField(max_length=100,required=False, widget=forms.TextInput(attrs={'value': ue.coefficient}))
 
 		if ue.code is None:
 			self.fields['code']  = forms.CharField(max_length=100,required=False)
 		else:
 			self.fields['code'] = forms.CharField(max_length=100,required=False, widget=forms.TextInput(attrs={'value': ue.code}))
 
-		if ue.coefficient is None:
-			self.fields['coefficient']  = forms.CharField(max_length=100,required=False)
-		else:
-			self.fields['coefficient'] = forms.CharField(max_length=100,required=False, widget=forms.TextInput(attrs={'value': ue.coefficient}))
-
+		
 		if ue.semestre is None:
 			self.fields['semestre'] = forms.ModelChoiceField(queryset=Semestre.objects.all(),required=False)
 		else:
 			self.fields['semestre']  = forms.ModelChoiceField(queryset=Semestre.objects.all().exclude(id=ue.semestre.id), empty_label=ue.semestre,required=False)
-
