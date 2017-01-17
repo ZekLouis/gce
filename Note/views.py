@@ -130,15 +130,11 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,re
 						n, created = Note.objects.get_or_create(valeur=note,etudiant=etudiant,matiere=matiere,annee=annee)
 						
 						if created==False:
-<<<<<<< HEAD
 								#print("La note",note,etudiant,matiere,"existait deja, elle n'a pas ete ajoutee")
 								compteur_note_error = compteur_note_error + 1
 								ret_notes.add("La note "+str(note)+" "+etudiant.nom+" "+matiere.intitule+" existait deja, elle n'a pas ete ajoutee")
 						else:
     							compteur_note = compteur_note +1
-=======
-								ret_notes.add(str(note)+" "+etudiant.nom+" "+matiere.intitule)
->>>>>>> 041978665398bf727066eaf6a0d6e3cf66c011e9
 						n.save()
 			except Matiere.DoesNotExist :
 				ret_mat.add("La matiere "+notes[i]+" n'existe pas")
