@@ -43,6 +43,7 @@ body{
 	color: #00A99D;
 }
 
+
 /*#footer{
 	width: 100%;
 	background-color:#222222;	
@@ -133,7 +134,7 @@ table{
 }
 
 table{
-	margin-left: 50px;
+	margin: 50px 50px 50px 50px;
 }
 
 td, th{

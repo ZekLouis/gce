@@ -7,7 +7,7 @@
 			<p>Ajout réussi dans la BD</p>
 		{% else %}
 		<h2>Résultat de l'import ....</h2>
-		<table>
+		<table class="tab general">
 			<th>Nombre de notes ajoutées</th>
 			<th>Nombre de notes non renseignées </th>
 			<th>Nombre d'élèves ajoutées</th>
@@ -21,35 +21,35 @@
 			</tr>
 		</table>	
 
-		<table>
+		<table class="tab sem" id="tabSem">
 			<th>Erreurs liées aux semestres </th>	
 		{% for sem in ret_sem %}		
 			<tr><td>{{ sem }}</td></tr>
 		{% endfor %}	
 		</table>
 
-		<table>
+		<table class="tab ue">
 			<th>Erreurs liées aux Unités d'enseignements </th>	
 		{% for ue in ret_ue %}		
 			<tr><td>{{ ue }} n'existe pas</td></tr>
 		{% endfor %}	
 		</table>
 
-		<table>
+		<table class="tab mat">
 			<th>Erreurs liées aux matières </th>	
 		{% for mat in ret_mat %}		
 			<tr><td>{{ mat }}</td></tr>
 		{% endfor %}	
 		</table>
 
-		<table>
+		<table class="tab etu">
 			<th>Erreurs liées aux étudiants </th>	
 		{% for etu in ret_etu %}		
 			<tr><td>{{ etu }}</td></tr>
 		{% endfor %}	
 		</table>
 
-		<table>
+		<table class="tab notes">
 			<th>Erreurs liées aux notes </th>	
 		{% for note in ret_notes %}		
 			<tr><td>{{ note }}</td></tr>
