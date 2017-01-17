@@ -293,6 +293,11 @@ def renseignerResultat(request):
 def completerResultat(request, id):
 	if request.method == 'POST':
 		etu= Etu.objects.get(id=id)
+		if(etu):
+			existe= True
+		else:
+			existe=False
+
 		resSem= Resultat_Semestre.objects.get(etudiant=etu)
 		form = CompleterResultat(request.POST,res = resSem)
 		if form.is_valid() :
@@ -305,7 +310,6 @@ def completerResultat(request, id):
 		else:
 			print("ERREUR : Completer resultat: VIEW modifieResultats : formulaire")	
 	else :
-		res=False
 		etu= Etu.objects.get(id=id)
 		resSem= Resultat_Semestre.objects.get(etudiant=etu)
 		form = CompleterResultat(res = resSem)
