@@ -288,3 +288,8 @@ def renseignerResultat(request):
 		u = Semestre.objects.all()
 		form = SelectSemestre(semestres=u)
 	return render(request, 'contenu_html/listerResultat.html',locals())
+
+
+
+	def completerResultat(request, id):
+		return render(request, 'contenu_html/completerResultat.html', locals())	
