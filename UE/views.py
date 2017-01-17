@@ -29,7 +29,7 @@ def supprue(request, id):
 """Cette fonction permet de faire afficher les matieres et les details d'une ue"""
 def detailUE(request, id):
 	ue = get_object_or_404(UE, id=id)
-	matieres = Matiere.objects.filter(unite__id=id)
+	matieres = Matiere.objects.filter(ue__id=id)
 	return render(request, 'contenu_html/detailUE.html', locals())
 
 """Cette vue permet d ajouter une UE a la base"""
