@@ -194,8 +194,8 @@ def listernotes(request):
 
 """Cette vue permet de supprimer une note"""
 def supprnote(request, id):
-	note = Diplome.objects.filter(id=id)
-
+	note = Note.objects.filter(id=id)
+	print(note)
 	note.delete()
 	return render(request, 'contenu_html/supprnote.html', locals())
 

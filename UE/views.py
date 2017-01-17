@@ -96,7 +96,7 @@ def modifierUe(request):
 				if form.cleaned_data['code']:
 					unite.code = form.cleaned_data['code']
 				if form.cleaned_data['semestre']:
-					unite.unite = form.cleaned_data['semestre']
+					unite.semestre = form.cleaned_data['semestre']
 				unite.save()	
 				#request.session['mat'] = False
 				res2=True
