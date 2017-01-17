@@ -27,3 +27,18 @@ class RenseignerNote(forms.Form):
 				self.fields[note.matiere.code]  = forms.CharField(max_length=100,required=False)
 			else:
 				self.fields[note.matiere.code] = forms.CharField(max_length=100,required=False ,widget=forms.TextInput(attrs={'value': note.valeur}))
+				
+class CompleterResultat(forms.Form):
+	def __init__(self,*args,**kwargs):
+		resSem = kwargs.pop('res')
+		super(CompleterResultat,self).__init__(*args,**kwargs)
+	
+		if resSem.resultat_pre_jury is None:
+			self.fields['Resultat pre-jury']  = forms.CharField(max_length=100,required=False)
+		else:
+			self.fields['Resultat pre-jury'] = forms.CharField(max_length=100,required=False ,widget=forms.TextInput(attrs={'value': resSem.resultat_pre_jury}))
+
+		if resSem.resultat_jury is None:
+			self.fields['Resultat jury']  = forms.CharField(max_length=100,required=False)
+		else:
+			self.fields['Resultat jury'] = forms.CharField(max_length=100,required=False ,widget=forms.TextInput(attrs={'value': resSem.resultat_jury}))	

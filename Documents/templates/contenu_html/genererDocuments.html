@@ -1,9 +1,9 @@
 {% extends "templates/base.html" %}
 {% block content %}
+<h1>Génération des documents</h1>
 	{% if res %}
 		<p>Documents générés</p>
 	{% else %}
-	<h1>Génération des documents</h1>
 	<form enctype="multipart/form-data" action="{% url "genererDocuments" %}" method="post">
 		{% csrf_token %}
 		{{ form.as_p }}

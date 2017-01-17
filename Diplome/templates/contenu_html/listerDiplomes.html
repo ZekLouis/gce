@@ -2,22 +2,20 @@
 {% block title %}Diplomes enregistrés{% endblock %}
 
 {% block content %}
-
+<h1>Lister les diplomes</h1>
 {% if not dips %}
 	<p>Pas de diplome</p> 
 {% else %}
 	<table style="border:1px solid black; border-collapse : collapse;">
 	<tr>
 		<th style="border:1px solid black;">Nom</th>
-		<th style="border:1px solid black;">Année</th>
 		<th style="border:1px solid black;">Supprimer</th>
 	</tr>
 {% endif %}
 
 {% for dip in dips %}
 	<tr>
-		<td style="border:1px solid black;">{{ dip.nom }}</td>
-		<td style="border:1px solid black;">{{ dip.annee }}</td>
+		<td style="border:1px solid black;">{{ dip.intitule }}</td>
 		<td><a href="supprdip/{{ dip.id }}">Supprimer</a></td>
 	</tr>
 {% endfor %}
