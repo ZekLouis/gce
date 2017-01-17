@@ -258,11 +258,12 @@ def renseignerResultat(request):
 							jury = "VAL"
 						resultatSem.note_calc = moyG
 						resultatSem.resultat = jury
-						
+						res=False
 						resultatSem.save()
 			except Resultat_Semestre.DoesNotExist:
 				print("probleme")
 	else :
+		res=True
 		u = Semestre.objects.all()
 		form = SelectSemestre(semestres=u)
 	return render(request, 'contenu_html/listerResultat.html',locals())
