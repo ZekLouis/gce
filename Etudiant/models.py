@@ -12,7 +12,7 @@ class Etu(models.Model):
 	prenom = models.CharField(max_length=30, null=False)
 	age = models.IntegerField(null=True)
 	apogee = models.IntegerField(null=True)
-	date_naissance = models.DateField(null=True)
+	date_naissance = models.CharField(max_length=100,null=True)
 	sexe = models.CharField(max_length=1, null=True)
 	adresse = models.CharField(max_length=100, null=True)
 	ine = models.CharField(max_length=100, null=True)
@@ -35,8 +35,10 @@ class Promotion(models.Model):
 	semestre = models.ForeignKey(Semestre, null=False)
 	intitule = models.CharField(max_length=100, null=True)
 	def __str__(self):
-		return self.intitule
+		return self.intitule.encode('utf-8')
 
 class Appartient(models.Model):
 	promotion = models.ForeignKey(Promotion, null=False)	
-	etudiant = models.ForeignKey(Etu, null=False)	
+	etudiant = models.ForeignKey(Etu, null=False)
+	def __str__(self):
+		return self.promotion.encode('utf-8')

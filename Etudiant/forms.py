@@ -1,7 +1,6 @@
 #-*- coding: utf-8 -*-
 from django import forms
 from Etudiant.models import Etu, Promotion
-from Groupe.models import Groupe
 from Semestre.models import Semestre
 
 class EtudiantForm(forms.Form):
@@ -59,7 +58,6 @@ class RenseignerEtu(forms.Form):
 		else:
 			self.fields['apogee'] = forms.CharField(max_length=100,required=False, widget=forms.TextInput(attrs={'value': etu.apogee}))
 
-
 		if etu.date_naissance is None:
 			self.fields['date_naissance']  = forms.CharField(max_length=100,required=False)
 		else:
@@ -69,7 +67,6 @@ class RenseignerEtu(forms.Form):
 			self.fields['sexe']  = forms.CharField(max_length=100,required=False)
 		else:
 			self.fields['sexe'] = forms.CharField(max_length=100,required=False, widget=forms.TextInput(attrs={'value': etu.sexe}))
-
 
 		if etu.adresse is None:
 			self.fields['adresse']  = forms.CharField(max_length=100,required=False)
@@ -136,7 +133,4 @@ class RenseignerEtu(forms.Form):
 		else:
 			self.fields['bourse']  = forms.CharField(max_length=100,required=False, widget=forms.TextInput(attrs={'value': etu.bourse}))
 
-		if etu.groupe is None:
-			self.fields['groupe'] = forms.ModelChoiceField(queryset=Groupe.objects.all(),required=False)
-		else:
-			self.fields['groupe']  = forms.ModelChoiceField(queryset=Groupe.objects.all().exclude(id=etu.groupe.id), empty_label=etu.groupe,required=False)
+		
