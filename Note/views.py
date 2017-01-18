@@ -268,14 +268,21 @@ def renseignerResultat(request):
 							for note in notes :
 								if note.matiere.intitule == matiere.intitule :
 									note = Note.objects.get(etudiant=etu, matiere=matiere)
-									print(note)
-									print(matiere.coefficient)
+									print("note" ,note)
+									print("mat" ,matiere.coefficient)
 									moy += (note.valeur*matiere.coefficient)
 									coeff += matiere.coefficient
+<<<<<<< HEAD
 									print(coeff)
 					print(moy)
 					if coeff==0:
 						coeff=1
+=======
+					if coeff==0:
+						coeff=1
+					print(" ue"  ,coeff)
+					print(" moy" ,moy)
+>>>>>>> d3fe2ed7cc13fbc598f969284e4004c119f52ef9
 					moyG = moy/coeff
 					resultatSem = Resultat_Semestre.objects.get(etudiant=etu, semestre=semes)
 					if moyG < 8:
@@ -299,6 +306,7 @@ def renseignerResultat(request):
 def completerResultat(request, id, semestre):
 	if request.method == 'POST':
 		etu= Etu.objects.get(id=id)
+		sem =Semestre.objects.get(id=semestre)
 		if(etu):
 			existe= True
 		else:
@@ -317,6 +325,7 @@ def completerResultat(request, id, semestre):
 			print("ERREUR : Completer resultat: VIEW modifieResultats : formulaire")	
 	else :
 		etu= Etu.objects.get(id=id)
-		resSem= Resultat_Semestre.objects.get(etudiant=etu,semestre__id=semestre)
+		sem =Semestre.objects.get(id=semestre)
+		resSem= Resultat_Semestre.objects.get(etudiant=etu,semestre=sem)
 		form = CompleterResultat(res = resSem)
 	return render(request, 'contenu_html/completerResultat.html', locals())	
