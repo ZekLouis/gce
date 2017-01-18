@@ -3,8 +3,7 @@
 
 {% block content %}
 	{% if res %}
-		<p>Ajout réussi dans la BD</p>
-		{% comment %}<input type="button" value="suivant" onclick="document.location.href = '/UE/ajouterUE';"/>{% endcomment %}
+		<p>Ajout reussi dans la BD</p>
 	{% else %}
 	<h1>Ajout d'une promotion</h1>
 	<form enctype="multipart/form-data" action="{% url "ajouter_promotion" %}" method="post">

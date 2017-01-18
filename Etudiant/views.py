@@ -2,8 +2,6 @@
 from django.shortcuts import render, get_object_or_404
 from Etudiant.models import Etu, Promotion, Appartient
 from Etudiant.forms import EtudiantForm, RenseignerEtu, SelectEtu, PromotionForm, SelectPromo
-from Groupe.forms import GroupeForm
-from Groupe.models import Groupe
 from Note.models import Note
 from Note.models import Resultat_Semestre
 from Semestre.models import Semestre
@@ -251,7 +249,7 @@ def complement_etu(request):
 				if form.cleaned_data['apogee']:
 					etudiant.apogee = form.cleaned_data['apogee']
 				if form.cleaned_data['date_naissance']:
-					etudiant.date_naissance = form.cleaned_data['date_naissance']
+					etudiant.sexe = form.cleaned_data['date_naissance']
 				if form.cleaned_data['sexe']:
 					etudiant.sexe = form.cleaned_data['sexe']
 				if form.cleaned_data['adresse']:
@@ -280,8 +278,6 @@ def complement_etu(request):
 					etudiant.aide_financiere = form.cleaned_data['aide_financiere']
 				if form.cleaned_data['bourse']:
 					etudiant.bourse = form.cleaned_data['bourse']
-				if form.cleaned_data['groupe'] is not None :
-					etudiant.groupe = form.cleaned_data['groupe']
 				etudiant.save()	
 				request.session['mat'] = False
 				res2=True
