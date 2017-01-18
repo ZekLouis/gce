@@ -1,25 +1,28 @@
 #-*- coding: utf-8 -*-
 from django.shortcuts import render, get_object_or_404
-from Etudiant.models import Etu
-from Etudiant.forms import EtudiantForm, RenseignerEtu, SelectEtu
-from Groupe.forms import GroupeForm
-from Groupe.models import Groupe
+from Etudiant.models import Etu, Promotion, Appartient
+from Etudiant.forms import EtudiantForm, RenseignerEtu, SelectEtu, PromotionForm, SelectPromo
 from Note.models import Note
 from Note.models import Resultat_Semestre
+from Note.models import Note, Resultat_Semestre
+from Note.forms import FileForm
 from Semestre.models import Semestre
 from UE.models import UE
-from Note.forms import FileForm
 from UE.forms import SelectSemestre
 from Matiere.models import Matiere
 import csv
 from io import StringIO
 
-# Create your views here.
+
+from django.test.client import RequestFactory
 
 """Cette vue permet de lister les notes d'un étudiant"""
 def listeretu(request, id):
+    # On récupère l'étudiant
 	etu = get_object_or_404(Etu, id=id)
+	# On récupère les notes de l'étudiant en question
 	notes = Note.objects.filter(etudiant__id=id)
+	# On envoi vers la page
 	return render(request, 'contenu_html/listeretu.html', locals())
 
 """Cette vue permet de supprimer un etudiant"""
@@ -28,7 +31,7 @@ def suppretu(request, id):
 	notes = Note.objects.filter(etudiant__id=id)
 	etu.delete()
 	notes.delete()
-	return render(request, 'contenu_html/suppretu.html', locals())
+	return render(request, 'contenu_html/suppretu.html',locals())
 
 """Cette vue permet de supprimer tous les étudiants"""
 def suppall(request):
@@ -37,28 +40,28 @@ def suppall(request):
 
 """Cette vue permet d'ajouter un étudiant"""
 def ajouterEtudiant(request):
-
-	if request.method == 'POST':  
+	# Si la requete est un formulaire de type POST
+	if request.method == 'POST':
+    	# On récupère le formulaire 
 		form = EtudiantForm(request.POST)
 		if form.is_valid() :
 
 			verif_Exist = Etu.objects.all().filter(apogee=form.cleaned_data['apogee'])
-
+			# On vérifie que le numéro apogée n'existe pas déjà.
 			if verif_Exist :
 				print("Un étudiant avec ce numéro apogee existe déjà")
 				exist = True
 
 			else :
+    			# On récupère les valeurs du formulaires
 				nom = form.cleaned_data['nom']
 				prenom = form.cleaned_data['prenom']
 				apogee = form.cleaned_data['apogee']
-
-
 				e = Etu(
 						nom=nom,
 						prenom=prenom,
 						apogee=apogee,
-			               )
+			    )
 				e.save()
 				res = True
 		else :
@@ -75,6 +78,7 @@ def listeretus(request):
 
 """Cette vue permet de faire un affichage complet des notes d'un étudiant"""
 def affichageComplet(request):
+    # On regarde si la requete est un formulaire POST
 	if request.method == 'POST':
 		if not request.session['sem']:
 			Etudiants = Etu.objects.all()
@@ -83,33 +87,40 @@ def affichageComplet(request):
 				id_etu = form.cleaned_data['select']
 				request.session['id_etu'] = id_etu
 				request.session['sem'] = True
-			u = Semestre.objects.all()
-			form = SelectSemestre(semestres=u)
+			semestres = Semestre.objects.all()
+			form = SelectSemestre(semestres=semestres)
 		else:
-			u = Semestre.objects.all()
-			form = SelectSemestre(request.POST, semestres=u)
+			semestres = Semestre.objects.all()
+			form = SelectSemestre(request.POST, semestres=semestres)
 			if form.is_valid() :
-				semes = form.cleaned_data['select']
-				semestre = Semestre.objects.get(id=semes)
+				semestre = form.cleaned_data['select']
+				semestre = Semestre.objects.get(id=semestre)
 				if semestre:
 					ues = UE.objects.all().filter(semestre=semestre)
 					tab_matieres = []
+					# Pour chaque UE on les ajoutes dans le tableau des matières
 					for ue in ues :
 						tab_matieres.append(Matiere.objects.all().filter(ue=ue))
+					
+					# On récupère les notes de l'étudiant courant
 					notes = Note.objects.all().filter(etudiant__id=request.session['id_etu'])
 					lignes = UE.objects.all().filter(semestre=semestre).count() + 2
+					
 					for matieres in tab_matieres :
 						for matiere in matieres :
 							lignes += 1
+					
 					colonnes = 4
+					# On déclare les dimensions du tableau
 					lst = [[""] * colonnes for _ in range(lignes)]
 					lst[0][0] = "Elements"
 					lst[0][1] = "Note"
 					lst[0][2] = "Abscence"
 					lst[0][3] = "Coefficient"
 					lst[1][0] = semestre.code
-					#Debut du tableau final
-					i =1
+
+					#Debut du contenu du tableau final
+					i = 1
 					coeff = 0
 					moy = 0
 					for matieres in tab_matieres :
@@ -124,10 +135,15 @@ def affichageComplet(request):
 									lst[i][1] = note.valeur
 									moy += (note.valeur*matiere.coefficient)
 									coeff += matiere.coefficient
+								
+								# S'il n'y a pas de note on place un "-"
 								if lst[i][1] == "" :
 									lst[i][1] = "-"
+								# Absence
 								lst[i][2]= ""
 								lst[i][3]= matiere.coefficient
+					if coeff==0:
+    						coeff=1
 					lst[1][1] = moy/coeff
 					res = True
 					e = Etu.objects.get(id=request.session['id_etu'])
@@ -142,39 +158,92 @@ def affichageComplet(request):
 		form = SelectEtu(etus=Etudiants)
 	return render(request, 'contenu_html/affichageComplet.html', locals())
 
-def importer_etu(request):
-	if request.method == "POST":
-		form = FileForm(request.POST, request.FILES)
-		if form.is_valid() :
-			fichier = form.cleaned_data['fichier']
-	
-			import csv
-			csvf = StringIO(fichier.read().decode('latin-1'))
-			read = csv.reader(csvf, delimiter=',')
-			nb_etu = 0
-			for row in read:
-				if row[0].isdigit():
-					nom = row[1]
-					prenom = row[2]
-					apogee = row[0]
+"""Cette vue permet d'ajouter une promotion à la base"""
+def ajouter_promotion(request):
+	if request.method == 'POST':  
+		form = PromotionForm(request.POST)
+		if form.is_valid():
 
-					e, created = Etu.objects.get_or_create(
-							nom=nom,
-							prenom=prenom,
-							apogee=apogee,
-							)
-					if created==True:
-						nb_etu = nb_etu + 1
-					e.save()
-				else:
-					code_eleve = row
+			annee = form.cleaned_data['annee']
+			semestre = form.cleaned_data['semestre']
+			intitule = form.cleaned_data['intitule']
+			
+			# La nouvelle Promotion
+			promo = Promotion(
+					annee=annee,
+					intitule=intitule,
+					semestre = semestre					
+			)
 
+			promo.save()
 			res = True
 		else :
-			print("ERREUR : IMPORT CSV : VIEW importer_csv : Formulaire")
+			print("ERREUR : AJOUTER Promotion : VIEW ajouterPromotion : formulaire")
 	else :
-		form = FileForm()
+		form = PromotionForm()
+	return render(request, 'contenu_html/ajouter_promotion.html', locals())
+
+"""Cette vue permet d'importer les étudiants"""
+def importer_etu(request):
+	if request.method == 'POST':
+		if not request.session['promo']:
+			promotions = Promotion.objects.all()
+			form = SelectPromo(request.POST, promotions=promotions)
+			if form.is_valid() :
+				id_promo = form.cleaned_data['select']
+				request.session['id_promo'] = id_promo
+				request.session['promo'] = True
+			res = True
+			p = get_object_or_404(Promotion, id=request.session['id_promo'])
+			form = FileForm()
+		else:
+			p = get_object_or_404(Promotion, id=request.session['id_promo'])
+			form = FileForm(request.POST, request.FILES)
+			if form.is_valid() :
+				fichier = form.cleaned_data['fichier']
+	
+				import csv
+				csvf = StringIO(fichier.read().decode('latin-1'))
+				read = csv.reader(csvf, delimiter=',')
+				nb_etu = 0
+				for row in read:
+					if row[0].isdigit():
+						nom = row[1]
+						prenom = row[2]
+						apogee = row[0]
+
+						# On créé les nouveaux étudiants
+						e, created = Etu.objects.get_or_create(
+								nom=nom,
+								prenom=prenom,
+								apogee=apogee,
+						)
+
+						# On les associes a la promotion selectionné
+						appartient, createdBis = Appartient.objects.get_or_create(
+								etudiant=e,
+								promotion=p,
+						)
+						if created==True:
+							nb_etu = nb_etu + 1
+						e.save()
+						appartient.save()
+					else:
+						code_eleve = row
+				res2=True
+			else :
+				print("ERREUR : IMPORT CSV : VIEW importer_csv : Formulaire")
+	else :
+		promotions = Promotion.objects.all()
+		if not promotions:
+    			promo = False	
+		else:
+    			promo = True
+		request.session['promo'] = False
+		form = SelectPromo(promotions=promotions)
 	return render(request, 'contenu_html/importer_etudiant.html', locals())
+	
+		
 
 """Cette vue permet de renseigner le reste des informations"""
 def complement_etu(request):
@@ -203,7 +272,7 @@ def complement_etu(request):
 				if form.cleaned_data['apogee']:
 					etudiant.apogee = form.cleaned_data['apogee']
 				if form.cleaned_data['date_naissance']:
-					etudiant.date_naissance = form.cleaned_data['date_naissance']
+					etudiant.sexe = form.cleaned_data['date_naissance']
 				if form.cleaned_data['sexe']:
 					etudiant.sexe = form.cleaned_data['sexe']
 				if form.cleaned_data['adresse']:
@@ -232,8 +301,6 @@ def complement_etu(request):
 					etudiant.aide_financiere = form.cleaned_data['aide_financiere']
 				if form.cleaned_data['bourse']:
 					etudiant.bourse = form.cleaned_data['bourse']
-				if form.cleaned_data['groupe'] is not None :
-					etudiant.groupe = form.cleaned_data['groupe']
 				etudiant.save()	
 				request.session['mat'] = False
 				res2=True
@@ -245,3 +312,35 @@ def complement_etu(request):
 		form = SelectEtu(etus=Etudiants)
 	return render(request, 'contenu_html/complement_etu.html', locals())
 
+"""Cette vue permet de faire afficher les étudiants d'une promotion"""
+def afficherPromotion(request):
+	if request.method == 'POST':
+		promotions = Promotion.objects.all()
+		form = SelectPromo(request.POST, promotions=promotions)
+		if form.is_valid() :
+			id_promo = form.cleaned_data['select']
+			promo = get_object_or_404(Promotion, id=id_promo)
+			listeEtu = Appartient.objects.filter(promotion=promo)
+			res = True
+		else:
+			print("ERREUR : Afficher promotion: VIEW afficher Promotion : formulaire")	
+	else:
+		promotions = Promotion.objects.all()
+		form = SelectPromo(promotions=promotions)
+	return render(request, 'contenu_html/afficherPromotion.html', locals())
+
+def faireEvoluerPromotion(request):
+	if request.method == 'POST':
+    		promotions = Promotion.objects.all()
+		form = SelectPromo(request.POST, promotions=promotions)
+		if form.is_valid() :
+			id_promo = form.cleaned_data['select']
+			promo = get_object_or_404(Promotion, id=id_promo)
+			listeEtu = Appartient.objects.filter(promotion=promo)
+			res = True
+		else:
+			print("ERREUR : Afficher promotion: VIEW afficher Promotion : formulaire")	
+	else:
+		promotions = Promotion.objects.all()
+		form = SelectPromo(promotions=promotions)
+	return render(request, 'contenu_html/faireEvoluerPromotion.html',locals())

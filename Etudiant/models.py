@@ -3,7 +3,8 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from Groupe.models import Groupe
+from Annee.models import Annee
+from Semestre.models import Semestre
 
 # Create your models here.
 class Etu(models.Model):
@@ -11,7 +12,7 @@ class Etu(models.Model):
 	prenom = models.CharField(max_length=30, null=False)
 	age = models.IntegerField(null=True)
 	apogee = models.IntegerField(null=True)
-	date_naissance = models.DateField(null=True)
+	date_naissance = models.CharField(max_length=100,null=True)
 	sexe = models.CharField(max_length=1, null=True)
 	adresse = models.CharField(max_length=100, null=True)
 	ine = models.CharField(max_length=100, null=True)
@@ -26,6 +27,18 @@ class Etu(models.Model):
 	cate_socio_pro_autre_parent = models.CharField(max_length=100, null=True)
 	aide_financiere = models.CharField(max_length=100, null=True)
 	bourse = models.CharField(max_length=100, null=True)
-	groupe = models.ForeignKey(Groupe, null=True)
 	def __str__(self):
-		return self.nom
+		return self.nom.encode('utf-8')
+
+class Promotion(models.Model):
+	annee =  models.ForeignKey(Annee, null=False)
+	semestre = models.ForeignKey(Semestre, null=False)
+	intitule = models.CharField(max_length=100, null=True)
+	def __str__(self):
+		return self.intitule.encode('utf-8')
+
+class Appartient(models.Model):
+	promotion = models.ForeignKey(Promotion, null=False)	
+	etudiant = models.ForeignKey(Etu, null=False)
+	def __str__(self):
+		return str(self.promotion).encode('utf-8')

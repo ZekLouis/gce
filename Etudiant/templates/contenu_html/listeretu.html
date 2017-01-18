@@ -74,16 +74,13 @@
 		<td>{{ etu.bourse }}</td>
 	</tr>
 	<tr>
-		<th>Groupe</th>
-		<td>{{ etu.groupe }}</td>
-
 		<th>Semestre Courant</th>
 		<td>{{ etu.semestre }}</td>
 	</tr>
 
 </table>
 
-
+<hr />
 
 {% if not notes %}
 	<p>L'étudiant n'a pas de notes</p> 
@@ -93,13 +90,13 @@
 		<th style="border:1px solid black;">Note</th>
 		<th style="border:1px solid black;">Matière</th>
 	</tr>
+	{% for note in notes %}
+		<tr>
+			<td style="border:1px solid black;">{{ note.valeur }}</td>
+			<td style="border:1px solid black;">{{ note.matiere.intitule }}</td>
+		</tr>
+	{% endfor %}
+	</table>
 {% endif %}
 
-{% for note in notes %}
-	<tr>
-		<td style="border:1px solid black;">{{ note.valeur }}</td>
-		<td style="border:1px solid black;">{{ note.matiere.intitule }}</td>
-	</tr>
-{% endfor %}
-</table>
 {% endblock %}

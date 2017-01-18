@@ -3,15 +3,30 @@
 
 {% block content %}
 	<h1>Importer des étudiants</h1>
-	{% if res %}
-		<p>Ajout des étudiants réussi</p>
-        <p>{{ nb_etu }} étudiant(s) créés</p>
-		<p><a href="/">Retour à l'accueil</a></p>
-	{% else %}
-		<form enctype="multipart/form-data" action="{% url "importer_etu" %}" method="post">
-			{% csrf_token %}
-			{{ form.as_p }}
-			<input type="submit" name="Valider">
-		</form>
+
+
+	{% if not res %} 
+			{% if not res2 %}
+				{% if not promo %}
+					<p>Aucune promotion n'est disponible, commencez par en créer une.</p>
+				{% else %}
+					<form enctype="multipart/form-data" action="{% url "importer_etu" %}" method="post">
+						{% csrf_token %}
+						{{ form.as_p }}
+						<input type="submit" value="Valider">
+					</form>
+				{% endif %}
+			{% else %}
+				<p>Ajout réussi dans la BD</p>
+				<p>{{ nb_etu }} étudiant(s) créés</p>
+			<p><a href="/">Retour à l'accueil</a></p>
+			{% endif %}
+		{% else %}
+			<p>Vous avez sélectionné la promo : {{ p.intitule }}</p>
+			<form enctype="multipart/form-data" action="{% url "importer_etu" %}" method="post">
+				{% csrf_token %}
+				{{ form.as_p }}
+				<input type="submit" value="Sauvegarder">
+			</form>
 	{% endif %}
 {% endblock %}

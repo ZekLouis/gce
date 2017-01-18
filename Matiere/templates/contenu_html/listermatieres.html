@@ -10,8 +10,7 @@
 	<tr>
 		<th>Code Matière</th>
 		<th>Intitulé</th>
-		<th>Nom Enseignant</th>
-		<th>Prénom Enseignant</th>
+		<th>Coefficient</th>
 		<th>Supprimer</th>
 	</tr>
 {% endif %}
@@ -20,23 +19,10 @@
 	<tr>
 		<td>{{ mat.code }}</td>
 		<td>{{ mat.intitule }}</td>
-		{% for enseignant in enseignants %}
-			{% if mat.id == enseignant.matiere.id %}
-				
-					<td>{{ enseignant.nom }}</td>
-					<td>{{ enseignant.prenom }}</td>
-			{% else %}
-					<td></td>
-					<td></td>
-			{% endif %}
-		{% empty %}
-			<td></td>
-			<td></td>
-		{% endfor %}
+		<td>{{ mat.coeff }}</td>
 		<td><a href="supprmat/{{ mat.id }}">Supprimer</a></td>
 	</tr>
 {% endfor %}
 </table>
 
-<p>Attention, supprimer une matière supprimera tout les enseignants qui lui sont associés.</p>
 {% endblock %}

@@ -1,7 +1,6 @@
 #-*- coding: utf-8 -*-
 from django import forms
-from Etudiant.models import Etu
-from Groupe.models import Groupe
+from Etudiant.models import Etu, Promotion
 from Semestre.models import Semestre
 
 class EtudiantForm(forms.Form):
@@ -9,6 +8,10 @@ class EtudiantForm(forms.Form):
 	prenom = forms.CharField(max_length=100)
 	apogee = forms.IntegerField()
 
+class PromotionForm(forms.ModelForm):
+	class Meta : 
+		model = Promotion
+		fields = '__all__'
 
 class SelectEtu(forms.Form):
 	def __init__(self,*args,**kwargs):
@@ -16,6 +19,13 @@ class SelectEtu(forms.Form):
 		super(SelectEtu,self).__init__(*args,**kwargs)
 		EtuChoices = [(etu.id,etu.nom) for etu in etudiant]
 		self.fields['select'] = forms.ChoiceField(widget=forms.Select(), choices=EtuChoices)
+
+class SelectPromo(forms.Form):
+	def __init__(self,*args,**kwargs):
+		promotions = kwargs.pop('promotions')
+		super(SelectPromo,self).__init__(*args,**kwargs)
+		PromoChoice = [(promo.id,promo.intitule) for promo in promotions]
+		self.fields['select'] = forms.ChoiceField(widget=forms.Select(), choices=PromoChoice)
 
 class RenseignerEtu(forms.Form):
 	# class Meta : 
@@ -48,7 +58,6 @@ class RenseignerEtu(forms.Form):
 		else:
 			self.fields['apogee'] = forms.CharField(max_length=100,required=False, widget=forms.TextInput(attrs={'value': etu.apogee}))
 
-
 		if etu.date_naissance is None:
 			self.fields['date_naissance']  = forms.DateField(required=False)
 		else:
@@ -58,7 +67,6 @@ class RenseignerEtu(forms.Form):
 			self.fields['sexe']  = forms.CharField(max_length=100,required=False)
 		else:
 			self.fields['sexe'] = forms.CharField(max_length=100,required=False, widget=forms.TextInput(attrs={'value': etu.sexe}))
-
 
 		if etu.adresse is None:
 			self.fields['adresse']  = forms.CharField(max_length=100,required=False)
@@ -125,7 +133,4 @@ class RenseignerEtu(forms.Form):
 		else:
 			self.fields['bourse']  = forms.CharField(max_length=100,required=False, widget=forms.TextInput(attrs={'value': etu.bourse}))
 
-		if etu.groupe is None:
-			self.fields['groupe'] = forms.ModelChoiceField(queryset=Groupe.objects.all(),required=False)
-		else:
-			self.fields['groupe']  = forms.ModelChoiceField(queryset=Groupe.objects.all().exclude(id=etu.groupe.id), empty_label=etu.groupe,required=False)
+		

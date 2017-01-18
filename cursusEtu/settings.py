@@ -43,9 +43,7 @@ INSTALLED_APPS = [
     'Matiere',
     'Note',
     'Annee',
-    'Enseignant',
     'Diplome',
-    'Groupe',
     'Documents',
 ]
 
