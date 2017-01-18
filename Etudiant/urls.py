@@ -31,4 +31,5 @@ urlpatterns = [
     url(r'^suppretu/(?P<id>\d+)$', views.suppretu, name='suppretu'),
     url(r'^ajouterPromotion', views.ajouter_promotion, name='ajouter_promotion'),
     url(r'^afficherPromotion', views.afficherPromotion, name='afficherPromotion'),
+    url(r'^faireEvoluerPromotion', views.faireEvoluerPromotion, name='faireEvoluerPromotion'),
 ]

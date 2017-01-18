@@ -6,4 +6,4 @@ from django.db import models
 class Annee(models.Model):
 	intitule = models.CharField(max_length=9,null=False)
 	def __str__(self):
-		return self.intitule
+		return self.intitule.encode('utf-8')
