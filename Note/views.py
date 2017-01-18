@@ -292,7 +292,7 @@ def renseignerResultat(request):
 		form = SelectSemestre(semestres=u)
 	return render(request, 'contenu_html/listerResultat.html',locals())
 
-def completerResultat(request, id):
+def completerResultat(request, id, semestre):
 	if request.method == 'POST':
 		etu= Etu.objects.get(id=id)
 		resSem= Resultat_Semestre.objects.get(etudiant=etu)
@@ -309,6 +309,6 @@ def completerResultat(request, id):
 	else :
 		res=False
 		etu= Etu.objects.get(id=id)
-		resSem= Resultat_Semestre.objects.get(etudiant=etu)
+		resSem= Resultat_Semestre.objects.get(etudiant=etu,semestre__id=semestre)
 		form = CompleterResultat(res = resSem)
 	return render(request, 'contenu_html/completerResultat.html', locals())	
