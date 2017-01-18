@@ -7,11 +7,15 @@
 
 	{% if not res %} 
 			{% if not res2 %}
-			<form enctype="multipart/form-data" action="{% url "importer_etu" %}" method="post">
-				{% csrf_token %}
-				{{ form.as_p }}
-				<input type="submit" value="Valider">
-			</form>
+				{% if not promo %}
+					<p>Aucune promotion n'est disponible, commencez par en créer une.</p>
+				{% else %}
+					<form enctype="multipart/form-data" action="{% url "importer_etu" %}" method="post">
+						{% csrf_token %}
+						{{ form.as_p }}
+						<input type="submit" value="Valider">
+					</form>
+				{% endif %}
 			{% else %}
 				<p>Ajout réussi dans la BD</p>
 				<p>{{ nb_etu }} étudiant(s) créés</p>
