@@ -128,15 +128,20 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,re
 					if note != "null":
 						note = note.replace(",", ".")
 						note = float(note)
-						n, created = Note.objects.get_or_create(valeur=note,etudiant=etudiant,matiere=matiere,annee=annee)
+						noteExiste = Note.objects.filter(etudiant=etudiant,matiere=matiere,annee=annee)
+
+						if not noteExiste:
+							n, created = Note.objects.get_or_create(valeur=note,etudiant=etudiant,matiere=matiere,annee=annee)
 						
-						if created==False:
-								#print("La note",note,etudiant,matiere,"existait deja, elle n'a pas ete ajoutee")
-								compteur_note_error = compteur_note_error + 1
-								ret_notes.add("La note "+str(note)+" "+etudiant.nom+" "+matiere.intitule+" existait deja, elle n'a pas ete ajoutee")
+							if created==False:
+									#print("La note",note,etudiant,matiere,"existait deja, elle n'a pas ete ajoutee")
+									compteur_note_error = compteur_note_error + 1
+									ret_notes.add("La note "+str(note)+" "+etudiant.nom+" "+matiere.intitule+" existait deja, elle n'a pas ete ajoutee")
+							else:
+									compteur_note = compteur_note +1
+							n.save()
 						else:
-    							compteur_note = compteur_note +1
-						n.save()
+							compteur_note_error = compteur_note_error + 1
 			except Matiere.DoesNotExist :
 				ret_mat.add("La matiere "+notes[i]+" n'existe pas")
 			except Semestre.DoesNotExist :
@@ -272,17 +277,12 @@ def renseignerResultat(request):
 									print("mat" ,matiere.coefficient)
 									moy += (note.valeur*matiere.coefficient)
 									coeff += matiere.coefficient
-<<<<<<< HEAD
 									print(coeff)
 					print(moy)
 					if coeff==0:
 						coeff=1
-=======
-					if coeff==0:
-						coeff=1
 					print(" ue"  ,coeff)
 					print(" moy" ,moy)
->>>>>>> d3fe2ed7cc13fbc598f969284e4004c119f52ef9
 					moyG = moy/coeff
 					resultatSem = Resultat_Semestre.objects.get(etudiant=etu, semestre=semes)
 					if moyG < 8:
