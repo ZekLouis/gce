@@ -17,7 +17,7 @@ def listerUE(request):
 def supprue(request, id):
 	ue = UE.objects.filter(id=id)
 
-	matiere = Matiere.objects.filter(unite_id=id)
+	matiere = Matiere.objects.filter(ue_id=id)
 
 	if matiere :
 		matiere.delete()
