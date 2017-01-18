@@ -212,6 +212,12 @@ def importer_etu(request):
 				print("ERREUR : IMPORT CSV : VIEW importer_csv : Formulaire")
 	else :
 		promotions = Promotion.objects.all()
+		print(promotions)
+		if not promotions:
+    			promo = False	
+		else:
+    			promo = True
+		print(promo)
 		request.session['promo'] = False
 		form = SelectPromo(promotions=promotions)
 	return render(request, 'contenu_html/importer_etudiant.html', locals())

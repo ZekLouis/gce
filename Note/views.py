@@ -101,7 +101,7 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,re
 						annee = annee,
 						etudiant = etudiant,
 						semestre = semestre,
-						note= note
+						note = note
 					)
 					if not create:
     						ResSem.note = note
@@ -118,7 +118,9 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,re
 						etudiant = etudiant,
 						ue = ue,
 						note= note#note qui sera modifiée dans une autre vue
-					)	
+					)
+					if not create:
+    						Res_Ue.note = note
 					Res_Ue.save()
 				else:	
 					#on commence par créer la matière	
