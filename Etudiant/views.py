@@ -2,11 +2,8 @@
 from django.shortcuts import render, get_object_or_404
 from Etudiant.models import Etu, Promotion, Appartient
 from Etudiant.forms import EtudiantForm, RenseignerEtu, SelectEtu, PromotionForm, SelectPromo
-<<<<<<< HEAD
 from Note.models import Note
 from Note.models import Resultat_Semestre
-from Groupe.forms import GroupeForm
-from Groupe.models import Groupe
 from Note.models import Note, Resultat_Semestre
 from Note.forms import FileForm
 from Semestre.models import Semestre
@@ -197,6 +194,7 @@ def importer_etu(request):
 				request.session['id_promo'] = id_promo
 				request.session['promo'] = True
 			res = True
+			p = get_object_or_404(Promotion, id=request.session['id_promo'])
 			form = FileForm()
 		else:
 			p = get_object_or_404(Promotion, id=request.session['id_promo'])

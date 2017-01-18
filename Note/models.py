@@ -35,4 +35,4 @@ class Note(models.Model):
 	annee = models.ForeignKey(Annee, null=True)
 	matiere = models.ForeignKey(Matiere, null=False)
 	def __str__(self):
-		return self.valeur.encode('utf-8')
+		return str(self.valeur).encode('utf-8')
