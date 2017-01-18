@@ -6,14 +6,14 @@
 	{% if exist %}
 		<p>Un étudiant avec ce numéro apogée existe déjà</p>
 	{% else %}
-	{% if res %}
-		<p>Ajout réussi dans la BD</p>
-	{% else %}
-	<form enctype="multipart/form-data" action="{% url "ajouterEtudiant" %}" method="post">
-		{% csrf_token %}
-		{{ form.as_p }}
-		<input type="submit" class="e" name="Valider">
-	</form>
-	{% endif %}
+		{% if res %}
+			<p>Ajout de l'étudiant réussi dans la BD</p>
+		{% else %}
+			<form enctype="multipart/form-data" action="{% url "ajouterEtudiant" %}" method="post">
+				{% csrf_token %}
+				{{ form.as_p }}
+				<input type="submit" class="e" name="Valider">
+			</form>
+		{% endif %}
 	{% endif %}
 {% endblock %}
