@@ -5,12 +5,10 @@ from Etudiant.forms import EtudiantForm, RenseignerEtu, SelectEtu, PromotionForm
 <<<<<<< HEAD
 from Note.models import Note
 from Note.models import Resultat_Semestre
-=======
 from Groupe.forms import GroupeForm
 from Groupe.models import Groupe
 from Note.models import Note, Resultat_Semestre
 from Note.forms import FileForm
->>>>>>> 7d9b1ff0e8fc42a86deb441fd79dee614633e822
 from Semestre.models import Semestre
 from UE.models import UE
 from UE.forms import SelectSemestre

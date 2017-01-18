@@ -18,7 +18,7 @@ class Resultat_Semestre(models.Model):
 	resultat_pre_jury = models.CharField(max_length=15, null=True)
 	resultat_jury = models.CharField(max_length=15, null=True)
 	def __str__(self):
-		return str(self.etudiant)
+		return self.etudiant.encode('utf-8')
 
 class Resultat_UE(models.Model):
 	annee = models.ForeignKey(Annee, null=False)
@@ -27,7 +27,7 @@ class Resultat_UE(models.Model):
 	note = models.FloatField()
 	note_calc = models.FloatField(null=True)
 	def __str__(self):
-		return str(self.etudiant)
+		return self.etudiant.encode('utf-8')
 
 class Note(models.Model):
 	valeur = models.FloatField()
@@ -35,4 +35,4 @@ class Note(models.Model):
 	annee = models.ForeignKey(Annee, null=True)
 	matiere = models.ForeignKey(Matiere, null=False)
 	def __str__(self):
-		return str(self.valeur)
+		return self.valeur.encode('utf-8')

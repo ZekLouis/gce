@@ -18,3 +18,5 @@ class Moyenne_matiere(models.Model):
 	semestre=models.ForeignKey(Semestre, null=True)
 	annee=models.ForeignKey(Annee, null=True)
 	moyenne=models.FloatField(null=True)
+	def __str__(self):
+		return self.matiere.encode('utf8')

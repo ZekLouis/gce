@@ -28,7 +28,7 @@ class Etu(models.Model):
 	aide_financiere = models.CharField(max_length=100, null=True)
 	bourse = models.CharField(max_length=100, null=True)
 	def __str__(self):
-		return self.nom
+		return self.nom.encode('utf-8')
 
 class Promotion(models.Model):
 	annee =  models.ForeignKey(Annee, null=False)
