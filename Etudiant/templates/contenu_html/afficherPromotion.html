@@ -1,0 +1,32 @@
+{% extends "templates/base.html" %}
+{% block title %}Promotion {{ promo.intitule }}{% endblock %}
+
+{% block content %}
+<h1>Liste des étudiants de la promotion : </h1>
+	{% if not res %}
+        <form enctype="multipart/form-data" action="{% url "afficherPromotion" %}" method="post">
+		    {% csrf_token %}
+		    {{ form.as_p }}
+		<input type="submit" class="e" name="Valider">
+	    </form>
+	{% else %}
+		<table id="tableauImpression">
+            <th>Nom</th>
+            <th>Prenom</th>
+            <th>Signature</th>
+
+		{% for ligne in listeEtu %}
+        <tr>
+			<td>{{ ligne.etudiant.nom }}</td>
+            <td>{{ ligne.etudiant.prenom }}</td>
+            <td></td>
+        </tr>  
+		{% endfor %}
+		</table> 
+    <input type="button" value="Imprimer" onclick="printData()">
+	{% endif %}
+
+
+
+
+{% endblock %}

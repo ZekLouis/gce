@@ -2,8 +2,12 @@
 {% block title %}Résultat Jury{% endblock %}
 
 {% block content %}
+    {% if not existe %}
+        <p>L'étudiant n'existe pas </p>
+    {% endif %}
     
-    {% if not res %} 
+    {% if not res %}
+     
          <p>Vous avez sélectionné l'étudiant: {{ etu.nom }}</p>
 
          <form enctype="multipart/form-data" action="{% url "completerResultat" id=etu.id semestre=semestre.id %}" method="post">

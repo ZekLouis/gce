@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
 from django import forms
-from Etudiant.models import Etu
+from Etudiant.models import Etu, Promotion
 from Groupe.models import Groupe
 from Semestre.models import Semestre
 
@@ -9,6 +9,10 @@ class EtudiantForm(forms.Form):
 	prenom = forms.CharField(max_length=100)
 	apogee = forms.IntegerField()
 
+class PromotionForm(forms.ModelForm):
+	class Meta : 
+		model = Promotion
+		fields = '__all__'
 
 class SelectEtu(forms.Form):
 	def __init__(self,*args,**kwargs):
@@ -16,6 +20,13 @@ class SelectEtu(forms.Form):
 		super(SelectEtu,self).__init__(*args,**kwargs)
 		EtuChoices = [(etu.id,etu.nom) for etu in etudiant]
 		self.fields['select'] = forms.ChoiceField(widget=forms.Select(), choices=EtuChoices)
+
+class SelectPromo(forms.Form):
+	def __init__(self,*args,**kwargs):
+		promotions = kwargs.pop('promotions')
+		super(SelectPromo,self).__init__(*args,**kwargs)
+		PromoChoice = [(promo.id,promo.intitule) for promo in promotions]
+		self.fields['select'] = forms.ChoiceField(widget=forms.Select(), choices=PromoChoice)
 
 class RenseignerEtu(forms.Form):
 	# class Meta : 

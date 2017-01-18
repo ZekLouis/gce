@@ -1,0 +1,16 @@
+{% extends "templates/base.html" %}
+{% block title %}Ajouter Promotion{% endblock %}
+
+{% block content %}
+	{% if res %}
+		<p>Ajout réussi dans la BD</p>
+		{% comment %}<input type="button" value="suivant" onclick="document.location.href = '/UE/ajouterUE';"/>{% endcomment %}
+	{% else %}
+	<h1>Ajout d'une promotion</h1>
+	<form enctype="multipart/form-data" action="{% url "ajouter_promotion" %}" method="post">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<input type="submit" class="e" name="Valider">
+	</form>
+	{% endif %}
+{% endblock %}
