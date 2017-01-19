@@ -41,4 +41,4 @@ class Appartient(models.Model):
 	promotion = models.ForeignKey(Promotion, null=False)	
 	etudiant = models.ForeignKey(Etu, null=False)
 	def __str__(self):
-		return self.promotion.encode('utf-8')
+		return str(self.promotion).encode('utf-8')
