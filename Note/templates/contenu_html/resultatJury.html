@@ -24,14 +24,14 @@
 
 	{% for resultat in resultatsJury %}
 	<tr>
-		<td style="border:1px solid black;">{{ resultat.annee }}</td>
-		<td style="border:1px solid black;">{{ resultat.semestre }}</td>
+		<td style="border:1px solid black;">{{ resultat.instance_semestre.annee }}</td>
+		<td style="border:1px solid black;">{{ resultat.instance_semestre.semestre }}</td>
 		<td style="border:1px solid black;">{{ resultat.note }}</td>
 		<td style="border:1px solid black;">{{ resultat.note_calc }}</td>
 		<td style="border:1px solid black;">{{ resultat.resultat }}</td>
 		<td style="border:1px solid black;">{{ resultat.resultat_pre_jury }}</td>
 		<td style="border:1px solid black;">{{ resultat.resultat_jury }}</td>
-		<td style="border:1px solid black;"><a href="completerResultat/{{ id_etu }}/{{ resultat.semestre.id }}">Saisir les résultats du jury</a></td>
+		<td style="border:1px solid black;"><a href="completerResultat/{{ id_etu }}/{{ resultat.instance_semestre.id }}">Saisir les résultats du jury</a></td>
 
 	</tr>
 	{% endfor %}
