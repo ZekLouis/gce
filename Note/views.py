@@ -277,6 +277,10 @@ def renseignerResultat(request):
 									print("mat" ,matiere.coefficient)
 									moy += (note.valeur*matiere.coefficient)
 									coeff += matiere.coefficient
+<<<<<<< HEAD
+=======
+
+>>>>>>> ad44336fc6abf152446bd653405e035b4e52a0f8
 					if coeff==0:
 						coeff=1
 					moyG = moy/coeff

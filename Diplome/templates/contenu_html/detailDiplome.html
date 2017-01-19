@@ -7,20 +7,20 @@
 		<form enctype="multipart/form-data" action="{% url "detailDiplome" %}" method="post">
 			{% csrf_token %}
 			{{ form.as_p }}
-			<input type="submit" value="Sauvegarder">
+			<button type="submit">Valider <i class="fa fa-check" aria-hidden="true"></i></button>
 		</form>
 		
 	{% else %}
 	
 	{% if not s %} 
 
-		<p>Le diplôme selectionné ne contient aucune information</p>
+		<p>Le diplôme selectionné ne contient aucune information.</p>
 
 	{% else %}
 
 	<br>
 
-	<p>Vous avez choisis le diplôme : {{ d.intitule }}</p>
+	<p>Vous avez choisi le diplôme : {{ d.intitule }}</p>
 
 
 
@@ -59,6 +59,8 @@
 			tds[i].style.paddingLeft = "30px";
 		}else if(tds[i].innerHTML.indexOf("UE") >= 0){
 			tds[i].style.paddingLeft = "60px";
+		}else{
+			tds[i].style.paddingLeft = "90px";
 		}
 		i++;
 		console.log(i)
