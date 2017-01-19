@@ -26,4 +26,5 @@ urlpatterns = [
 	#url(r'^ajouterDiplomeCreation/(?P<annee>\d+)$', views.ajouterDiplomeCreation, name='ajouterDiplomeCreation'),
     url(r'^supprdip/(?P<id>\d+)$', views.supprdip, name='supprdip'),
     url(r'^modifierDiplome', views.modifierDiplome, name='modifierDiplome'),
+    url(r'^detailDiplome', views.detailDiplome, name='detailDiplome'),
 ]

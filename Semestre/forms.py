@@ -1,9 +1,19 @@
 #-*- coding: utf-8 -*-
 from django import forms
-from Semestre.models import Semestre
+from Semestre.models import Semestre,InstanceSemestre
 from Diplome.models import Diplome
 
+class InstanceSemestreForm(forms.ModelForm):
+	class Meta : 
+		model = InstanceSemestre
+		fields = '__all__'
 
+class SelectInstanceSemestre(forms.Form):
+	def __init__(self,*args,**kwargs):
+		instanceSemestres = kwargs.pop('instanceSemestres')
+		super(SelectInstanceSemestre,self).__init__(*args,**kwargs)
+		ISChoice = [(instanceSemestre.id,'Semestre ' +str(instanceSemestre.semestre) + " Année " + str(instanceSemestre.annee)) for instanceSemestre in instanceSemestres]
+		self.fields['select'] = forms.ChoiceField(widget=forms.Select(), choices=ISChoice)
 
 class SemestreForm(forms.ModelForm):
 	class Meta : 

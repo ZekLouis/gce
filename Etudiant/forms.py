@@ -1,17 +1,12 @@
 #-*- coding: utf-8 -*-
 from django import forms
-from Etudiant.models import Etu, Promotion
+from Etudiant.models import Etu
 from Semestre.models import Semestre
 
 class EtudiantForm(forms.Form):
 	nom = forms.CharField(max_length=100)
 	prenom = forms.CharField(max_length=100)
 	apogee = forms.IntegerField()
-
-class PromotionForm(forms.ModelForm):
-	class Meta : 
-		model = Promotion
-		fields = '__all__'
 
 class SelectEtu(forms.Form):
 	def __init__(self,*args,**kwargs):
@@ -20,12 +15,7 @@ class SelectEtu(forms.Form):
 		EtuChoices = [(etu.id,etu.nom) for etu in etudiant]
 		self.fields['select'] = forms.ChoiceField(widget=forms.Select(), choices=EtuChoices)
 
-class SelectPromo(forms.Form):
-	def __init__(self,*args,**kwargs):
-		promotions = kwargs.pop('promotions')
-		super(SelectPromo,self).__init__(*args,**kwargs)
-		PromoChoice = [(promo.id,promo.intitule) for promo in promotions]
-		self.fields['select'] = forms.ChoiceField(widget=forms.Select(), choices=PromoChoice)
+
 
 class RenseignerEtu(forms.Form):
 	# class Meta : 
@@ -59,9 +49,9 @@ class RenseignerEtu(forms.Form):
 			self.fields['apogee'] = forms.CharField(max_length=100,required=False, widget=forms.TextInput(attrs={'value': etu.apogee}))
 
 		if etu.date_naissance is None:
-			self.fields['date_naissance']  = forms.CharField(max_length=100,required=False)
+			self.fields['date_naissance']  = forms.DateField(required=False)
 		else:
-			self.fields['date_naissance'] = forms.CharField(max_length=100,required=False, widget=forms.TextInput(attrs={'value': etu.date_naissance}))
+			self.fields['date_naissance'] = forms.DateField(required=False, widget=forms.TextInput(attrs={'value': etu.date_naissance}))
 
 		if etu.sexe is None:
 			self.fields['sexe']  = forms.CharField(max_length=100,required=False)
