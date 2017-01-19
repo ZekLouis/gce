@@ -311,7 +311,6 @@ def renseignerResultat(request):
 						jury = "Barre"
 					elif moyG<10 and moyG >= 8:
 						jury = "NVAL"
->>>>>>> 662d7da4d316aed7a665a25fa4b4a1e1da782f72
 					else:
 						if semes.intitule == "Semestre 2":
 							semesPrec = Semstre.objects.get(intitule="Semestre 1")	
