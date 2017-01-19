@@ -51,13 +51,15 @@ def ajouterUE(request):
 			form = UEForm(request.POST)
 			if form.is_valid() :
 				intitule = form.cleaned_data['intitule']
-				code = form.cleaned_data['code']
-				e = get_object_or_404(Semestre, id=request.session['id_sem'])
+				code_ppn = form.cleaned_data['code_ppn']
+				code_apogee = form.cleaned_data['code_apogee']
+				s = get_object_or_404(Semestre, id=request.session['id_sem'])
 				coef = form.cleaned_data['coefficient']
 				ue = UE(
 						intitule=intitule,
-						code=code,
-						semestre=e,
+						code_ppn=code_ppn,
+						code_apogee=code_apogee,
+						semestre=s,
 						coefficient=coef,
 		                )
 				ue.save()

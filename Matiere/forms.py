@@ -17,7 +17,7 @@ class SelectUE(forms.Form):
 	def __init__(self,*args,**kwargs):
 		unites = kwargs.pop('ues')
 		super(SelectUE,self).__init__(*args,**kwargs)
-		UeChoices = [(ue.id,ue.code) for ue in unites]
+		UeChoices = [(ue.id,ue.code_ppn) for ue in unites]
 		self.fields['select'] = forms.ChoiceField(widget=forms.Select(), choices=UeChoices)
 
 class SelectMat(forms.Form):
@@ -42,10 +42,15 @@ class RenseignerMat(forms.Form):
 			self.fields['intitule'] = forms.CharField(max_length=100,required=False ,widget=forms.TextInput(attrs={'value': mat.intitule}))
 
 
-		if mat.code is None:
-			self.fields['code']  = forms.CharField(max_length=100,required=False)
+		if mat.code_apogee is None:
+			self.fields['code_apogee']  = forms.CharField(max_length=100,required=False)
 		else:
-			self.fields['code'] = forms.CharField(max_length=100,required=False, widget=forms.TextInput(attrs={'value': mat.code}))
+			self.fields['code_apogee'] = forms.CharField(max_length=100,required=False, widget=forms.TextInput(attrs={'value': mat.code_apogee}))
+
+		if mat.code_ppn is None:
+			self.fields['code_ppn']  = forms.CharField(max_length=100,required=False)
+		else:
+			self.fields['code_ppn'] = forms.CharField(max_length=100,required=False, widget=forms.TextInput(attrs={'value': mat.code_ppn}))
 
 		if mat.coefficient is None:
 			self.fields['coefficient']  = forms.CharField(max_length=100,required=False)

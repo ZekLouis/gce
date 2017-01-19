@@ -7,16 +7,9 @@ from Annee.models import Annee
 
 class Matiere(models.Model):
 	intitule = models.CharField(max_length=30,null=False)
-	code = models.CharField(max_length=30,null=False)
+	code_ppn = models.CharField(max_length=30,null=False)
+	code_apogee = models.CharField(max_length=30,null=False)
 	coefficient = models.FloatField(default=1.0)
 	ue = models.ForeignKey('UE.ue', null=True)	
 	def __str__(self):
-		return self.intitule.encode('utf8')
-
-class Moyenne_matiere(models.Model):
-	matiere=models.ForeignKey(Matiere, null=True)
-	semestre=models.ForeignKey(Semestre, null=True)
-	annee=models.ForeignKey(Annee, null=True)
-	moyenne=models.FloatField(null=True)
-	def __str__(self):
-		return self.matiere.encode('utf8')
+		return str(self.intitule).encode('utf8')

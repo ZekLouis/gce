@@ -1,5 +1,6 @@
 #-*- coding: utf-8 -*-
 from django.shortcuts import render, get_object_or_404
+from operator import itemgetter, attrgetter, methodcaller
 from xlutils.copy import copy # http://pypi.python.org/pypi/xlutils
 from xlrd import open_workbook # http://pypi.python.org/pypi/xlrd
 from xlwt import easyxf
@@ -13,6 +14,63 @@ from Semestre.models import Semestre
 from Note.models import Note
 from UE.forms import SelectSemestre
 # Create your views here.
+
+class etudiant:
+	def __init__ (self, numero,resultat):
+	#Definition des attributs de chaque instance
+		self.numero = numero
+		self.resultat = resultat
+
+
+def testValidite(string, num):
+	if string == "VAL":
+		note=0*num
+	elif string == "VALC":
+		note=1*num
+	elif string == "ADAC":
+		note=2*num
+	elif string == "NATT":
+		note=3*num
+	elif string == "NATB":
+		note=4*num
+	elif string == "probleme":
+			note=4*num
+	else:
+		note=5*num
+	return note
+
+
+def ordreListe(semestrePrec, semestre):
+	liste = []
+	etus = Etu.objects.all()
+	for etu in etus:
+		note1 = ""
+		note2 = ""
+		str = 0
+		semestre1 = Semestre.objects.get(id=semestrePrec)
+		ues = UE.objects.all().filter(semestre=semestre)
+		semestre2 = Semestre.objects.get(id=semestre)
+		ues = UE.objects.all().filter(semestre=semestre)
+		try:
+			note1 = Resultat_Semestre.objects.get(etudiant = etu, semestre=semestre1)
+			str = testValidite(note1.resultat, 1000)
+			note2 = Resultat_Semestre.objects.get(etudiant = etu, semestre=semestre2)
+			str += testValidite(note2.resultat, 100)
+			moyG = (note1.note+note2.note)/2
+			str-=moyG
+		except Resultat_Semestre.DoesNotExist:
+			print("probleme")
+		if str == 0:
+			str = 10000
+		e = etudiant(etu.apogee, str)
+		liste.append(e)
+		liste = sorted(liste, key=attrgetter('resultat'))
+	for li in liste:
+		print (li.numero, li.resultat)
+	return liste
+
+
+
 
 """Cette vue permet de generer les documents"""
 def genererDocuments(request):
@@ -31,35 +89,37 @@ def genererDocuments(request):
 			if form.is_valid() :
 				semestrePrec = form.cleaned_data['select']
 			style = xlwt.easyxf(' alignment: horizontal center, vertical center; borders: left thin, right thin, top thin, bottom thin;')
-			book = open_workbook('DocJury/S2.xls',formatting_info=True)
+			book = open_workbook('docJury/S2.xls',formatting_info=True)
 			book.sheet_by_index(0)
 			newFeuille = copy(book)
 			etus = Etu.objects.all()
 			ligne = 7
 			cp =0
-			for etu in etus:
+			liste = ordreListe(1, 1)
+			for etu in liste:
+				etudi = Etu.objects.get(apogee=etu.numero)
 				sem1=0
 				sem2=0
 				colonne = 0
 				newFeuille.get_sheet(0).write(ligne,colonne,cp, style)
 				colonne +=1
-				newFeuille.get_sheet(0).write(ligne,colonne,etu.apogee, style)
+				newFeuille.get_sheet(0).write(ligne,colonne,etudi.apogee, style)
 				colonne +=1
-				newFeuille.get_sheet(0).write(ligne,colonne,etu.nom, style)
+				newFeuille.get_sheet(0).write(ligne,colonne,etudi.nom, style)
 				colonne +=1
-				newFeuille.get_sheet(0).write(ligne,colonne,etu.prenom, style)
+				newFeuille.get_sheet(0).write(ligne,colonne,etudi.prenom, style)
 				colonne +=2
-				semestre = Semestre.objects.get(id=request.session['semestre'])
+				semestre = Semestre.objects.get(id=semestrePrec)
 				ues = UE.objects.all().filter(semestre=semestre)
 				for ue in ues:
 					try:
-						noteUE = Resultat_UE.objects.get(etudiant=etu, ue=ue)	
+						noteUE = Resultat_UE.objects.get(etudiant=etudi, ue=ue)	
 						newFeuille.get_sheet(0).write(ligne,colonne,noteUE.note, style)
 						colonne +=1
 					except Resultat_UE.DoesNotExist:
 						print("probleme")
 				try:
-					resS = Resultat_Semestre.objects.get(etudiant = etu, semestre=semestre)
+					resS = Resultat_Semestre.objects.get(etudiant = etudi, semestre=semestre)
 					colonne =8
 					newFeuille.get_sheet(0).write(ligne,colonne,resS.note, style)
 					sem1 = resS.note
@@ -67,18 +127,18 @@ def genererDocuments(request):
 					newFeuille.get_sheet(0).write(ligne,colonne,resS.resultat, style)
 				except Resultat_Semestre.DoesNotExist:
 					print("probleme")
-				semestre2 = Semestre.objects.get(id=semestrePrec)
+				semestre2 = Semestre.objects.get(id=request.session['semestre'])
 				ues = UE.objects.all().filter(semestre=semestre2)
 				colonne = 13
 				for ue in ues:
 					try:
-						noteUE = Resultat_UE.objects.get(etudiant=etu, ue=ue)	
+						noteUE = Resultat_UE.objects.get(etudiant=etudi, ue=ue)	
 						newFeuille.get_sheet(0).write(ligne,colonne,noteUE.note, style)
 						colonne +=1
 					except Resultat_UE.DoesNotExist:
 						print("probleme")
 				try:
-					resS = Resultat_Semestre.objects.get(etudiant = etu, semestre=semestre)
+					resS = Resultat_Semestre.objects.get(etudiant = etudi, semestre=semestre)
 					colonne =16
 					newFeuille.get_sheet(0).write(ligne,colonne,resS.note, style)
 					sem2 = resS.note
@@ -113,57 +173,3 @@ def genererDocuments(request):
 
 
 
-
-'''	if request.method == 'POST':  
-		semestre = Semestre.objects.all()
-		form = SelectSemestre(request.POST, semestres=semestre)
-		if form.is_valid() :
-			request.session['id_semestre'] = form.cleaned_data['select']
-		#book = Workbook()
-		style = xlwt.easyxf(' alignment: horizontal center, vertical center; borders: left thin, right thin, top thin, bottom thin;')
-		book = open_workbook('DocJury/S2.xls',formatting_info=True)
-		book.sheet_by_index(0)
-		newFeuille = copy(book)
-		etus = Etu.objects.all()
-		ligne = 7
-		cp =0
-		for etu in etus:
-			colonne = 0
-			newFeuille.get_sheet(0).write(ligne,colonne,cp, style)
-			colonne +=1
-			newFeuille.get_sheet(0).write(ligne,colonne,etu.apogee, style)
-			colonne +=1
-			newFeuille.get_sheet(0).write(ligne,colonne,etu.nom, style)
-			colonne +=1
-			newFeuille.get_sheet(0).write(ligne,colonne,etu.prenom, style)
-			colonne +=2
-			semestre = Semestre.objects.all().filter(id=request.session['id_semestre'])
-			print(semestre)
-			ues = UE.objects.all().filter(semestre=semestre)
-			for ue in ues:
-				try:
-					noteUE = Resultat_UE.objects.get(etudiant=etu, ue=ue)	
-					newFeuille.get_sheet(0).write(ligne,colonne,noteUE.note, style)
-					colonne +=1
-				except Resultat_UE.DoesNotExist:
-					print("probleme")
-			try:
-				resS = Resultat_Semestre.objects.get(etudiant = etu, semestre=semestre)
-				newFeuille.get_sheet(0).write(ligne,colonne,resS.note, style)
-				colonne +=1
-				newFeuille.get_sheet(0).write(ligne,colonne,resS.resultat, style)
-			except Resultat_Semestre.DoesNotExist:
-				print("probleme")
-			ligne += 1
-			cp+=1
-			res=True
-		newFeuille.save('output.xls')
-	else:
-		res=False
-		semestre = Semestre.objects.all()
-		form = SelectSemestre(semestres=semestre)
-	return render(request, 'contenu_html/genererDocuments.html', locals())
-
-	
-'''
-	
