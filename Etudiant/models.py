@@ -28,7 +28,18 @@ class Etu(models.Model):
 	aide_financiere = models.CharField(max_length=100, null=True)
 	bourse = models.CharField(max_length=100, null=True)
 	def __str__(self):
+<<<<<<< HEAD
+		return self.nom
+
+class Promotion(models.Model):
+	annee =  models.ForeignKey(Annee, null=False)
+	semestre = models.ForeignKey(Semestre, null=False)
+	intitule = models.CharField(max_length=100, null=True)
+	def __str__(self):
+		return self.intitule.encode('utf-8')
+=======
 		return str(self.nom).encode('utf-8')
+>>>>>>> 7efcf1836b04ad06d3411043b4cc6bf1a436b636
 
 class Appartient(models.Model):
 	instance_semestre = models.ForeignKey(InstanceSemestre, null=False)	
