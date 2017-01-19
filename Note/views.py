@@ -277,17 +277,8 @@ def renseignerResultat(request):
 									print("mat" ,matiere.coefficient)
 									moy += (note.valeur*matiere.coefficient)
 									coeff += matiere.coefficient
-									print(coeff)
-<<<<<<< HEAD
-					if coeff == 0:
-						coeff=1
-=======
-					print(moy)
 					if coeff==0:
 						coeff=1
-					print(" ue"  ,coeff)
-					print(" moy" ,moy)
->>>>>>> beb3a8af3794b8035d42830a1187e7316dc1ffc6
 					moyG = moy/coeff
 					resultatSem = Resultat_Semestre.objects.get(etudiant=etu, semestre=semes)
 					if moyG < 8:
