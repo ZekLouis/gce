@@ -277,6 +277,28 @@ def renseignerResultat(request):
 									print("mat" ,matiere.coefficient)
 									moy += (note.valeur*matiere.coefficient)
 									coeff += matiere.coefficient
+<<<<<<< HEAD
+=======
+					if coeff==0:
+						coeff=1
+					moyG = moy/coeff
+					
+					resultatSem = Resultat_Semestre.objects.get(etudiant=etu, semestre=semes)
+					barre = False
+					if semes.intitule == "Semestre 1":
+						for ue in ues:
+							res = Resultat_UE.objects.get(etudiant=etu,ue = ue)
+							if res.note<8:
+								barre=True
+							
+							if moyG>=10 and not barre:
+								jury = "VAL"
+							elif moyG>=8 and not barre:
+								jury = "NATT"
+							else:
+								jury="NATB"
+				
+>>>>>>> 5dca3969f41ab2d0acc8adc80eeb63d05b1c296c
 					if coeff==0:
 						coeff=1
 					moyG = moy/coeff
@@ -286,7 +308,34 @@ def renseignerResultat(request):
 					elif moyG<10 and moyG >= 8:
 						jury = "NVAL"
 					else:
-						jury = "VAL"
+						if semes.intitule == "Semestre 2":
+							semesPrec = Semstre.objects.get(intitule="Semestre 1")	
+						elif semes.intitule == "Semestre 3":
+							semesPrec = Semstre.objects.get(intitule="Semestre 2")
+						elif semes.intitule == "Semestre 4":		
+							semesPrec = Semstre.objects.get(intitule="Semestre 3")
+						moyGPrec = resSemPrec.note
+						resSemPrec = Resultat_Semestre.objects.get(etudiant=etu, semestre=semesPrec)
+
+						for ue in ues:
+							res = Resultat_UE.objects.get(etudiant=etu,ue = ue)
+							if res.note<8:
+								barre=True
+						
+						if moyG>=10 and not barre and resSemPrec.resultat == "VAL":
+							jury = "VAL"
+						elif moyG>=10 and not barre and resSemPrec.resultat == "NATT" and (moyG+moyGPrec)>=20:
+							jury = "ADAC"
+						elif moyG>=10 and not barre and resSemPrec.resultat == "NATB" :
+							jury = "AJPC"
+						elif moyG>=8 and not barre and resSemPrec.resultat == "VAL" and (moyG+moyGPrec)>=10 :
+							jury = "VALC"
+						elif not barre:
+							jury = "NATT"
+						else:
+							jury = "NATB"
+						
+						
 					resultatSem.note_calc = moyG
 					resultatSem.resultat = jury
 					res=False

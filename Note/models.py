@@ -19,6 +19,15 @@ class Resultat_Semestre(models.Model):
 	def __str__(self):
 		return str(self.etudiant)
 
+<<<<<<< HEAD
+=======
+=======
+<<<<<<< HEAD
+
+=======
+>>>>>>> ad44336fc6abf152446bd653405e035b4e52a0f8
+>>>>>>> 662d7da4d316aed7a665a25fa4b4a1e1da782f72
+>>>>>>> 5dca3969f41ab2d0acc8adc80eeb63d05b1c296c
 
 class Resultat_UE(models.Model):
 	instance_semestre = models.ForeignKey(InstanceSemestre, null=False)
