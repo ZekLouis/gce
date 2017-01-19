@@ -7,8 +7,8 @@
 
 	{% if not res %} 
 			{% if not res2 %}
-				{% if not promo %}
-					<p>Aucune promotion n'est disponible, commencez par en créer une.</p>
+				{% if not inst %}
+					<p>Aucune Instance de semestre n'est disponible, commencez par en créer une.</p>
 				{% else %}
 					<form enctype="multipart/form-data" action="{% url "importer_etu" %}" method="post">
 						{% csrf_token %}
@@ -22,7 +22,7 @@
 			<p><a href="/">Retour à l'accueil</a></p>
 			{% endif %}
 		{% else %}
-			<p>Vous avez sélectionné la promo : {{ p.intitule }}</p>
+			<p>Vous avez sélectionné la promo : {{ instanceSemestre.semestre }} {{ instanceSemestre.annee }}</p>
 			<form enctype="multipart/form-data" action="{% url "importer_etu" %}" method="post">
 				{% csrf_token %}
 				{{ form.as_p }}

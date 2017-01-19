@@ -279,6 +279,8 @@ def renseignerResultat(request):
 									coeff += matiere.coefficient
 									
 					if coeff == 0:
+									print(coeff)
+					if coeff==0:
 						coeff=1
 					moyG = moy/coeff
 					resultatSem = Resultat_Semestre.objects.get(etudiant=etu, semestre=semes)

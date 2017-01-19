@@ -16,7 +16,7 @@
 {% for dip in dips %}
 	<tr>
 		<td style="border:1px solid black;">{{ dip.intitule }}</td>
-		<td><a href="supprdip/{{ dip.id }}">Supprimer</a></td>
+		<td><a href="supprdip/{{ dip.id }}"><button>Supprimer <i style="color:red" class="fa fa-trash" aria-hidden="true"></i></button></a></td>
 	</tr>
 {% endfor %}
 </table>

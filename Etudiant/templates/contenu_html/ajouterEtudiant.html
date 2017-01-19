@@ -5,9 +5,11 @@
 	<h1>Ajouter un étudiant</h1>
 	{% if exist %}
 		<p>Un étudiant avec ce numéro apogée existe déjà</p>
+		<a href="/"><button>Retour à l'accueil <i class="fa fa-reply" aria-hidden="true"></button></a>
 	{% else %}
 		{% if res %}
 			<p>Ajout de l'étudiant réussi dans la BD</p>
+			<a href="/"><button>Retour à l'accueil <i class="fa fa-reply" aria-hidden="true"></i></button></a>
 		{% else %}
 			<form enctype="multipart/form-data" action="{% url "ajouterEtudiant" %}" method="post">
 				{% csrf_token %}

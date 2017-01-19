@@ -1,0 +1,16 @@
+{% extends "templates/base.html" %}
+{% block title %}Ajouter Instance{% endblock %}
+
+{% block content %}
+<h1>Ajouter une Instance de semestre</h1>
+	{% if res %}
+		<p>Ajout reussi dans la BD</p>
+		<a href="/"><button>Retour à l'accueil <i class="fa fa-reply" aria-hidden="true"></i></button></a>
+	{% else %}
+	<form enctype="multipart/form-data" action="{% url "ajouter_instance_semestre" %}" method="post">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<input type="submit" class="e" name="Valider">
+	</form>
+	{% endif %}
+{% endblock %}

@@ -37,13 +37,15 @@ def ajouterMatiere(request):
 			form = MatiereForm(request.POST)
 			if form.is_valid() :
 				intitule = form.cleaned_data['intitule']
-				code = form.cleaned_data['code']
+				code_ppn = form.cleaned_data['code_ppn']
+				code_apogee = form.cleaned_data['code_apogee']
 				coefficient = form.cleaned_data['coefficient']
 				e = get_object_or_404(UE, id=request.session['id_ue'])
 
 				mat = Matiere(
 						intitule=intitule,
-						code=code,
+						code_ppn=code_ppn,
+						code_apogee=code_apogee,
 						coefficient = coefficient,
 						ue=e,
 		                )
