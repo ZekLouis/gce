@@ -277,21 +277,55 @@ def renseignerResultat(request):
 									print("mat" ,matiere.coefficient)
 									moy += (note.valeur*matiere.coefficient)
 									coeff += matiere.coefficient
-<<<<<<< HEAD
-									print(coeff)
-
-=======
->>>>>>> 7efcf1836b04ad06d3411043b4cc6bf1a436b636
 					if coeff==0:
 						coeff=1
 					moyG = moy/coeff
+					
 					resultatSem = Resultat_Semestre.objects.get(etudiant=etu, semestre=semes)
-					if moyG < 8:
-						jury = "Barre"
-					elif moyG<10 and moyG >= 8:
-						jury = "NVAL"
+					barre = False
+					if semes.intitule == "Semestre 1":
+						for ue in ues:
+							res = Resultat_UE.objects.get(etudiant=etu,ue = ue)
+							if res.note<8:
+								barre=True
+							
+							if moyG>=10 and not barre:
+								jury = "VAL"
+							elif moyG>=8 and not barre:
+								jury = "NATT"
+							else:
+								jury="NATB"
+				
+				
 					else:
-						jury = "VAL"
+						if semes.intitule == "Semestre 2":
+							semesPrec = Semstre.objects.get(intitule="Semestre 1")	
+						elif semes.intitule == "Semestre 3":
+							semesPrec = Semstre.objects.get(intitule="Semestre 2")
+						elif semes.intitule == "Semestre 4":		
+							semesPrec = Semstre.objects.get(intitule="Semestre 3")
+						moyGPrec = resSemPrec.note
+						resSemPrec = Resultat_Semestre.objects.get(etudiant=etu, semestre=semesPrec)
+
+						for ue in ues:
+							res = Resultat_UE.objects.get(etudiant=etu,ue = ue)
+							if res.note<8:
+								barre=True
+						
+						if moyG>=10 and not barre and resSemPrec.resultat == "VAL":
+							jury = "VAL"
+						elif moyG>=10 and not barre and resSemPrec.resultat == "NATT" and (moyG+moyGPrec)>=20:
+							jury = "ADAC"
+						elif moyG>=10 and not barre and resSemPrec.resultat == "NATB" :
+							jury = "AJPC"
+						elif moyG>=8 and not barre and resSemPrec.resultat == "VAL" and (moyG+moyGPrec)>=10 :
+							jury = "VALC"
+						elif not barre:
+							jury = "NATT"
+						else:
+							jury = "NATB"
+						
+						
 					resultatSem.note_calc = moyG
 					resultatSem.resultat = jury
 					res=False
