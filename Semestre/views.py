@@ -2,6 +2,8 @@
 from django.shortcuts import render
 from Semestre.models import Semestre, InstanceSemestre
 from Semestre.forms import SemestreForm, SelectSem, RenseignerSem,InstanceSemestreForm,SelectInstanceSemestre
+from UE.models import UE
+from Matiere.models import Matiere
 from django.shortcuts import render, get_object_or_404
 from Etudiant.models import Appartient
 # Create your views here.
@@ -38,6 +40,15 @@ def listerSemestre(request):
 """Cette vue permet de supprimer un semestre"""
 def supprsem(request, id):
 	semestre = Semestre.objects.filter(id=id)
+	ue = UE.objects.filter(semestre_id=id)
+
+	if ue :
+		ue.delete()
+
+	matiere = Matiere.objects.filter(ue_id=id)
+
+	if matiere :
+		matiere.delete()
 
 	semestre.delete()
 	return render(request, 'contenu_html/supprsem.html', locals())
