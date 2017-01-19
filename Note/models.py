@@ -18,7 +18,7 @@ class Resultat_Semestre(models.Model):
 	resultat_pre_jury = models.CharField(max_length=15, null=True)
 	resultat_jury = models.CharField(max_length=15, null=True)
 	def __str__(self):
-		return self.etudiant.encode('utf-8')
+		return str(self.etudiant)
 
 class Resultat_UE(models.Model):
 	annee = models.ForeignKey(Annee, null=False)
