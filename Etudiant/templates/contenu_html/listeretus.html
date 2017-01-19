@@ -23,7 +23,7 @@
 		<td>{{ appartient.etudiant.prenom }}</td>
 		<td>{{ appartient.etudiant.age }}</td>
 		<td>{{ appartient.etudiant.apogee }}</td>
-		<td>{{ appartient.promotion }}
+		<td>{{ appartient.instance_semestre }}
 		<td><a href="suppretu/{{ appartient.etudiant.id }}"><button>Supprimer <i style="color:red;" class="fa fa-trash" aria-hidden="true"></i></button></a></td>
 	</tr>
 {% endfor %}
@@ -36,6 +36,6 @@
 	}
 </script>
 <p><a onclick="suppression();"><button>Supprimer tous les étudiants <i style="color:red;" class="fa fa-trash" aria-hidden="true"></i></button></a></p>
-<a href="/"><button>Retour à l'accueil</button></a>
+<a href="/"><button>Retour à l'accueil <i class="fa fa-reply" aria-hidden="true"></i></button></a>
 <p>Attention, supprimer un étudiant supprimera toutes les notes qui lui sont associées.</p>
 {% endblock %}
