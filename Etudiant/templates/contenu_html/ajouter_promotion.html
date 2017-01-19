@@ -7,7 +7,6 @@
 		<p>Ajout reussi dans la BD</p>
 		<a href="/"><button>Retour à l'accueil</button></a>
 	{% else %}
-	<h1>Ajout d'une promotion</h1>
 	<form enctype="multipart/form-data" action="{% url "ajouter_promotion" %}" method="post">
 		{% csrf_token %}
 		{{ form.as_p }}

@@ -5,6 +5,7 @@ from Annee.models import Annee
 from Diplome.forms import DiplomeForm
 from Diplome.forms import DiplomeFormCreation, SelectDip, RenseignerDip
 from Annee.forms import AnneeForm
+from Matiere.models import Matiere
 from UE.models import UE
 from UE.forms import UEForm
 from Semestre.models import Semestre
@@ -77,3 +78,57 @@ def modifierDiplome(request):
 		request.session['dip'] = False
 		form = SelectDip(diplomes=Diplomes)
 	return render(request, 'contenu_html/modifierDiplome.html', locals())
+
+"""Cette vue permet d'afficher le détail d'un diplôme"""
+def detailDiplome(request):
+	if request.method == 'POST':
+		Diplomes = Diplome.objects.all()
+		form = SelectDip(request.POST, diplomes=Diplomes)
+		if form.is_valid() :
+
+			id_detdip = form.cleaned_data['select']
+			request.session['id_detdip'] = id_detdip
+			detdip = True
+			res = True
+
+		d = get_object_or_404(Diplome, id=request.session['id_detdip'])
+		sem_exist = Semestre.objects.filter(diplome__id=request.session['id_detdip'])
+
+		if sem_exist:
+			s = Semestre.objects.get(diplome__id=request.session['id_detdip'])
+			ues = UE.objects.all().filter(semestre=s)
+			tab_matieres = []
+			for ue in ues :
+				tab_matieres.append(Matiere.objects.all().filter(ue=ue))
+			lignes = UE.objects.all().filter(semestre=s).count() + 1
+
+			for matieres in tab_matieres :
+				for matiere in matieres :
+							lignes += 1
+			colonnes = 4
+			lst = [[""] * colonnes for _ in range(lignes)]
+			lst[0][0] = s.intitule
+			lst[0][1] = "Coefficient"
+			lst[0][2] = '<a href="../Semestre/modifierSemestre/">Modifier</a></td>'
+			lst[0][3] = '<a href="../Semestre/supprsem/'+str(s.id)+'">Supprimer</a></td>'
+			i =0
+
+			#moy = 0
+			for matieres in tab_matieres :
+				i += 1
+				lst[i][0]=matieres[0].ue
+				lst[i][1]= matieres[0].ue.coefficient 
+				lst[i][2]= '<a href="../UE/modifierUe/">Modifier</a></td>'
+				lst[i][3] = '<a href="../UE/supprue/'+str(matieres[0].ue.id)+'">Supprimer</a></td>'
+				for matiere in matieres :
+					i += 1
+					lst[i][0]= matiere.intitule
+					lst[i][1]= matiere.coefficient
+					lst[i][2]= '<a href="../Matiere/modifierMatiere/">Modifier</a></td>'
+					lst[i][3] = '<a href="../Matiere/supprmat/'+str(matiere.id)+'">Supprimer</a></td>'
+			#lst[1][1] = moy/coeff
+			res = True
+	else :
+		Diplomes = Diplome.objects.all()
+		form = SelectDip(diplomes=Diplomes)
+	return render(request, 'contenu_html/detailDiplome.html', locals())

@@ -59,9 +59,9 @@ class RenseignerEtu(forms.Form):
 			self.fields['apogee'] = forms.CharField(max_length=100,required=False, widget=forms.TextInput(attrs={'value': etu.apogee}))
 
 		if etu.date_naissance is None:
-			self.fields['date_naissance']  = forms.CharField(max_length=100,required=False)
+			self.fields['date_naissance']  = forms.DateField(required=False)
 		else:
-			self.fields['date_naissance'] = forms.CharField(max_length=100,required=False, widget=forms.TextInput(attrs={'value': etu.date_naissance}))
+			self.fields['date_naissance'] = forms.DateField(required=False, widget=forms.TextInput(attrs={'value': etu.date_naissance}))
 
 		if etu.sexe is None:
 			self.fields['sexe']  = forms.CharField(max_length=100,required=False)
