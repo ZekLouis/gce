@@ -262,7 +262,7 @@ def renseignerResultat(request):
 			moy = 0
 			coeff = 0
 			try:
-				res = Resultat_Semestre.objects.get(etudiant=etu,instance_semestre = Isemes)
+				res = Resultat_Semestre.objects.get(etudiant=etu,instance_semestre = instancesemestre)
 				
 				if res is not None:
 					notes = Note.objects.all().filter(etudiant=etu)
@@ -277,66 +277,61 @@ def renseignerResultat(request):
 									print("mat" ,matiere.coefficient)
 									moy += (note.valeur*matiere.coefficient)
 									coeff += matiere.coefficient
-					if coeff==0:
-						coeff=1
-					moyG = moy/coeff
-					
-					resultatSem = Resultat_Semestre.objects.get(etudiant=etu, semestre=semes)
-					barre = False
-					if semes.intitule == "Semestre 1":
-						for ue in ues:
-							res = Resultat_UE.objects.get(etudiant=etu,ue = ue)
-							if res.note<8:
-								barre=True
-							
-							if moyG>=10 and not barre:
-								jury = "VAL"
-							elif moyG>=8 and not barre:
-								jury = "NATT"
-							else:
-								jury="NATB"
-				
-					if coeff==0:
-						coeff=1
-					moyG = moy/coeff
-					resultatSem = Resultat_Semestre.objects.get(etudiant=etu, instance_semestre=Isemes)
-					if moyG < 8:
-						jury = "Barre"
-					elif moyG<10 and moyG >= 8:
-						jury = "NVAL"
-					else:
-						if semes.intitule == "Semestre 2":
-							semesPrec = Semstre.objects.get(intitule="Semestre 1")	
-						elif semes.intitule == "Semestre 3":
-							semesPrec = Semstre.objects.get(intitule="Semestre 2")
-						elif semes.intitule == "Semestre 4":		
-							semesPrec = Semstre.objects.get(intitule="Semestre 3")
-						moyGPrec = resSemPrec.note
-						resSemPrec = Resultat_Semestre.objects.get(etudiant=etu, semestre=semesPrec)
 
-						for ue in ues:
-							res = Resultat_UE.objects.get(etudiant=etu,ue = ue)
-							if res.note<8:
-								barre=True
-						
-						if moyG>=10 and not barre and resSemPrec.resultat == "VAL":
-							jury = "VAL"
-						elif moyG>=10 and not barre and resSemPrec.resultat == "NATT" and (moyG+moyGPrec)>=20:
-							jury = "ADAC"
-						elif moyG>=10 and not barre and resSemPrec.resultat == "NATB" :
-							jury = "AJPC"
-						elif moyG>=8 and not barre and resSemPrec.resultat == "VAL" and (moyG+moyGPrec)>=10 :
-							jury = "VALC"
-						elif not barre:
-							jury = "NATT"
-						else:
-							jury = "NATB"
-						
-						
-					resultatSem.note_calc = moyG
-					resultatSem.resultat = jury
-					res=False
-					resultatSem.save()
+				if coeff==0:
+					coeff=1
+				moyGcal = moy/coeff
+				res = Resultat_Semestre.objects.get(etudiant=etu,instance_semestre = instancesemestre )
+				moyG = res.note
+				print('MOYG=', moyG)
+				resultatSem = Resultat_Semestre.objects.get(etudiant=etu, instance_semestre=instancesemestre)
+				barre = False
+				print(instancesemestre.semestre)
+				if instancesemestre.semestre.intitule == "Semestre 1":
+					for ue in ues:
+						res = Resultat_UE.objects.get(etudiant=etu,ue = ue)
+						if res.note<8:
+							barre=True
+					if moyG>=10 and not barre:
+						jury = "VAL"
+					elif moyG>=8 and not barre:
+						jury = "NATT"
+					else:
+						jury="NATB"
+				
+				else:
+					if instancesemestre.semestre.intitule == "Semestre 2":
+						semesPrec = InstanceSemestre.objects.get(semestre__intitule="Semestre 1")	
+					elif instancesemestre.semestre.intitule == "Semestre 3":
+						semesPrec =InstanceSemestre.objects.get(semestre__intitule="Semestre 2")
+					elif instancesemestre.semestre.intitule == "Semestre 4":		
+						semesPrec = InstanceSemestre.objects.get(semestre__intitule="Semestre 3")
+					resSemPrec = Resultat_Semestre.objects.get(etudiant=etu, instance_semestre=semesPrec)
+					moyGPrec = resSemPrec.note
+					
+					for ue in ues:
+						res = Resultat_UE.objects.get(etudiant=etu,ue = ue)
+						if res.note<8:
+							barre=True
+					
+					if moyG>=10 and not barre and resSemPrec.resultat == "VAL":
+						jury = "VAL"
+					elif moyG>=10 and not barre and resSemPrec.resultat == "NATT" and (moyG+moyGPrec)>=20:
+						jury = "ADAC"
+					elif moyG>=10 and not barre and resSemPrec.resultat == "NATB" :
+						jury = "AJPC"
+					elif moyG>=8 and not barre and resSemPrec.resultat == "VAL" and (moyG+moyGPrec)>=10 :
+						jury = "VALC"
+					elif not barre:
+						jury = "NATT"
+					else:
+						jury = "NATB"
+					
+					
+				resultatSem.note_calc = moyGcal
+				resultatSem.resultat = jury
+				res=False
+				resultatSem.save()
 			except Resultat_Semestre.DoesNotExist:
 				print("probleme")
 	else :
