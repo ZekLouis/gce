@@ -9,18 +9,18 @@
 			{% csrf_token %}
 			{{ form.as_p }}
 			
-			<input type="submit" value="Valider">
+			<button type="submit">Valider <i class="fa fa-check" aria-hidden="true"></i></button>
 		</form>
 		{% else %}
 			<p>Ajout réussi dans la BD</p>
-		<input type="button" value="Ajouter encore une matière ?" onclick="document.location.href = '/Matiere/ajouterMatiere';"/>
+		<button type="button" onclick="document.location.href = '/Matiere/ajouterMatiere';">Ajouter une nouvelle matière <i class="fa fa-retweet" aria-hidden="true"></i></button>
 		{% endif %}
 	{% else %}
 	<form enctype="multipart/form-data" action="{% url "ajouterMatiere" %}" method="post">
 		{% csrf_token %}
 		{{ form.as_p }}
-		<p>Unité d'enseignement : {{ e.code }}</p>
-		<input type="submit" class="e" name="Valider">
+		<p>Unité d'enseignement : {{ e.code_ppn }}</p>
+		<button type="submit">Valider <i class="fa fa-check" aria-hidden="true"></i></button>
 	</form>
 	{% endif %}
 {% endblock %}

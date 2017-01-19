@@ -9,7 +9,7 @@ class MatiereForm(forms.ModelForm):
 	class Meta : 
 		model = Matiere
 		fields = '__all__'
-		exclude = ['unite']
+		exclude = ['ue']
 
 
 class SelectUE(forms.Form):

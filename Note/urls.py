@@ -27,6 +27,6 @@ urlpatterns = [
     url(r'^modifierNote', views.modifierNote, name='modifierNote'),
     url(r'^resultatJury', views.resultatJury, name='resultatJury'),
     url(r'^listerResultat', views.renseignerResultat, name='renseignerResultat'),
-    url(r'^completerResultat/(?P<id>\d+)/(?P<semestre>\d+)$', views.completerResultat, name='completerResultat'),
+    url(r'^completerResultat/(?P<id>\d+)/(?P<Isemestre>\d+)$', views.completerResultat, name='completerResultat'),
 
 ]
