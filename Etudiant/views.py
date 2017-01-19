@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*-
 from django.shortcuts import render, get_object_or_404
-from Etudiant.models import Etu, Promotion, Appartient
-from Etudiant.forms import EtudiantForm, RenseignerEtu, SelectEtu, PromotionForm, SelectPromo
+from Etudiant.models import Etu, Appartient
+from Etudiant.forms import EtudiantForm, RenseignerEtu, SelectEtu
 from Note.models import Note, Resultat_Semestre
 from Note.forms import FileForm
 from Semestre.models import Semestre, InstanceSemestre
