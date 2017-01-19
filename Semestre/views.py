@@ -1,8 +1,9 @@
 #-*- coding: utf-8 -*-
 from django.shortcuts import render
-from Semestre.models import Semestre
-from Semestre.forms import SemestreForm, SelectSem, RenseignerSem
+from Semestre.models import Semestre, InstanceSemestre
+from Semestre.forms import SemestreForm, SelectSem, RenseignerSem,InstanceSemestreForm,SelectInstanceSemestre
 from django.shortcuts import render, get_object_or_404
+from Etudiant.models import Appartient
 # Create your views here.
 
 """Cette vue permet d'ajouter un semestre"""
@@ -11,11 +12,13 @@ def ajouterSemestre(request):
 		form = SemestreForm(request.POST)
 		if form.is_valid():
 
-			code = form.cleaned_data['code']
+			code_ppn = form.cleaned_data['code_ppn']
+			code_apogee = form.cleaned_data['code_apogee']
 			dip = form.cleaned_data['diplome']
 			intitule = form.cleaned_data['intitule']
 			sem = Semestre(
-					code=code,
+					code_ppn=code_ppn,
+					code_apogee=code_apogee,
 					intitule=intitule,
 					diplome = dip,					
 	                )
@@ -73,3 +76,44 @@ def modifierSemestre(request):
 		request.session['sem'] = False
 		form = SelectSem(semestres=Semestres)
 	return render(request, 'contenu_html/modifierSemestre.html', locals())
+
+
+def ajouter_instance_semestre(request):
+	if request.method == 'POST':  
+		form = InstanceSemestreForm(request.POST)
+		if form.is_valid():
+
+			annee = form.cleaned_data['annee']
+			semestre = form.cleaned_data['semestre']
+			
+			# L'instance du semestre
+			IS = InstanceSemestre(
+					annee=annee,
+					semestre = semestre,					
+			)
+
+			IS.save()
+			res = True
+		else :
+			print("ERREUR : AJOUTER IS : VIEW ajouter_instance_semestre : formulaire")
+	else :
+		form = InstanceSemestreForm()
+	return render(request, 'contenu_html/ajouterInstanceSemestre.html', locals())
+
+
+"""Cette vue permet de faire afficher les étudiants d'une Instance de semestre"""
+def afficherInstanceSemestre(request):
+	if request.method == 'POST':
+		instanceSemestres = InstanceSemestre.objects.all()
+		form = SelectInstanceSemestre(request.POST, instanceSemestres=instanceSemestres)
+		if form.is_valid() :
+			id_inst = form.cleaned_data['select']
+			instanceSemestre = get_object_or_404(InstanceSemestre, id=id_inst)
+			listeEtu = Appartient.objects.filter(instance_semestre=instanceSemestre)
+			res = True
+		else:
+			print("ERREUR : Afficher promotion: VIEW afficher Promotion : formulaire")	
+	else:
+		instanceSemestres = InstanceSemestre.objects.all()
+		form = SelectInstanceSemestre(instanceSemestres=instanceSemestres)
+	return render(request, 'contenu_html/afficherInstanceSemestre.html', locals())

@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from Annee.models import Annee
-from Semestre.models import Semestre
+from Semestre.models import Semestre, InstanceSemestre
 
 # Create your models here.
 class Etu(models.Model):
@@ -28,17 +28,10 @@ class Etu(models.Model):
 	aide_financiere = models.CharField(max_length=100, null=True)
 	bourse = models.CharField(max_length=100, null=True)
 	def __str__(self):
-		return self.nom.encode('utf-8')
-
-class Promotion(models.Model):
-	annee =  models.ForeignKey(Annee, null=False)
-	semestre = models.ForeignKey(Semestre, null=False)
-	intitule = models.CharField(max_length=100, null=True)
-	def __str__(self):
-		return self.intitule.encode('utf-8')
+		return str(self.nom).encode('utf-8')
 
 class Appartient(models.Model):
-	promotion = models.ForeignKey(Promotion, null=False)	
+	instance_semestre = models.ForeignKey(InstanceSemestre, null=False)	
 	etudiant = models.ForeignKey(Etu, null=False)
 	def __str__(self):
-		return str(self.promotion).encode('utf-8')
+		return str(self.etudiant).encode('utf-8')

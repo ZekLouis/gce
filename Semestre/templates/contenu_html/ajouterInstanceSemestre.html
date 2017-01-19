@@ -1,12 +1,12 @@
 {% extends "templates/base.html" %}
-{% block title %}Ajouter Promotion{% endblock %}
+{% block title %}Ajouter Instance{% endblock %}
 
 {% block content %}
-<h1>Ajouter une promotion</h1>
+<h1>Ajouter une Instance de semestre</h1>
 	{% if res %}
 		<p>Ajout reussi dans la BD</p>
 	{% else %}
-	<form enctype="multipart/form-data" action="{% url "ajouter_promotion" %}" method="post">
+	<form enctype="multipart/form-data" action="{% url "ajouter_instance_semestre" %}" method="post">
 		{% csrf_token %}
 		{{ form.as_p }}
 		<input type="submit" class="e" name="Valider">
