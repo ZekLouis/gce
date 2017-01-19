@@ -3,6 +3,7 @@
 <h1>Génération des documents</h1>
 	{% if res %}
 		<p>Documents générés</p>
+		<a href="/semestre 1.xls">Télécharger Documents</a>
 	{% else %}
 	<form enctype="multipart/form-data" action="{% url "genererDocuments" %}" method="post">
 		{% csrf_token %}

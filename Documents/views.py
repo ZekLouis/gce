@@ -10,9 +10,10 @@ from UE.models import UE
 from Note.models import Resultat_UE
 from Note.models import Resultat_Semestre
 from Matiere.models import Matiere
-from Semestre.models import Semestre
+from Semestre.models import Semestre, InstanceSemestre
 from Note.models import Note
 from UE.forms import SelectSemestre
+from Semestre.forms import SelectInstanceSemestre
 # Create your views here.
 
 class etudiant:
@@ -47,14 +48,12 @@ def ordreListe(semestrePrec, semestre):
 		note1 = ""
 		note2 = ""
 		str = 0
-		semestre1 = Semestre.objects.get(id=semestrePrec)
-		ues = UE.objects.all().filter(semestre=semestre)
-		semestre2 = Semestre.objects.get(id=semestre)
-		ues = UE.objects.all().filter(semestre=semestre)
+		semestre1 = InstanceSemestre.objects.get(id=semestrePrec)
+		semestre2 = InstanceSemestre.objects.get(id=semestre)
 		try:
-			note1 = Resultat_Semestre.objects.get(etudiant = etu, semestre=semestre1)
+			note1 = Resultat_Semestre.objects.get(etudiant = etu, instance_semestre=semestre1)
 			str = testValidite(note1.resultat, 1000)
-			note2 = Resultat_Semestre.objects.get(etudiant = etu, semestre=semestre2)
+			note2 = Resultat_Semestre.objects.get(etudiant = etu, instance_semestre=semestre2)
 			str += testValidite(note2.resultat, 100)
 			moyG = (note1.note+note2.note)/2
 			str-=moyG
@@ -76,16 +75,16 @@ def ordreListe(semestrePrec, semestre):
 def genererDocuments(request):
 	if request.method == 'POST':
 		if not request.session['doc']:
-			u = Semestre.objects.all()
-			form = SelectSemestre(request.POST, semestres=u)
+			u = InstanceSemestre.objects.all()
+			form = SelectInstanceSemestre(request.POST, instanceSemestres=u)
 			if form.is_valid() :
 				request.session['semestre'] = form.cleaned_data['select']
 				request.session['doc'] = True
-			semestre = Semestre.objects.all()
-			form = SelectSemestre(semestres=semestre)
+			semestre = InstanceSemestre.objects.all()
+			form = SelectInstanceSemestre(instanceSemestres=semestre)
 		else:
-			u = Semestre.objects.all()
-			form = SelectSemestre(request.POST, semestres=u)
+			u = InstanceSemestre.objects.all()
+			form = SelectInstanceSemestre(request.POST, instanceSemestres=u)
 			if form.is_valid() :
 				semestrePrec = form.cleaned_data['select']
 			style = xlwt.easyxf(' alignment: horizontal center, vertical center; borders: left thin, right thin, top thin, bottom thin;')
@@ -95,7 +94,7 @@ def genererDocuments(request):
 			etus = Etu.objects.all()
 			ligne = 7
 			cp =0
-			liste = ordreListe(1, 1)
+			liste = ordreListe(semestrePrec, request.session['semestre'])
 			for etu in liste:
 				etudi = Etu.objects.get(apogee=etu.numero)
 				sem1=0
@@ -109,8 +108,9 @@ def genererDocuments(request):
 				colonne +=1
 				newFeuille.get_sheet(0).write(ligne,colonne,etudi.prenom, style)
 				colonne +=2
-				semestre = Semestre.objects.get(id=semestrePrec)
-				ues = UE.objects.all().filter(semestre=semestre)
+				semestre = InstanceSemestre.objects.get(id=semestrePrec)
+				s = semestre.semestre
+				ues = UE.objects.all().filter(semestre=s)
 				for ue in ues:
 					try:
 						noteUE = Resultat_UE.objects.get(etudiant=etudi, ue=ue)	
@@ -119,7 +119,7 @@ def genererDocuments(request):
 					except Resultat_UE.DoesNotExist:
 						print("probleme")
 				try:
-					resS = Resultat_Semestre.objects.get(etudiant = etudi, semestre=semestre)
+					resS = Resultat_Semestre.objects.get(etudiant = etudi, instance_semestre=semestre)
 					colonne =8
 					newFeuille.get_sheet(0).write(ligne,colonne,resS.note, style)
 					sem1 = resS.note
@@ -127,8 +127,8 @@ def genererDocuments(request):
 					newFeuille.get_sheet(0).write(ligne,colonne,resS.resultat, style)
 				except Resultat_Semestre.DoesNotExist:
 					print("probleme")
-				semestre2 = Semestre.objects.get(id=request.session['semestre'])
-				ues = UE.objects.all().filter(semestre=semestre2)
+				semestre2 = InstanceSemestre.objects.get(id=request.session['semestre'])
+				ues = UE.objects.all().filter(semestre=semestre2.semestre)
 				colonne = 13
 				for ue in ues:
 					try:
@@ -138,12 +138,12 @@ def genererDocuments(request):
 					except Resultat_UE.DoesNotExist:
 						print("probleme")
 				try:
-					resS = Resultat_Semestre.objects.get(etudiant = etudi, semestre=semestre)
+					resS2 = Resultat_Semestre.objects.get(etudiant = etudi, instance_semestre=semestre2)
 					colonne =16
-					newFeuille.get_sheet(0).write(ligne,colonne,resS.note, style)
-					sem2 = resS.note
+					newFeuille.get_sheet(0).write(ligne,colonne,resS2.note, style)
+					sem2 = resS2.note
 					colonne +=1
-					newFeuille.get_sheet(0).write(ligne,colonne,resS.resultat, style)
+					newFeuille.get_sheet(0).write(ligne,colonne,resS2.resultat, style)
 				except Resultat_Semestre.DoesNotExist:
 					print("probleme")
 				colonne = 21
@@ -162,12 +162,12 @@ def genererDocuments(request):
 				cp+=1
 				res=True
 			print(semestre)
-			newFeuille.save(semestre.code+'.xls')
+			newFeuille.save(semestre.semestre.code_ppn+'.xls')
 	else :
 		res=False
-		semestre = Semestre.objects.all()
+		semestre = InstanceSemestre.objects.all()
 		request.session['doc'] = False
-		form = SelectSemestre(semestres=semestre)
+		form = SelectInstanceSemestre(instanceSemestres=semestre)
 	return render(request, 'contenu_html/genererDocuments.html', locals())
 
 

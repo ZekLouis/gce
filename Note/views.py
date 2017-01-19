@@ -9,7 +9,8 @@ from UE.forms import SelectSemestre
 from Etudiant.models import Etu
 from Note.models import Note,Resultat_Semestre,Resultat_UE
 from Matiere.models import Matiere
-from Semestre.models import Semestre
+from Semestre.models import Semestre,InstanceSemestre
+from Semestre.forms import SelectInstanceSemestre
 from Annee.models import Annee
 from UE.models import UE
 import csv
@@ -94,13 +95,12 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,re
 			try :
 				#si on lit un chaine contenant par "Semestre"	
 				if "Semestre" in notes[i] :
-					semestre = Semestre.objects.get(code=notes[i])
+					semestre_instance = InstanceSemestre.objects.get(semestre__code_ppn=notes[i])
 					note = note.replace(",", ".")
 					note = float(note)
 					ResSem, create = Resultat_Semestre.objects.get_or_create(
-						annee = annee,
 						etudiant = etudiant,
-						semestre = semestre,
+						instance_semestre = semestre_instance,
 						note = note
 					)
 					if not create:
@@ -109,12 +109,12 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,re
 				#si on lit un chaine contenants par "UE"	
 				elif "UE" in notes[i]:
 					#on commence par récupérer l'ue à l'aide de son code 
-					ue = UE.objects.get(code=notes[i])
+					ue = UE.objects.get(code_ppn=notes[i])
 					note = note.replace(",", ".")
 					note = float(note)
 					#on peut maintenant récupérer toutes les informations 
 					Res_Ue, create = Resultat_UE.objects.get_or_create(
-						annee = annee,
+						instance_semestre= semestre_instance,
 						etudiant = etudiant,
 						ue = ue,
 						note= note#note qui sera modifiée dans une autre vue
@@ -124,14 +124,14 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,re
 					Res_Ue.save()
 				else:	
 					#on commence par créer la matière	
-					matiere = Matiere.objects.get(code=notes[i])
+					matiere = Matiere.objects.get(code_ppn=notes[i])
 					if note != "null":
 						note = note.replace(",", ".")
 						note = float(note)
-						noteExiste = Note.objects.filter(etudiant=etudiant,matiere=matiere,annee=annee)
+						noteExiste = Note.objects.filter(etudiant=etudiant,matiere=matiere,instance_semestre=semestre_instance)
 
 						if not noteExiste:
-							n, created = Note.objects.get_or_create(valeur=note,etudiant=etudiant,matiere=matiere,annee=annee)
+							n, created = Note.objects.get_or_create(valeur=note,etudiant=etudiant,matiere=matiere,instance_semestre=semestre_instance)
 						
 							if created==False:
 									#print("La note",note,etudiant,matiere,"existait deja, elle n'a pas ete ajoutee")
@@ -234,8 +234,8 @@ def modifierNote(request):
 			if form.is_valid() :
 				for note in NOTES:
 					note_temp = get_object_or_404(Note, id=note.id)
-					if form.cleaned_data[note_temp.matiere.code]:
-						note_temp.valeur = form.cleaned_data[note.matiere.code]
+					if form.cleaned_data[note_temp.matiere.code_ppn]:
+						note_temp.valeur = form.cleaned_data[note.matiere.code_ppn]
 				note_temp.save()	
 				res2=True
 			else :
@@ -250,19 +250,19 @@ def modifierNote(request):
 
 def renseignerResultat(request):
 	if request.method == 'POST':
-		u = Semestre.objects.all()
-		form = SelectSemestre(request.POST, semestres=u)
+		u = InstanceSemestre.objects.all()
+		form = SelectInstanceSemestre(request.POST, instanceSemestres=u)
 		if form.is_valid() :
-			semes = form.cleaned_data['select']
-			semestre = Semestre.objects.get(id=semes)
+			Isemes = form.cleaned_data['select']
+			instancesemestre = InstanceSemestre.objects.get(id=Isemes)
 		etus = Etu.objects.all()
-		ues  = UE.objects.filter(semestre=semes)
+		ues  = UE.objects.filter(semestre=instancesemestre.semestre)
 		
 		for etu in etus:
 			moy = 0
 			coeff = 0
 			try:
-				res = Resultat_Semestre.objects.get(etudiant=etu,semestre = semes)
+				res = Resultat_Semestre.objects.get(etudiant=etu,instance_semestre = instancesemestre)
 				
 				if res is not None:
 					notes = Note.objects.all().filter(etudiant=etu)
@@ -277,41 +277,78 @@ def renseignerResultat(request):
 									print("mat" ,matiere.coefficient)
 									moy += (note.valeur*matiere.coefficient)
 									coeff += matiere.coefficient
-									
-					if coeff == 0:
-									print(coeff)
-					if coeff==0:
-						coeff=1
-					moyG = moy/coeff
-					resultatSem = Resultat_Semestre.objects.get(etudiant=etu, semestre=semes)
-					if moyG < 8:
-						jury = "Barre"
-					elif moyG<10 and moyG >= 8:
-						jury = "NVAL"
-					else:
+				if coeff==0:
+					coeff=1
+				moyGcal = moy/coeff
+				res = Resultat_Semestre.objects.get(etudiant=etu,instance_semestre = instancesemestre )
+				moyG = res.note
+				print('MOYG=', moyG)
+				resultatSem = Resultat_Semestre.objects.get(etudiant=etu, instance_semestre=instancesemestre)
+				barre = False
+				print(instancesemestre.semestre)
+				if instancesemestre.semestre.intitule == "Semestre 1":
+					for ue in ues:
+						res = Resultat_UE.objects.get(etudiant=etu,ue = ue)
+						if res.note<8:
+							barre=True
+					if moyG>=10 and not barre:
 						jury = "VAL"
-					resultatSem.note_calc = moyG
-					resultatSem.resultat = jury
-					res=False
-					resultatSem.save()
+					elif moyG>=8 and not barre:
+						jury = "NATT"
+					else:
+						jury="NATB"
+				
+				else:
+					if instancesemestre.semestre.intitule == "Semestre 2":
+						semesPrec = InstanceSemestre.objects.get(semestre__intitule="Semestre 1")	
+					elif instancesemestre.semestre.intitule == "Semestre 3":
+						semesPrec =InstanceSemestre.objects.get(semestre__intitule="Semestre 2")
+					elif instancesemestre.semestre.intitule == "Semestre 4":		
+						semesPrec = InstanceSemestre.objects.get(semestre__intitule="Semestre 3")
+					resSemPrec = Resultat_Semestre.objects.get(etudiant=etu, instance_semestre=semesPrec)
+					moyGPrec = resSemPrec.note
+					
+					for ue in ues:
+						res = Resultat_UE.objects.get(etudiant=etu,ue = ue)
+						if res.note<8:
+							barre=True
+					
+					if moyG>=10 and not barre and resSemPrec.resultat == "VAL":
+						jury = "VAL"
+					elif moyG>=10 and not barre and resSemPrec.resultat == "NATT" and (moyG+moyGPrec)>=20:
+						jury = "ADAC"
+					elif moyG>=10 and not barre and resSemPrec.resultat == "NATB" :
+						jury = "AJPC"
+					elif moyG>=8 and not barre and resSemPrec.resultat == "VAL" and (moyG+moyGPrec)>=10 :
+						jury = "VALC"
+					elif not barre:
+						jury = "NATT"
+					else:
+						jury = "NATB"
+					
+					
+				resultatSem.note_calc = moyGcal
+				resultatSem.resultat = jury
+				res=False
+				resultatSem.save()
 			except Resultat_Semestre.DoesNotExist:
 				print("probleme")
 	else :
 		res=True
-		u = Semestre.objects.all()
-		form = SelectSemestre(semestres=u)
+		u = InstanceSemestre.objects.all()
+		form = SelectInstanceSemestre(instanceSemestres=u)
 	return render(request, 'contenu_html/listerResultat.html',locals())
 
-def completerResultat(request, id, semestre):
+def completerResultat(request, id, Isemestre):
 	if request.method == 'POST':
 		etu= Etu.objects.get(id=id)
-		sem =Semestre.objects.get(id=semestre)
+		Instsem =InstanceSemestre.objects.get(id=Isemestre)
 		if(etu):
 			existe= True
 		else:
 			existe=False
 
-		resSem= Resultat_Semestre.objects.get(etudiant=etu)
+		resSem= Resultat_Semestre.objects.get(etudiant=etu,instance_semestre=Instsem)
 		form = CompleterResultat(request.POST,res = resSem)
 		if form.is_valid() :
 			if form.cleaned_data['Resultat pre-jury']:
@@ -324,7 +361,7 @@ def completerResultat(request, id, semestre):
 			print("ERREUR : Completer resultat: VIEW modifieResultats : formulaire")	
 	else :
 		etu= Etu.objects.get(id=id)
-		sem =Semestre.objects.get(id=semestre)
-		resSem= Resultat_Semestre.objects.get(etudiant=etu,semestre=sem)
+		Instsem =InstanceSemestre.objects.get(id=Isemestre)
+		resSem= Resultat_Semestre.objects.get(etudiant=etu,instance_semestre=Instsem)
 		form = CompleterResultat(res = resSem)
 	return render(request, 'contenu_html/completerResultat.html', locals())	

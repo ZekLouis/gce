@@ -8,7 +8,8 @@
 {% else %}
 	<table >
 	<tr>
-		<th>Code Matière</th>
+		<th>Code PPN Matière</th>
+		<th>Code Apogée Matière</th>
 		<th>Intitulé</th>
 		<th>Coefficient</th>
 		<th>Supprimer</th>
@@ -17,10 +18,11 @@
 
 {% for mat in matieres %}
 	<tr>
-		<td>{{ mat.code }}</td>
+		<td>{{ mat.code_ppn }}</td>
+		<td>{{ mat.code_apogee }}</td>
 		<td>{{ mat.intitule }}</td>
 		<td>{{ mat.coefficient }}</td>
-		<td><a href="supprmat/{{ mat.id }}">Supprimer</a></td>
+		<td><a href="supprmat/{{ mat.id }}"><button>Supprimer</a></td>
 	</tr>
 {% endfor %}
 </table>

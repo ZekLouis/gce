@@ -5,6 +5,21 @@
 	{% if res %}
 		{% if perf %}
 			<p>Ajout réussi dans la BD</p>
+
+			<h2>Résultat de l'import ....</h2>
+		<table class="tab general">
+			<th>Nombre de notes ajoutées</th>
+			<th>Nombre de notes non renseignées </th>
+			<th>Nombre d'élèves ajoutées</th>
+			<th>Nombre d'élèves qui n'existent pas</th>
+
+			<tr>
+				<td>Il y a {{ compteur_note }} notes qui ont été ajoutées</td>
+				<td>Il y a {{ compteur_note_error }} notes qui n'ont pas été ajoutées</td>
+				<td>Les notes de {{ compteur_eleve }} élève(s) ont été prises en compte</td>
+				<td>Il y a {{ compteur_eleve_error }} élève(s) qui n'existent pas</td>
+			</tr>
+		</table>
 		{% else %}
 		<h2>Résultat de l'import ....</h2>
 		<table class="tab general">

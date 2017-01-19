@@ -3,7 +3,7 @@
 <h1>Ajout d'un diplome</h1>
 	{% if res %}
 	<p>Ajout réussi dans la BD</p>
-	<button onclick="document.location.href = '/Diplome/ajouterDiplome';">Ajouter un nouveau diplome <i class="fa fa-reply" aria-hidden="true"></i></button>
+	<button onclick="document.location.href = '/Diplome/ajouterDiplome';">Ajouter un nouveau diplome <i class="fa fa-retweet" aria-hidden="true"></i></button>
 	<button onclick="document.location.href = '/Semestre/ajouterSemestres';">Étape suivante <i class="fa fa-chevron-right" aria-hidden="true"></i></button>
 	{% else %}
 	<form enctype="multipart/form-data" action="{% url "ajouterDiplome" %}" method="post">
