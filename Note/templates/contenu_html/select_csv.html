@@ -62,7 +62,7 @@
 		<form enctype="multipart/form-data" action="{% url "importer_csv" %}" method="post">
 			{% csrf_token %}
 			{{ form.as_p }}
-			<input type="submit" name="Valider">
+			<button type="submit">Valider <i class="fa fa-check" aria-hidden="true"></i></button>
 		</form>
 	{% endif %}
 {% endblock %}

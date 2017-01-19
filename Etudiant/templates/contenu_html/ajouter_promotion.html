@@ -5,7 +5,7 @@
 <h1>Ajouter une promotion</h1>
 	{% if res %}
 		<p>Ajout reussi dans la BD</p>
-		<a href="/"><button>Retour à l'accueil</button></a>
+		<a href="/"><button>Retour à l'accueil <i class="fa fa-reply" aria-hidden="true"></i></button></a>
 	{% else %}
 	<form enctype="multipart/form-data" action="{% url "ajouter_promotion" %}" method="post">
 		{% csrf_token %}

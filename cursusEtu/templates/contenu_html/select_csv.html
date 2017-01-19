@@ -7,12 +7,13 @@
 
 	{% if res %}
 		<p>Ajout réussi dans la BD</p>
-		<p><a href="/">Retour à l'accueil</a></p>
+		<p><a href="/Note/importer_csv"><button>Importer un nouveau fichier <i class="fa fa-retweet" aria-hidden="true"></i></button></a></p>
+		<p><a href="/"><button>Retour à l'accueil <i class="fa fa-reply" aria-hidden="true"></i></button></a></p>
 	{% else %}
 		<form enctype="multipart/form-data" action="{% url "importer_csv" %}" method="post">
 			{% csrf_token %}
 			{{ form.as_p }}
-			<input type="submit" name="Valider">
+			<button type="submit">Valider <i class="fa fa-reply" aria-hidden="true"></i></button></a></p>
 		</form>
 	{% endif %}
 {% endblock %}
