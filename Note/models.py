@@ -18,7 +18,14 @@ class Resultat_Semestre(models.Model):
 	resultat_jury = models.CharField(max_length=15, null=True)
 	def __str__(self):
 		return str(self.etudiant)
+<<<<<<< HEAD
+=======
 
+<<<<<<< HEAD
+=======
+>>>>>>> 8e3e1ae186a98e66268d2cefc752139a989a8e99
+
+>>>>>>> 546ec0433c90ae320adba731dd83b0023931bc05
 class Resultat_UE(models.Model):
 	instance_semestre = models.ForeignKey(InstanceSemestre, null=False)
 	etudiant = models.ForeignKey(Etu, null=False)
