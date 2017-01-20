@@ -36,7 +36,7 @@ class SelectSem(forms.Form):
 	def __init__(self,*args,**kwargs):
 		semestres = kwargs.pop('semestres')
 		super(SelectSem,self).__init__(*args,**kwargs)
-		SemChoices = [(sem.id,sem.code) for sem in semestres]
+		SemChoices = [(sem.id,sem.code_ppn) for sem in semestres]
 		self.fields['select'] = forms.ChoiceField(widget=forms.Select(), choices=SemChoices)
 
 class RenseignerSem(forms.Form):
