@@ -6,7 +6,7 @@ from django import forms
 from Note.forms import FileForm, SelectNote, RenseignerNote,CompleterResultat
 from Etudiant.forms import SelectEtu
 from UE.forms import SelectSemestre
-from Etudiant.models import Etu
+from Etudiant.models import Etu,Appartient
 from Note.models import Note,Resultat_Semestre,Resultat_UE
 from Matiere.models import Matiere
 from Semestre.models import Semestre,InstanceSemestre
@@ -365,6 +365,16 @@ def completerResultat(request, id, Isemestre):
 		else:
 			print("ERREUR : Completer resultat: VIEW modifieResultats : formulaire")	
 	else :
+<<<<<<< HEAD
+		etu= Etu.objects.get(id=id)
+		Instsem =InstanceSemestre.objects.get(id=Isemestre)
+		resSem= Resultat_Semestre.objects.get(etudiant=etu,instance_semestre=Instsem)
+		form = CompleterResultat(res = resSem)
+	return render(request, 'contenu_html/completerResultat.html', locals())	
+
+
+	
+=======
 		try:
 			etu=Etu.objects.get(id=id)
 			Instsem =InstanceSemestre.objects.get(id=Isemestre)
@@ -373,3 +383,4 @@ def completerResultat(request, id, Isemestre):
 		except Etu.DoesNotExist:
 			exist=False
 	return render(request, 'contenu_html/completerResultat.html', locals())	
+>>>>>>> 30a66283dbe5adeac17943d4018df3661ac5bb7e

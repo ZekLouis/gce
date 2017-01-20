@@ -261,7 +261,7 @@ def complement_etu(request):
 				if form.cleaned_data['apogee']:
 					etudiant.apogee = form.cleaned_data['apogee']
 				if form.cleaned_data['date_naissance']:
-					etudiant.sexe = form.cleaned_data['date_naissance']
+					etudiant.date_naissance = form.cleaned_data['date_naissance']
 				if form.cleaned_data['sexe']:
 					etudiant.sexe = form.cleaned_data['sexe']
 				if form.cleaned_data['adresse']:

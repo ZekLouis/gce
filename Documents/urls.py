@@ -21,4 +21,5 @@ from Documents import views
 
 urlpatterns = [
     url(r'^genererDocuments', views.genererDocuments, name='genererDocuments'),
+    url(r'^classementSemestre', views.classementSemestre, name='classementSemestre'),
 ]
