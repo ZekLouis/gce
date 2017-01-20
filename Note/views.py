@@ -98,7 +98,7 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,re
 				if "Semestre" in notes[i] :
 					print(notes[i])
 					semestre_instance = InstanceSemestre.objects.get(semestre__code_ppn=notes[i])
-					note = note.replace(",", ".")
+					note = note.replace(",",".")
 					note = float(note)
 					ResSem, create = Resultat_Semestre.objects.get_or_create(
 						etudiant = etudiant,
