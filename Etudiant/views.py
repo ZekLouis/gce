@@ -287,18 +287,3 @@ def complement_etu(request):
 		form = SelectEtu(etus=Etudiants)
 	return render(request, 'contenu_html/complement_etu.html', locals())
 
-# def faireEvoluerPromotion(request):
-# 	if request.method == 'POST':
-#     		promotions = Promotion.objects.all()
-# 		form = SelectPromo(request.POST, promotions=promotions)
-# 		if form.is_valid() :
-# 			id_promo = form.cleaned_data['select']
-# 			promo = get_object_or_404(Promotion, id=id_promo)
-# 			listeEtu = Appartient.objects.filter(promotion=promo)
-# 			res = True
-# 		else:
-# 			print("ERREUR : Afficher promotion: VIEW afficher Promotion : formulaire")	
-# 	else:
-# 		promotions = Promotion.objects.all()
-# 		form = SelectPromo(promotions=promotions)
-# 	return render(request, 'contenu_html/faireEvoluerPromotion.html',locals())
