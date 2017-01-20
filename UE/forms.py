@@ -11,8 +11,7 @@ class UEForm(forms.ModelForm):
 		exclude = ['semestre']
 
 
-class SelectSemestre(forms.Form):
-	
+class SelectSemestre(forms.Form):	
 	def __init__(self,*args,**kwargs):
 		semestre = kwargs.pop('semestres')
 		super(SelectSemestre,self).__init__(*args,**kwargs)
@@ -20,11 +19,10 @@ class SelectSemestre(forms.Form):
 		self.fields['select'] = forms.ChoiceField(label = "Choix du Semestre", widget=forms.Select(), choices=SemChoices)
 
 class SelectUE(forms.Form):
-	
 	def __init__(self,*args,**kwargs):
 		unites = kwargs.pop('ues')
 		super(SelectUE,self).__init__(*args,**kwargs)
-		UeChoices = [(ue.id,ue.code) for ue in unites]
+		UeChoices = [(ue.id,ue.code_ppn) for ue in unites]
 		self.fields['select'] = forms.ChoiceField(widget=forms.Select(), choices=UeChoices)
 
 class RenseignerUe(forms.Form):

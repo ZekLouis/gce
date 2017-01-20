@@ -7,10 +7,14 @@
 			<form enctype="multipart/form-data" action="{% url "resultatJury" %}" method="post">
 			{% csrf_token %}
 			{{ form.as_p }}
-			<input type="submit" value="Sauvegarder">
+			<button type="submit">Valider <i class="fa fa-check" aria-hidden="true"></i></button>
 	</form>
 			
 	{% else %}
+	<p>Si aucun résultat n'est présent, vous pouvez les générer <a href="/Note/listerResultat"><button>ici</button></a> (ou alors cet étudiant n'a pas de notes)</p>
+	
+	<p>Résultat pour l'étudiant : <strong>{{ etu.nom }} {{ etu.prenom }} {{ etu.apogee }}</strong></p>
+
 	<table style="border:1px solid black; border-collapse : collapse;">
 	<tr>
 		<th style="border:1px solid black;">Année</th>
@@ -31,7 +35,7 @@
 		<td style="border:1px solid black;">{{ resultat.resultat }}</td>
 		<td style="border:1px solid black;">{{ resultat.resultat_pre_jury }}</td>
 		<td style="border:1px solid black;">{{ resultat.resultat_jury }}</td>
-		<td style="border:1px solid black;"><a href="completerResultat/{{ id_etu }}/{{ resultat.instance_semestre.id }}">Saisir les résultats du jury</a></td>
+		<td style="border:1px solid black;"><a href="completerResultat/{{ id_etu }}/{{ resultat.instance_semestre.id }}"><button>Saisir les résultats du jury <i class="fa fa-chevron-right" aria-hidden="true"></i></button></a></td>
 
 	</tr>
 	{% endfor %}

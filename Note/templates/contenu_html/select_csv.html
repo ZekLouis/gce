@@ -1,4 +1,6 @@
 {% extends "templates/base.html" %}
+{% block title %}Importation des notes{% endblock %}
+
 {% block content %}
 	<h1>Importer des notes via un fichier</h1>
 
@@ -34,7 +36,10 @@
 				<td>Les notes de {{ compteur_eleve }} élève(s) ont été prises en compte</td>
 				<td>Il y a {{ compteur_eleve_error }} élève(s) qui n'existent pas</td>
 			</tr>
-		</table>	
+		</table>
+
+		<p><a href="/"><button>Retour à l'accueil <i class="fa fa-reply" aria-hidden="true"></i></button></a></p>
+		<p><a href="/Note/importer_csv"><button>Importer de nouvelles notes <i class="fa fa-retweet" aria-hidden="true"></i></button></a></p>
 
 		<table class="tab sem" id="tabSem">
 			<th>Erreurs liées aux semestres </th>	
@@ -72,7 +77,6 @@
 		</table>
 
 		{% endif %}
-		<p><a href="/accueil">Retour à l'accueil</a></p>
 	{% else %}
 		<form enctype="multipart/form-data" action="{% url "importer_csv" %}" method="post">
 			{% csrf_token %}
