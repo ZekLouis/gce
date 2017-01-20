@@ -29,4 +29,5 @@ urlpatterns = [
     url(r'^modifierSemestre', views.modifierSemestre, name='modifierSemestre'),
     url(r'^ajouterInstanceSemestre', views.ajouter_instance_semestre, name='ajouter_instance_semestre'),
     url(r'^afficherInstanceSemestre', views.afficherInstanceSemestre, name='afficherInstanceSemestre'),
+    url(r'^faireEvoluerInstanceSemestre', views.faireEvoluerInstanceSemestre, name='faireEvoluerInstanceSemestre'),
 ]
