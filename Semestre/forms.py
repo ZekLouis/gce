@@ -22,7 +22,7 @@ class EvolutionSemestreForm(forms.Form):
 		super(EvolutionSemestreForm,self).__init__(*args,**kwargs)
 		for ligne in Liste:
 			self.fields[str(ligne.etudiant.apogee)] = forms.BooleanField(required=False)
-		ISChoice = [(instanceSemestre.id,'Semestre ' +str(instanceSemestre.semestre) + " Année " + str(instanceSemestre.annee)) for instanceSemestre in instances]
+		ISChoice = [(instanceSemestre.id,str(instanceSemestre.semestre) + " de l'année " + str(instanceSemestre.annee)) for instanceSemestre in instances]
 		self.fields['select'] = forms.ChoiceField(widget=forms.Select(), choices=ISChoice)
 
 	
@@ -36,7 +36,7 @@ class SelectSem(forms.Form):
 	def __init__(self,*args,**kwargs):
 		semestres = kwargs.pop('semestres')
 		super(SelectSem,self).__init__(*args,**kwargs)
-		SemChoices = [(sem.id,sem.code) for sem in semestres]
+		SemChoices = [(sem.id,sem.code_ppn) for sem in semestres]
 		self.fields['select'] = forms.ChoiceField(widget=forms.Select(), choices=SemChoices)
 
 class RenseignerSem(forms.Form):

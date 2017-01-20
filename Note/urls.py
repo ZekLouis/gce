@@ -28,5 +28,5 @@ urlpatterns = [
     url(r'^resultatJury', views.resultatJury, name='resultatJury'),
     url(r'^listerResultat', views.renseignerResultat, name='renseignerResultat'),
     url(r'^completerResultat/(?P<id>\d+)/(?P<Isemestre>\d+)$', views.completerResultat, name='completerResultat'),
-
+    
 ]

@@ -4,17 +4,21 @@
 {% block content %}
     {% if not res %} 
 			{% if not res2 %}
-			    <h1>Choisir une instance :</h1>
+                <h1>Choisir le semestre actuel que vous souhaitez traiter</h1>
+                <p>Vous allez pouvoir faire évoluer la situtation des étudiants présents dans ce semestre. (Faire passer un élève du S1 au S2)</p>
+                <p>Vous devez avoir créer l'instance du semestre au préalale.</p>
                     <form enctype="multipart/form-data" action="{% url "faireEvoluerInstanceSemestre" %}" method="post">
 		                {% csrf_token %}
                         {{ form.as_p }}
                     <button type="submit">Valider <i class="fa fa-check" aria-hidden="true"></i></button>
                     </form>
 			{% else %}
+                <h1>Changement de semestre pour les étudiants</h1>
 				<p>Ajout réussi dans la BD</p>
+                <a href="/"><button>Retour à l'accueil <i class="fa fa-reply" aria-hidden="true"></i></button></a>
 			{% endif %}
 	{% else %}
-		 <h1>Liste des étudiants du semestre {{instanceSemestre.semestre}} et de l'annee {{instanceSemestre.annee}} : </h1>
+		 <h1>Liste des étudiants du semestre {{ instance.semestre }} et de l'annee {{ instance.annee }} : </h1>
          <form enctype="multipart/form-data" action="{% url "faireEvoluerInstanceSemestre" %}" method="post">
 		    {% csrf_token %}
             <table>
@@ -24,13 +28,13 @@
                         <td>{{ ligne.1 }}</td>
                         <td>{{ ligne.2 }}</td>
                         {% comment %}<td>{{ form|add:"."|add:ligne.2 }}</td>{% endcomment %}
-                       <td>{{ ligne.3 }}</td>
+                        <td>{{ ligne.3 }}</td>
                     
                     </tr>
                 {% endfor %}
             </table>
-
-            <p>{{ form.select }}</p>
+        <p>Sélectionner le semestre de destinations des étudiants sélectionnés</p>
+        <p>{{ form.select }}</p>
 		<button type="submit">Valider <i class="fa fa-check" aria-hidden="true"></i></button>
 	    </form>	
 	{% endif %}

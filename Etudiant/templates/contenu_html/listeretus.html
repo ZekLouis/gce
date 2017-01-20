@@ -12,19 +12,17 @@
 		<th>Prenom</th>
 		<th>Age</th>
 		<th>Apogée</th>
-		<th>Semestre en cours</th>
 		<th>Supprimer</th>
 	</tr>
 {% endif %}
 
-{% for appartient in appartients %}
+{% for etu in etus %}
 	<tr>
-		<td><a href="listeretu/{{ appartient.etudiant.id }}">{{ appartient.etudiant.nom }}</a></td>
-		<td>{{ appartient.etudiant.prenom }}</td>
-		<td>{{ appartient.etudiant.age }}</td>
-		<td>{{ appartient.etudiant.apogee }}</td>
-		<td>{{ appartient.instance_semestre }}
-		<td><a href="suppretu/{{ appartient.etudiant.id }}"><button>Supprimer <i style="color:red;" class="fa fa-trash" aria-hidden="true"></i></button></a></td>
+		<td><a href="listeretu/{{ appartient.etudiant.id }}">{{ etu.nom }}</a></td>
+		<td>{{ etu.prenom }}</td>
+		<td>{{ etu.age }}</td>
+		<td>{{ etu.apogee }}</td>
+		<td><a href="suppretu/{{ etu.id }}"><button>Supprimer <i style="color:red;" class="fa fa-trash" aria-hidden="true"></i></button></a></td>
 	</tr>
 {% endfor %}
 </table>

@@ -6,7 +6,7 @@ from django import forms
 from Note.forms import FileForm, SelectNote, RenseignerNote,CompleterResultat
 from Etudiant.forms import SelectEtu
 from UE.forms import SelectSemestre
-from Etudiant.models import Etu
+from Etudiant.models import Etu,Appartient
 from Note.models import Note,Resultat_Semestre,Resultat_UE
 from Matiere.models import Matiere
 from Semestre.models import Semestre,InstanceSemestre
