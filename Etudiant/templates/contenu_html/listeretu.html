@@ -81,6 +81,7 @@
 {% if not notes %}
 	<p>L'étudiant n'a pas de notes</p> 
 {% else %}
+	<p style="text-align: left">Liste des notes de l'étudiant :</p>
 	<table style="border:1px solid black; border-collapse : collapse;">
 	<tr>
 		<th style="border:1px solid black;">Note</th>
@@ -90,6 +91,24 @@
 		<tr>
 			<td style="border:1px solid black;">{{ note.valeur }}</td>
 			<td style="border:1px solid black;">{{ note.matiere.intitule }}</td>
+		</tr>
+	{% endfor %}
+	</table>
+{% endif %}
+
+{% if not appartients %}
+	<p>L'étudiant n'a jamais appartenu a un semestre.</p> 
+{% else %}
+	<p style="text-align: left">Liste des semestres que l'étudiant a fait :</p>
+	<table style="border:1px solid black; border-collapse : collapse;">
+	<tr>
+		<th style="border:1px solid black;">Année</th>
+		<th style="border:1px solid black;">Semestre</th>
+	</tr>
+	{% for appartient in appartients %}
+		<tr>
+			<td style="border:1px solid black;">{{ appartient.instance_semestre.annee }}</td>
+			<td style="border:1px solid black;">{{ appartient.instance_semestre.semestre }}</td>
 		</tr>
 	{% endfor %}
 	</table>

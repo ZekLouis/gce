@@ -4,7 +4,7 @@
 {% block content %}
 <h1>Lister les étudiants</h1>
 {% if not etus %}
-	<p>Pas d'étudiants dans la base</p> 
+	<p>Il faut créer les étudiant avant de pouvoir les lister.</p> 
 {% else %}
 	<table>
 	<tr>
@@ -12,7 +12,7 @@
 		<th>Prenom</th>
 		<th>Age</th>
 		<th>Apogée</th>
-		<th>Promotion</th>
+		<th>Semestre en cours</th>
 		<th>Supprimer</th>
 	</tr>
 {% endif %}

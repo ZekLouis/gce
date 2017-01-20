@@ -254,7 +254,7 @@ def genererDocuments(request):
 						newFeuille.get_sheet(0).write(ligne,colonne,noteUE.note, style)
 						colonne +=1
 					except Resultat_UE.DoesNotExist:
-						print("probleme")
+						print("WARNING : view genererDocuments : Un Resultat_UE n'existe pas")
 				try:
 					resS = Resultat_Semestre.objects.get(etudiant = etudi, instance_semestre=semestre)
 					colonne =8
@@ -263,7 +263,7 @@ def genererDocuments(request):
 					colonne +=1
 					newFeuille.get_sheet(0).write(ligne,colonne,resS.resultat, style)
 				except Resultat_Semestre.DoesNotExist:
-					print("probleme")
+					print("WARNING : view genererDocuments : Un Resultat_Semestre n'existe pas")
 				semestre2 = InstanceSemestre.objects.get(id=request.session['semestre'])
 				ues = UE.objects.all().filter(semestre=semestre2.semestre)
 				colonne = 13
@@ -273,7 +273,7 @@ def genererDocuments(request):
 						newFeuille.get_sheet(0).write(ligne,colonne,noteUE.note, style)
 						colonne +=1
 					except Resultat_UE.DoesNotExist:
-						print("probleme")
+						print("WARNING : view genererDocuments : Un Resultat_UE n'existe pas")
 				try:
 					resS2 = Resultat_Semestre.objects.get(etudiant = etudi, instance_semestre=semestre2)
 					colonne =16
@@ -282,7 +282,7 @@ def genererDocuments(request):
 					colonne +=1
 					newFeuille.get_sheet(0).write(ligne,colonne,resS2.resultat, style)
 				except Resultat_Semestre.DoesNotExist:
-					print("probleme")
+					print("WARNING : view genererDocuments : Un Resultat_Semestre n'existe pas")
 				colonne = 21
 				if sem1>0 and sem2>0:
 					moyAn = (sem1+sem2)/2
@@ -298,7 +298,7 @@ def genererDocuments(request):
 				ligne += 1
 				cp+=1
 				res=True
-			print(semestre)
+			# print(semestre)
 			newFeuille.save(semestre.semestre.code_ppn+'.xls')
 	else :
 		res=False

@@ -21,6 +21,7 @@ def listeretu(request, id):
 	etu = get_object_or_404(Etu, id=id)
 	# On récupère les notes de l'étudiant en question
 	notes = Note.objects.filter(etudiant__id=id)
+	appartients = Appartient.objects.filter(etudiant__id=id)
 	# On envoi vers la page
 	return render(request, 'contenu_html/listeretu.html', locals())
 
@@ -260,7 +261,7 @@ def complement_etu(request):
 				if form.cleaned_data['apogee']:
 					etudiant.apogee = form.cleaned_data['apogee']
 				if form.cleaned_data['date_naissance']:
-					etudiant.sexe = form.cleaned_data['date_naissance']
+					etudiant.date_naissance = form.cleaned_data['date_naissance']
 				if form.cleaned_data['sexe']:
 					etudiant.sexe = form.cleaned_data['sexe']
 				if form.cleaned_data['adresse']:
@@ -300,18 +301,3 @@ def complement_etu(request):
 		form = SelectEtu(etus=Etudiants)
 	return render(request, 'contenu_html/complement_etu.html', locals())
 
-# def faireEvoluerPromotion(request):
-# 	if request.method == 'POST':
-#     		promotions = Promotion.objects.all()
-# 		form = SelectPromo(request.POST, promotions=promotions)
-# 		if form.is_valid() :
-# 			id_promo = form.cleaned_data['select']
-# 			promo = get_object_or_404(Promotion, id=id_promo)
-# 			listeEtu = Appartient.objects.filter(promotion=promo)
-# 			res = True
-# 		else:
-# 			print("ERREUR : Afficher promotion: VIEW afficher Promotion : formulaire")	
-# 	else:
-# 		promotions = Promotion.objects.all()
-# 		form = SelectPromo(promotions=promotions)
-# 	return render(request, 'contenu_html/faireEvoluerPromotion.html',locals())

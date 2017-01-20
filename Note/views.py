@@ -26,6 +26,7 @@ def resultatJury(request):
 				request.session['id_etu'] = id_etu
 				request.session['etu'] = True
 				res = True
+				etu = Etu.objects.get(id=id_etu)
 				resultatsJury = Resultat_Semestre.objects.filter(etudiant_id=request.session['id_etu'])
 			else :
 				print("ERREUR : resultatJury : VIEW resultatJury : formulaire")	
@@ -95,6 +96,7 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,re
 			try :
 				#si on lit un chaine contenant par "Semestre"	
 				if "Semestre" in notes[i] :
+					print(notes[i])
 					semestre_instance = InstanceSemestre.objects.get(semestre__code_ppn=notes[i])
 					note = note.replace(",", ".")
 					note = float(note)
@@ -148,6 +150,8 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,re
 				ret_sem.add("Le semestre "+notes[i]+" n'existe pas")
 			except UE.DoesNotExist :
 				ret_ue.add("L'UE "+notes[i]+" n'existe pas")
+			except InstanceSemestre.DoesNotExist :
+				ret_sem.add("L'instance de semestre "+notes[i]+" n'existe pas")
 	except Etu.DoesNotExist :
 		print("L'étudiant",nom,prenom,apogee,"n'existe pas")
 		ret_etu.add("L'etudiant "+nom+" "+prenom+" "+str(apogee)+" n'existe pas")
@@ -341,12 +345,13 @@ def renseignerResultat(request):
 
 def completerResultat(request, id, Isemestre):
 	if request.method == 'POST':
-		etu= Etu.objects.get(id=id)
+		try:
+			etu=Etu.objects.get(id=id)
+		except Etu.DoesNotExist:
+			exist=False
 		Instsem =InstanceSemestre.objects.get(id=Isemestre)
-		if(etu):
-			existe= True
-		else:
-			existe=False
+		if etu:
+			exist=True
 
 		resSem= Resultat_Semestre.objects.get(etudiant=etu,instance_semestre=Instsem)
 		form = CompleterResultat(request.POST,res = resSem)
@@ -360,6 +365,7 @@ def completerResultat(request, id, Isemestre):
 		else:
 			print("ERREUR : Completer resultat: VIEW modifieResultats : formulaire")	
 	else :
+<<<<<<< HEAD
 		etu= Etu.objects.get(id=id)
 		Instsem =InstanceSemestre.objects.get(id=Isemestre)
 		resSem= Resultat_Semestre.objects.get(etudiant=etu,instance_semestre=Instsem)
@@ -368,3 +374,13 @@ def completerResultat(request, id, Isemestre):
 
 
 	
+=======
+		try:
+			etu=Etu.objects.get(id=id)
+			Instsem =InstanceSemestre.objects.get(id=Isemestre)
+			resSem= Resultat_Semestre.objects.get(etudiant=etu,instance_semestre=Instsem)
+			form = CompleterResultat(res = resSem)
+		except Etu.DoesNotExist:
+			exist=False
+	return render(request, 'contenu_html/completerResultat.html', locals())	
+>>>>>>> 30a66283dbe5adeac17943d4018df3661ac5bb7e
