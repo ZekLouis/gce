@@ -12,7 +12,7 @@ class SelectInstanceSemestre(forms.Form):
 	def __init__(self,*args,**kwargs):
 		instanceSemestres = kwargs.pop('instanceSemestres')
 		super(SelectInstanceSemestre,self).__init__(*args,**kwargs)
-		ISChoice = [(instanceSemestre.id,'Semestre ' +str(instanceSemestre.semestre) + " Année " + str(instanceSemestre.annee)) for instanceSemestre in instanceSemestres]
+		ISChoice = [(instanceSemestre.id,str(instanceSemestre.semestre) + " de l'année " + str(instanceSemestre.annee)) for instanceSemestre in instanceSemestres]
 		self.fields['select'] = forms.ChoiceField(widget=forms.Select(), choices=ISChoice)
 
 class EvolutionSemestreForm(forms.Form):

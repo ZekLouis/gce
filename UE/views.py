@@ -95,8 +95,10 @@ def modifierUe(request):
 					unite.intitule = form.cleaned_data['intitule']
 				if form.cleaned_data['coefficient']:
 					unite.coefficient = form.cleaned_data['coefficient']
-				if form.cleaned_data['code']:
-					unite.code = form.cleaned_data['code']
+				if form.cleaned_data['code_ppn']:
+					unite.code_ppn = form.cleaned_data['code_ppn']
+				if form.cleaned_data['code_apogee']:
+					unite.code_apogee = form.cleaned_data['code_apogee']
 				if form.cleaned_data['semestre']:
 					unite.semestre = form.cleaned_data['semestre']
 				unite.save()	

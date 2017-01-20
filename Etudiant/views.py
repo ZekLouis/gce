@@ -2,7 +2,7 @@
 from django.shortcuts import render, get_object_or_404
 from Etudiant.models import Etu, Appartient
 from Etudiant.forms import EtudiantForm, RenseignerEtu, SelectEtu
-from Note.models import Note, Resultat_Semestre
+from Note.models import Note, Resultat_Semestre, Resultat_UE
 from Note.forms import FileForm
 from Semestre.models import Semestre, InstanceSemestre
 from Semestre.forms import SelectInstanceSemestre
@@ -26,14 +26,27 @@ def listeretu(request, id):
 
 """Cette vue permet de supprimer un etudiant"""
 def suppretu(request, id):
+    	appartients = Appartient.objects.filter(etudiant__id=id)
+	resultat_semestres = Resultat_Semestre.objects.filter(etudiant__id=id)
+	resultat_ues = Resultat_UE.objects.filter(etudiant__id=id)
 	etu = get_object_or_404(Etu, id=id)
 	notes = Note.objects.filter(etudiant__id=id)
+	for resultat_semestre in resultat_semestres : 
+			resultat_semestre.delete()
+	for appartient in appartients:
+    		appartient.delete()
+	for resultat_ue in resultat_ues:
+    		resultat_ue.delete()
 	etu.delete()
 	notes.delete()
 	return render(request, 'contenu_html/suppretu.html',locals())
 
 """Cette vue permet de supprimer tous les étudiants"""
 def suppall(request):
+    	Appartient.objects.all().delete()
+	Resultat_Semestre.objects.all().delete()
+	Resultat_UE.objects.all().delete()
+	Note.objects.all().delete()
 	Etu.objects.all().delete()
 	return listeretus(request)
 

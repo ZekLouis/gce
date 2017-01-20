@@ -19,7 +19,6 @@ class Resultat_Semestre(models.Model):
 	def __str__(self):
 		return str(self.etudiant)
 
-
 class Resultat_UE(models.Model):
 	instance_semestre = models.ForeignKey(InstanceSemestre, null=False)
 	etudiant = models.ForeignKey(Etu, null=False)
