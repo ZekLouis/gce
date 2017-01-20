@@ -5,8 +5,8 @@
 	<h1>Ajout d'un semestre</h1>
 	{% if res %}
 		<p>Ajout réussi dans la BD</p>
-		<button onclick="document.location.href = '/Semestre/ajouterSemestre';">Ajouter un nouveau semestre <i class="fa fa-retweet" aria-hidden="true"></i></button>
-		<button onclick="document.location.href = '/UE/ajouterUE';">Étape suivante <i class="fa fa-chevron-right" aria-hidden="true"></i></button>
+		<a href="/Semestre/ajouterSemestre"><button>Ajouter un nouveau semestre <i class="fa fa-retweet" aria-hidden="true"></i></button></a>
+		<a href="/UE/ajouterUE"><button>Étape suivante <i class="fa fa-chevron-right" aria-hidden="true"></i></button></a>
 	{% else %}
 	
 	<form enctype="multipart/form-data" action="{% url "ajouterSemestre" %}" method="post">

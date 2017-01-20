@@ -165,7 +165,7 @@ def faireEvoluerInstanceSemestre(request):
 					listeEvolution[i][2]='Résultat inexistant'
 					listeEvolution[i][3]=ligne.etudiant.apogee	
 					i+=1
-					print('Erreur, cet etudiant n a pas de res semestre')	
+					print('Erreur, cet etudiant n\'a pas de Resultat_Semestre')	
 			res = True
 			request.session['listeEvolution'] = listeEvolution
 			instances = InstanceSemestre.objects.all()
