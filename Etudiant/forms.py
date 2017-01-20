@@ -25,7 +25,6 @@ class RenseignerEtu(forms.Form):
 	def __init__(self,*args,**kwargs):
 		etu = kwargs.pop('etudiant')
 		super(RenseignerEtu,self).__init__(*args,**kwargs)
-
 		if etu.nom is None:
 			self.fields['nom']  = forms.CharField(max_length=100,required=False)
 		else:
@@ -49,9 +48,9 @@ class RenseignerEtu(forms.Form):
 			self.fields['apogee'] = forms.CharField(max_length=100,required=False, widget=forms.TextInput(attrs={'value': etu.apogee}))
 
 		if etu.date_naissance is None:
-			self.fields['date_naissance']  = forms.DateField(required=False)
+			self.fields['date_naissance']  = forms.CharField(required=False)
 		else:
-			self.fields['date_naissance'] = forms.DateField(required=False, widget=forms.TextInput(attrs={'value': etu.date_naissance}))
+			self.fields['date_naissance'] = forms.CharField(required=False, widget=forms.TextInput(attrs={'value': etu.date_naissance}))
 
 		if etu.sexe is None:
 			self.fields['sexe']  = forms.CharField(max_length=100,required=False)
@@ -122,5 +121,3 @@ class RenseignerEtu(forms.Form):
 			self.fields['bourse']  = forms.CharField(max_length=100,required=False)
 		else:
 			self.fields['bourse']  = forms.CharField(max_length=100,required=False, widget=forms.TextInput(attrs={'value': etu.bourse}))
-
-		
