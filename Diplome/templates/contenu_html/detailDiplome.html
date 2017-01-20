@@ -12,7 +12,7 @@
 		
 	{% else %}
 	
-	{% if not s %} 
+	{% if not sem_exist %} 
 
 		<p>Le diplôme selectionné ne contient aucune information.</p>
 
@@ -21,8 +21,6 @@
 	<br>
 
 	<p>Vous avez choisi le diplôme : {{ d.intitule }}</p>
-
-
 
 	<table class="affComplet">
 		{% for l in lst %}

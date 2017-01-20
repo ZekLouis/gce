@@ -89,29 +89,24 @@ def detailDiplome(request):
 			id_detdip = form.cleaned_data['select']
 			request.session['id_detdip'] = id_detdip
 			detdip = True
+			res = True
 
 		d = get_object_or_404(Diplome, id=request.session['id_detdip'])
 		sem_exist = Semestre.objects.filter(diplome__id=request.session['id_detdip'])
+		print(sem_exist)
 
 		if sem_exist:
 			semestres = Semestre.objects.all().filter(diplome__id=request.session['id_detdip'])
-			tab_ue = []
-			for s in semestres :
-				tab_ue.append(UE.objects.all().filter(semestre=s))
 
-				ues = UE.objects.all().filter(semestre=s)
-				tab_matieres = []
-				for ue in ues :
-					tab_matieres.append(Matiere.objects.all().filter(ue=ue))
 			lignes = Semestre.objects.all().filter(diplome__id=request.session['id_detdip']).count() + 1
-			#lignes += UE.objects.all().filter(semestre=s).count() + 1
 
-			for unites in tab_ue :
-				for unite in unites :
-					lignes += 1
-					for matieres in tab_matieres :
-						for matiere in matieres :
-							lignes += 1
+			for s in semestres :
+				ues = UE.objects.all().filter(semestre=s)
+				for ue in ues :
+					lignes +=1
+					matieres = Matiere.objects.all().filter(ue=ue)
+					for matieres in matieres :
+						lignes +=1
 
 			colonnes = 4
 			lst = [[""] * colonnes for _ in range(lignes)]
@@ -120,29 +115,36 @@ def detailDiplome(request):
 			lst[0][2] = "Modification"
 			lst[0][3] = "Suppression"
 
-			i = 1
+			i = 0
 
-			for unite in tab_ue :
+			for s in semestres :
+				print(i)
 				i += 1
-				lst[i][0]= unite[0].semestre.intitule
-				lst[i][1]= "Coefficient"
+				lst[i][0]= s.intitule
+				lst[i][1]= "-"
 				lst[i][2]= '<a href="../Semestre/modifierSemestre/">Modifier</a></td>'
-				lst[i][3]= '<a href="../Semestre/supprsem/'+str(unite[0].semestre.id)+'">Supprimer</a></td>'
-				
-				for matieres in tab_matieres :
+				lst[i][3]= '<a href="../Semestre/supprsem/'+str(s.id)+'">Supprimer</a></td>'
+
+				ues = UE.objects.all().filter(semestre=s)
+
+				for ue in ues :
 					i += 1
-					lst[i][0]=matieres[0].ue
-					lst[i][1]= matieres[0].ue.coefficient 
+					lst[i][0]= ue.intitule
+					lst[i][1]= ue.coefficient 
 					lst[i][2]= '<a href="../UE/modifierUe/">Modifier</a></td>'
-					lst[i][3] = '<a href="../UE/supprue/'+str(matieres[0].ue.id)+'">Supprimer</a></td>'
+					lst[i][3] = '<a href="../UE/supprue/'+str(ue.id)+'">Supprimer</a></td>'
+
+					matieres = Matiere.objects.all().filter(ue=ue)
+
 					for matiere in matieres :
+						print(i)
 						i += 1
 						lst[i][0]= matiere.intitule
 						lst[i][1]= matiere.coefficient
 						lst[i][2]= '<a href="../Matiere/modifierMatiere/">Modifier</a></td>'
 						lst[i][3] = '<a href="../Matiere/supprmat/'+str(matiere.id)+'">Supprimer</a></td>'
-				#lst[1][1] = moy/coeff
-				res = True
+
+			res = True
 	else :
 		Diplomes = Diplome.objects.all()
 		form = SelectDip(diplomes=Diplomes)
