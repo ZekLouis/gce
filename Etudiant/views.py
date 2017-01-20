@@ -130,7 +130,7 @@ def affichageComplet(request):
 					lst[0][1] = "Note"
 					lst[0][2] = "Abscence"
 					lst[0][3] = "Coefficient"
-					lst[1][0] = semestre.code
+					lst[1][0] = semestre.code_ppn
 
 					#Debut du contenu du tableau final
 					i = 1
