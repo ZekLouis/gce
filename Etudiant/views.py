@@ -21,6 +21,7 @@ def listeretu(request, id):
 	etu = get_object_or_404(Etu, id=id)
 	# On récupère les notes de l'étudiant en question
 	notes = Note.objects.filter(etudiant__id=id)
+	appartients = Appartient.objects.filter(etudiant__id=id)
 	# On envoi vers la page
 	return render(request, 'contenu_html/listeretu.html', locals())
 
