@@ -79,13 +79,17 @@ def genererDocuments(request):
 		if form.is_valid() :
 			instSemestreId = form.cleaned_data['select']
 		instSemestre = InstanceSemestre.objects.get(id=instSemestreId)
-		if instSemestre.semestre.intitule is not "semestre 1":
+		if instSemestre.semestre.intitule == "Semestre 1":
+			pasSemestre = True
+			res = True
+		else:
 			if instSemestre.semestre.intitule == "Semestre 2":
 				instSemestrePrec = InstanceSemestre.objects.get(semestre__intitule="Semestre 1")	
 			elif instSemestre.semestre.intitule == "Semestre 3":
 				instSemestrePrec =InstanceSemestre.objects.get(semestre__intitule="Semestre 2")
-			elif instSemestre.semestre.intitule == "Semestre 4":		
+			elif instSemestre.semestre.intitule == "Semestre 4":	
 				instSemestrePrec = InstanceSemestre.objects.get(semestre__intitule="Semestre 3")
+		
 			style = xlwt.easyxf(' alignment: horizontal center, vertical center; borders: left thin, right thin, top thin, bottom thin;')
 			book = open_workbook('docJury/S2.xls',formatting_info=True)
 			book.sheet_by_index(0)
@@ -158,9 +162,8 @@ def genererDocuments(request):
 				ligne += 1
 				cp+=1
 				res=True
-			newFeuille.save(instSemestre.semestre.code_ppn+'.xls')
-		else:
-			print("semestre1")
+			nom_fichier = instSemestre.semestre.code_ppn
+			newFeuille.save('static/documents/res_semestre.xls')
 	else :
 		res=False
 		semestre = InstanceSemestre.objects.all()

@@ -256,8 +256,6 @@ def complement_etu(request):
 					etudiant.nom = form.cleaned_data['nom']
 				if form.cleaned_data['prenom']:
 					etudiant.prenom = form.cleaned_data['prenom']
-				if form.cleaned_data['age']:
-					etudiant.age = form.cleaned_data['age']
 				if form.cleaned_data['apogee']:
 					etudiant.apogee = form.cleaned_data['apogee']
 				if form.cleaned_data['date_naissance']:

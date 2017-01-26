@@ -14,7 +14,7 @@
                     </form>
 			{% else %}
                 <h1>Changement de semestre pour les étudiants</h1>
-				<p>Ajout réussi dans la BD</p>
+				<p>Modification du semestre pour les étudiants réussie.</p>
                 <a href="/"><button>Retour à l'accueil <i class="fa fa-reply" aria-hidden="true"></i></button></a>
 			{% endif %}
 	{% else %}
@@ -34,7 +34,7 @@
                 {% endfor %}
             </table>
         <p>Sélectionner le semestre de destinations des étudiants sélectionnés</p>
-        <p>{{ form.select }}</p>
+        <p><label>Semestre de destination : </label>{{ form.select }}</p>
 		<button type="submit">Valider <i class="fa fa-check" aria-hidden="true"></i></button>
 	    </form>	
 	{% endif %}

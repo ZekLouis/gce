@@ -36,16 +36,10 @@ class RenseignerEtu(forms.Form):
 		else:
 			self.fields['prenom'] = forms.CharField(max_length=100,required=False, widget=forms.TextInput(attrs={'value': etu.prenom}))
 
-
-		if etu.age is None:
-			self.fields['age']  = forms.CharField(max_length=100,required=False)
-		else:
-			self.fields['age'] = forms.CharField(max_length=100,required=False, widget=forms.TextInput(attrs={'value': etu.age}))
-
 		if etu.apogee is None:
-			self.fields['apogee']  = forms.CharField(max_length=100,required=False)
+			self.fields['apogee']  = forms.CharField(required=False)
 		else:
-			self.fields['apogee'] = forms.CharField(max_length=100,required=False, widget=forms.TextInput(attrs={'value': etu.apogee}))
+			self.fields['apogee'] = forms.CharField(required=False, widget=forms.TextInput(attrs={'value': etu.apogee,'type':'number'}))
 
 		if etu.date_naissance is None:
 			self.fields['date_naissance']  = forms.CharField(required=False)
@@ -53,9 +47,9 @@ class RenseignerEtu(forms.Form):
 			self.fields['date_naissance'] = forms.CharField(required=False, widget=forms.TextInput(attrs={'value': etu.date_naissance}))
 
 		if etu.sexe is None:
-			self.fields['sexe']  = forms.CharField(max_length=100,required=False)
+			self.fields['sexe']  = forms.CharField(max_length=1,required=False)
 		else:
-			self.fields['sexe'] = forms.CharField(max_length=100,required=False, widget=forms.TextInput(attrs={'value': etu.sexe}))
+			self.fields['sexe'] = forms.CharField(max_length=1,required=False, widget=forms.TextInput(attrs={'value': etu.sexe}))
 
 		if etu.adresse is None:
 			self.fields['adresse']  = forms.CharField(max_length=100,required=False)

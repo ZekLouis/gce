@@ -7,6 +7,7 @@ from Matiere.models import Matiere
 from django.shortcuts import render, get_object_or_404
 from Etudiant.models import Appartient, Etu
 from Note.models import Resultat_Semestre
+from Diplome.models import Diplome
 # Create your views here.
 
 """Cette vue permet d'ajouter un semestre"""
@@ -30,7 +31,8 @@ def ajouterSemestre(request):
 		else :
 			print("ERREUR : AJOUTER Semestre : VIEW ajouterUE : formulaire")
 	else :
-		form = SemestreForm() 
+		diplomes = Diplome.objects.all()
+		form = SemestreForm(diplomes=diplomes) 
 	return render(request, 'contenu_html/ajouterSemestre.html', locals())
 
 """Cette vue permet de lister les semestres"""

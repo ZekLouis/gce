@@ -10,7 +10,6 @@ from Semestre.models import Semestre, InstanceSemestre
 class Etu(models.Model):
 	nom = models.CharField(max_length=30, null=False)
 	prenom = models.CharField(max_length=30, null=False)
-	age = models.IntegerField(null=True)
 	apogee = models.IntegerField(null=True)
 	date_naissance = models.CharField(max_length=100,null=True)
 	sexe = models.CharField(max_length=1, null=True)
