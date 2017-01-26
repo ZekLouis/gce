@@ -11,7 +11,7 @@ from UE.models import UE
 class Resultat_Semestre(models.Model):
 	instance_semestre = models.ForeignKey(InstanceSemestre, null=False)
 	etudiant = models.ForeignKey(Etu, null=False)
-	note = models.FloatField()
+	note = models.FloatField(null=True, blank=True)
 	note_calc = models.FloatField(null=True)
 	resultat = models.CharField(max_length=15, null=True)
 	resultat_pre_jury = models.CharField(max_length=15, null=True)
