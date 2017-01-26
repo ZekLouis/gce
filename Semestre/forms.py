@@ -27,10 +27,24 @@ class EvolutionSemestreForm(forms.Form):
 
 	
 			
-class SemestreForm(forms.ModelForm):
-	class Meta : 
-		model = Semestre
-		fields = '__all__'
+class SemestreForm(forms.Form):
+    def __init__(self,*args,**kwargs):
+    		
+		SEMESTRE = (
+			('Semestre 1','Semestre 1'),
+			('Semestre 2','Semestre 2'),
+			('Semestre 3','Semestre 3'),
+			('Semestre 4','Semestre 4'),
+		)
+		diplomes = kwargs.pop('diplomes')
+		super(SemestreForm,self).__init__(*args,**kwargs)
+		DIPLOME = [(dip.id,dip.intitule) for dip in diplomes]
+		print(DIPLOME)
+		self.fields['code_ppn'] = forms.CharField(label='Code PPN')
+		self.fields['code_apogee'] = forms.CharField(label='Code Apogée')
+		self.fields['diplome'] = forms.ChoiceField(widget=forms.Select(), choices=DIPLOME)
+		self.fields['intitule'] = forms.ChoiceField(widget=forms.Select(), choices=SEMESTRE)
+	
 
 class SelectSem(forms.Form):
 	def __init__(self,*args,**kwargs):
