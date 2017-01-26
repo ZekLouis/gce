@@ -9,19 +9,19 @@
 			{% csrf_token %}
 			{{ form.as_p }}
 			
-			<input type="submit" value="Valider">
+			<button type="submit">Valider <i class="fa fa-check" aria-hidden="true"></i></button>
 		</form>
 		{% else %}
 			<p>Ajout réussi dans la BD</p>
-			<input type="button" value="Ajouter encore une UE" onclick="document.location.href = '/UE/ajouterUE';"/>
-			<input type="button" value="Etape suivante" onclick="document.location.href = '/Matiere/ajouterMatiere';" />
+			<a href="/UE/ajouterUE"><button type="submit">Ajouter encore une UE <i class="fa fa-retweet" aria-hidden="true"></i></button></a>
+			<a href="/Matiere/ajouterMatiere"><button type="submit">Étape suivante <i class="fa fa-chevron-right" aria-hidden="true"></i></button></a>
 		{% endif %}
 	{% else %}
 	<form enctype="multipart/form-data" action="{% url "ajouterUE" %}" method="post">
 		{% csrf_token %}
 		{{ form.as_p }}
 		<p>semestre : {{ e.code }}</p>
-		<input type="submit" class="e" name="Valider">
+		<button type="submit">Valider <i class="fa fa-check" aria-hidden="true"></i></button>
 	</form>
 	{% endif %}
 
