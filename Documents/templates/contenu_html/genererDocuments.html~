@@ -10,7 +10,7 @@
 			<a href="/"><button>Retour à l'accueil <i class="fa fa-reply" aria-hidden="true"></i></button></a>
 		{% else %}
 			<p>Documents générés. Ces documents peuvent être imcomplet s'il manque des notes dans la base</p>
-			<a href="{% static 'documents/res_semestre.xls' %}" download="{{ nom_fichier }}.xls"><button>Télécharger les documents <i class="fa fa-download" aria-hidden="true"></i></button></a>
+			<button><a href="{% static 'documents/res_semestre.xls' %}" download="{{ nom_fichier }}.xls">Télécharger les documents <i class="fa fa-download" aria-hidden="true"></i></a></button>
 			<a href="/"><button>Retour à l'accueil <i class="fa fa-reply" aria-hidden="true"></i></button></a>
 		{% endif %}
 	{% else %}
