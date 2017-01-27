@@ -100,14 +100,25 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,re
 					semestre_instance = InstanceSemestre.objects.get(semestre__code_ppn=notes[i])
 					note = note.replace(",",".")
 					note = float(note)
-					ResSem, create = Resultat_Semestre.objects.get_or_create(
-						etudiant = etudiant,
-						instance_semestre = semestre_instance,
-						note = note
-					)
-					if not create:
-    						ResSem.note = note
-					ResSem.save()
+
+					try:
+						ResSem = Resultat_Semestre.objects.get(
+							etudiant = etudiant,
+							instance_semestre = semestre_instance,
+						)
+
+						ResSem.note = note
+						ResSem.save()
+					except Resultat_Semestre.DoesNotExist :
+						print("pas de res semestre")
+						ResSem = Resultat_Semestre(
+							etudiant = etudiant,
+							instance_semestre = semestre_instance,
+							note = note,
+						)
+						ResSem.save()
+
+					
 				#si on lit un chaine contenants par "UE"	
 				elif "UE" in notes[i]:
 					#on commence par récupérer l'ue à l'aide de son code 
@@ -143,6 +154,8 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,re
 									compteur_note = compteur_note +1
 							n.save()
 						else:
+							noteExiste[0].valeur=note
+							noteExiste[0].save()
 							compteur_note_error = compteur_note_error + 1
 			except Matiere.DoesNotExist :
 				ret_mat.add("La matiere "+notes[i]+" n'existe pas")
@@ -203,6 +216,7 @@ def importer_csv(request):
 		else :
 			print("ERREUR : IMPORT CSV : VIEW importer_csv : Formulaire")
 	else :
+		Resultat_UE.objects.all().delete()
 		form = FileForm()
 	return render(request, 'contenu_html/select_csv.html', locals())
 
