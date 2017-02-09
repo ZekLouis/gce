@@ -11,12 +11,11 @@
 	</form>
 			
 	{% else %}
-	<p>Si aucun résultat n'est présent, vous pouvez les générer <a href="/Note/listerResultat"><button>ici</button></a> (ou alors cet étudiant n'a pas de notes)</p>
+	<p>Si aucun résultat n'est présent, vous pouvez les générer <a href="/Note/listerResultat"><button>ici</button></a></p>
 	
-	<p>Résultat pour l'étudiant : <strong>{{ etu.nom }} {{ etu.prenom }} {{ etu.apogee }}</strong></p>
-
 	<table style="border:1px solid black; border-collapse : collapse;">
 	<tr>
+		<th style="border:1px solid black;">Etudiant</th>
 		<th style="border:1px solid black;">Année</th>
 		<th style="border:1px solid black;">Semestre</th>
 		<th style="border:1px solid black;">Note</th>
@@ -28,6 +27,7 @@
 
 	{% for resultat in resultatsJury %}
 	<tr>
+		<td style="border:1px solid black;">{{ resultat.etudiant.nom}} <br> {{ resultat.etudiant.prenom }}</td>
 		<td style="border:1px solid black;">{{ resultat.instance_semestre.annee }}</td>
 		<td style="border:1px solid black;">{{ resultat.instance_semestre.semestre }}</td>
 		<td style="border:1px solid black;">{{ resultat.note }}</td>
