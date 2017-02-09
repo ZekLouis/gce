@@ -18,3 +18,30 @@ function printData()
    newWin.print();
    newWin.close();
 }
+
+$(function(){
+    $(".sous-menu").hide();
+    var ouvert = false;
+
+    $(".btnDer").on("click",function(){
+        if(ouvert){
+            $(this).children("ul").slideUp(300);
+            ouvert = false;
+        }else{
+            $(this).children("ul").slideDown(300);
+            ouvert = true;
+        }
+    });
+
+
+    $('.cb-value').on("click",function() {
+        console.log("bjr")
+        var mainParent = $(this).parent('.toggle-btn');
+
+        if($(mainParent).find('input.cb-value').is(':checked')) {
+            $(mainParent).addClass('active');
+        } else {
+            $(mainParent).removeClass('active');
+        };
+    })
+});
