@@ -9,3 +9,6 @@ def accueil(request):
 """Cette vue permet de faire afficher la page d'aides"""
 def aides(request):
 	return render(request, 'templates/contenu_html/aides.html')
+
+def onAdmin(request):
+	request.session['admin'] = True
