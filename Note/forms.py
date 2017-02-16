@@ -24,9 +24,9 @@ class RenseignerNote(forms.Form):
 		for note in notes:
 			print(note)
 			if note.valeur is None:
-				self.fields[note.matiere.code]  = forms.CharField(max_length=100,required=False)
+				self.fields[note.matiere.code_apogee]  = forms.CharField(max_length=100,required=False)
 			else:
-				self.fields[note.matiere.code] = forms.CharField(max_length=100,required=False ,widget=forms.TextInput(attrs={'value': note.valeur}))
+				self.fields[note.matiere.code_apogee] = forms.CharField(max_length=100,required=False ,widget=forms.TextInput(attrs={'value': note.valeur}))
 				
 class CompleterResultat(forms.Form):
 	def __init__(self,*args,**kwargs):
