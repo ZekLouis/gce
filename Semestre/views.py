@@ -203,3 +203,10 @@ def faireEvoluerInstanceSemestre(request):
 		request.session['inst']=False
 		form = SelectInstanceSemestre(instanceSemestres=instances)
 	return render(request, 'contenu_html/faireEvoluerInstance.html',locals())
+
+"""Cette vue permet d'afficher les étudiants présents dans un Semestre"""
+def etudiants(request):
+	ISemestres = InstanceSemestre.objects.all().filter(semestre__code_apogee="Semestre 1")
+	App = Appartient.objects.all().filter(instance_semestre=ISemestres)
+	print App
+	return render(request, 'contenu_html/etudiants.html',locals())

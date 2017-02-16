@@ -22,7 +22,7 @@ from Semestre import views
 
 
 urlpatterns = [
-    
+
     url(r'^ajouterSemestre', views.ajouterSemestre, name='ajouterSemestre'),
     url(r'^listerSemestre', views.listerSemestre, name='listerSemestre'),
     url(r'^supprsem/(?P<id>\d+)$', views.supprsem, name='supprsem'),
@@ -30,4 +30,5 @@ urlpatterns = [
     url(r'^ajouterInstanceSemestre', views.ajouter_instance_semestre, name='ajouter_instance_semestre'),
     url(r'^afficherInstanceSemestre', views.afficherInstanceSemestre, name='afficherInstanceSemestre'),
     url(r'^faireEvoluerInstanceSemestre', views.faireEvoluerInstanceSemestre, name='faireEvoluerInstanceSemestre'),
+    url(r'^etudiants', views.etudiants, name='etudiants'),
 ]
