@@ -29,7 +29,7 @@
 		        <a href="/"><li>Accueil</li></a>
 
 				<li class="btnDer" id="maintenance">
-					<a>Maintenance</a>
+					<a>Maintenance Création</a>
 					<ul id="maintenanceMenu" class="sous-menu">
 						<a href="/Annee/ajouterAnnee"><li>Créer la structure complète</li></a>
 		            	<a href="/Annee/ajouterAnnee"><li>Insérer une année</li></a>
@@ -39,6 +39,20 @@
 		                <a href="/Matiere/ajouterMatiere"><li>Insérer une matière</li></a>
 		                <a href="/Etudiant/ajouterEtudiant"><li>Insérer un étudiant</li></a>
 						<a href="/Semestre/ajouterInstanceSemestre"><li>Insérer une instance de semestre</li></a>
+					</ul>
+				</li>
+
+
+				<li class="btnDer" id="maintenance">
+					<a>Maintenance Modification</a>
+					<ul id="maintenanceMenu" class="sous-menu">
+						<li><a href="/Etudiant/complement_etu">Compléter les informations d'un étudiant</a></li>
+						<li><a href="/Note/modifierNote">Modifier une note</a></li>
+						<li><a href="/Diplome/modifierDiplome">Modifier un diplôme</a></li>
+						<li><a href="/Semestre/modifierSemestre">Modifier un semestre</a></li>
+						<li><a href="/Annee/modifierAnnee">Modifier une annee</a></li>
+						<li><a href="/Matiere/modifierMatiere">Modifier une matiere</a></li>
+						<li><a href="/UE/modifierUe">Modifier une ue</a></li>
 					</ul>
 				</li>
 
@@ -67,7 +81,15 @@
 			</ul>
 		</nav>
 
-		{{ request.session.admin }}
+		{% if request.session.admin %}
+			<script>
+				$(".toggle-btn").addClass('active');
+			</script>
+		{% else %}
+			<script>
+				$(".toggle-btn").removeClass('active');
+			</script>
+		{% endif %}
 		<!-- Contenu de la page inclus par les templates -->
 		<div id="main">
 			{% block content %}

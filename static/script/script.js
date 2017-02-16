@@ -37,11 +37,11 @@ $(function(){
     $('.cb-value').on("click",function() {
         console.log("bjr")
         var mainParent = $(this).parent('.toggle-btn');
-
-        if($(mainParent).find('input.cb-value').is(':checked')) {
-            $(mainParent).addClass('active');
-        } else {
+        $.get("/onAdmin");
+        if($(mainParent).hasClass('active')) {
             $(mainParent).removeClass('active');
+        } else {
+            $(mainParent).addClass('active');
         };
     })
 });
