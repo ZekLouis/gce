@@ -4,7 +4,7 @@ from Semestre.models import Semestre,InstanceSemestre
 from Diplome.models import Diplome
 
 class InstanceSemestreForm(forms.ModelForm):
-	class Meta : 
+	class Meta :
 		model = InstanceSemestre
 		fields = '__all__'
 
@@ -25,11 +25,11 @@ class EvolutionSemestreForm(forms.Form):
 		ISChoice = [(instanceSemestre.id,str(instanceSemestre.semestre) + " de l'année " + str(instanceSemestre.annee)) for instanceSemestre in instances]
 		self.fields['select'] = forms.ChoiceField(widget=forms.Select(), choices=ISChoice)
 
-	
-			
+
+
 class SemestreForm(forms.Form):
     def __init__(self,*args,**kwargs):
-    		
+
 		SEMESTRE = (
 			('Semestre 1','Semestre 1'),
 			('Semestre 2','Semestre 2'),
@@ -44,7 +44,7 @@ class SemestreForm(forms.Form):
 		self.fields['code_apogee'] = forms.CharField(label='Code Apogée')
 		self.fields['diplome'] = forms.ChoiceField(widget=forms.Select(), choices=DIPLOME)
 		self.fields['intitule'] = forms.ChoiceField(widget=forms.Select(), choices=SEMESTRE)
-	
+
 
 class SelectSem(forms.Form):
 	def __init__(self,*args,**kwargs):
@@ -54,7 +54,7 @@ class SelectSem(forms.Form):
 		self.fields['select'] = forms.ChoiceField(widget=forms.Select(), choices=SemChoices)
 
 class RenseignerSem(forms.Form):
-	
+
 	def __init__(self,*args,**kwargs):
 		sem = kwargs.pop('semestre')
 		super(RenseignerSem,self).__init__(*args,**kwargs)
@@ -64,10 +64,15 @@ class RenseignerSem(forms.Form):
 		else:
 			self.fields['intitule'] = forms.CharField(max_length=100,required=False ,widget=forms.TextInput(attrs={'value': sem.intitule}))
 
-		if sem.code is None:
-			self.fields['code']  = forms.CharField(max_length=100,required=False)
+		if sem.code_apogee is None:
+			self.fields['code_apogee']  = forms.CharField(max_length=100,required=False)
 		else:
-			self.fields['code'] = forms.CharField(max_length=100,required=False ,widget=forms.TextInput(attrs={'value': sem.code}))
+			self.fields['code_apogee'] = forms.CharField(max_length=100,required=False ,widget=forms.TextInput(attrs={'value': sem.code_apogee}))
+
+		if sem.code_ppn is None:
+			self.fields['code_ppn']  = forms.CharField(max_length=100,required=False)
+		else:
+			self.fields['code_ppn'] = forms.CharField(max_length=100,required=False ,widget=forms.TextInput(attrs={'value': sem.code_ppn}))
 
 		if sem.diplome is None:
 			self.fields['diplome'] = forms.ModelChoiceField(queryset=Diplome.objects.all(),required=False)
