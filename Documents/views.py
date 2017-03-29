@@ -29,7 +29,7 @@ class etudiant:
 		self.resultat = resultat
 
 class UECapitalise:
-    	def __init__ (self, numero,nom,prenom,ue):
+	def __init__ (self, numero,nom,prenom,ue):
 	#Definition des attributs de chaque instance
 		self.numero = numero
 		self.nom = nom
@@ -37,7 +37,7 @@ class UECapitalise:
 		self.ue = ue
 
 class ResSem:
-    	def __init__ (self, numero,nom,prenom,resultat, sem1, sem2):
+	def __init__ (self, numero,nom,prenom,resultat, sem1, sem2):
 	#Definition des attributs de chaque instance
 		self.numero = numero
 		self.nom = nom
@@ -149,7 +149,6 @@ def generationPV_Semestre1():
 	font.underline = True
 	capitale = ""
 	for etu in etus:
-		print etu
 		etudi = Etu.objects.get(apogee=etu.etudiant.apogee)
 		try:
 			res = Resultat_Semestre.objects.get(etudiant = etu.etudiant, instance_semestre=instSemestre)
@@ -689,7 +688,7 @@ def generationSemestre1():
 			colonne +=1
 			newFeuille.get_sheet(0).write(ligne,colonne,resS.resultat, style)
 		except Resultat_Semestre.DoesNotExist:
-			print "probleme"
+			print ("probleme")
 		ligne += 1
 		
 	nom_fichier = instSemestre.semestre.code_ppn
@@ -813,7 +812,7 @@ def genererDocuments(request):
 
 
 def classementSemestre(request):
-    	if request.method == 'POST':
+	if request.method == 'POST':
 		Instsem =InstanceSemestre.objects.all()
 		form = SelectInstanceSemestre(request.POST, instanceSemestres=Instsem)
 		if form.is_valid() :

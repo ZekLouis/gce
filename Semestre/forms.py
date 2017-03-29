@@ -28,13 +28,13 @@ class EvolutionSemestreForm(forms.Form):
 
 
 class SemestreForm(forms.Form):
-    def __init__(self,*args,**kwargs):
+	def __init__(self,*args,**kwargs):
 
 		SEMESTRE = (
 			('Semestre 1','Semestre 1'),
 			('Semestre 2','Semestre 2'),
-			('Semestre 3','Semestre 3'),
-			('Semestre 4','Semestre 4'),
+			('Semestre 3','Semestre 3'),	
+			('Semestre 4','Semestre 4')
 		)
 		diplomes = kwargs.pop('diplomes')
 		super(SemestreForm,self).__init__(*args,**kwargs)

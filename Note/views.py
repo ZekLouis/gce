@@ -40,6 +40,9 @@ def resultatJury(request):
 
 
 
+
+
+
 """Cette vue permet de supprimer tous les étudiants"""
 def suppall(request):
 	Note.objects.all().delete()

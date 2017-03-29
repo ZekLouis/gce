@@ -208,5 +208,4 @@ def faireEvoluerInstanceSemestre(request):
 def etudiants(request):
 	ISemestres = InstanceSemestre.objects.all().filter(semestre__code_apogee="Semestre 1")
 	App = Appartient.objects.all().filter(instance_semestre=ISemestres)
-	print App
 	return render(request, 'contenu_html/etudiants.html',locals())
