@@ -800,7 +800,7 @@ def genererDocuments(request):
 			res=True
 			nom_fichier_pv = instSemestre.semestre.code_ppn+" - PV"
 			nom_fichier_semestre = instSemestre.semestre.code_ppn+" - Resultats"
-			newFeuille.save('static/documents/res_semestre.xls')
+			newFeuille.save('static/documents/resultat_semestre/res_semestre.xls')
 	else :
 		res=False
 		semestre = InstanceSemestre.objects.all()
