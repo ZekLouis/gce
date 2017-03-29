@@ -797,7 +797,7 @@ def genererDocuments(request):
 					newFeuille.get_sheet(0).write(ligne,colonne,jury, style)
 				ligne += 1
 				cp+=1
-				res=True
+			res=True
 			nom_fichier_pv = instSemestre.semestre.code_ppn+" - PV"
 			nom_fichier_semestre = instSemestre.semestre.code_ppn+" - Resultats"
 			newFeuille.save('static/documents/res_semestre.xls')
