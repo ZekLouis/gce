@@ -10,7 +10,8 @@
 			<a href="/"><button>Retour à l'accueil <i class="fa fa-reply" aria-hidden="true"></i></button></a>
 		{% else %}
 			<p>Documents générés. Ces documents peuvent être imcomplet s'il manque des notes dans la base</p>
-			<a href="{% static 'documents/res_semestre.xls' %}" download="{{ nom_fichier }}.xls"><button>Télécharger les documents <i class="fa fa-download" aria-hidden="true"></i></button></a>
+			<a href="{% static 'documents/PV/pv_semestre.docx' %}" download="{{ nom_fichier_pv }}.docx"><button>Télécharger les PV <i class="fa fa-download" aria-hidden="true"></i></button></a>
+			<a href="{% static 'documents/resultat_semestre/res_semestre.xls' %}" download="{{ nom_fichier_semestre }}.xls"><button>Télécharger les résultats <i class="fa fa-download" aria-hidden="true"></i></button></a>
 			<a href="/"><button>Retour à l'accueil <i class="fa fa-reply" aria-hidden="true"></i></button></a>
 		{% endif %}
 	{% else %}

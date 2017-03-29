@@ -201,7 +201,7 @@ def generationPV_Semestre1():
 	paragraph_format.line_spacing
 
 	document.add_page_break()
-	document.save('static/documents/PV/PV_Semestre1.docx')
+	document.save('static/documents/PV/pv_semestre.docx')
 
 
 """////////////////////////////////////////////////////////////////////////////////////////
@@ -289,7 +289,7 @@ def generationPV_Semestre2():
 	table.alignment = WD_TABLE_ALIGNMENT.CENTER
 	hdr_cells = table.rows[0].cells
 	hdr_cells[0].text = unicode('Nom - Prénom', "utf-8")
-	hdr_cells[1].text = unicode('Situations prochaine rentré', 'utf-8')
+	hdr_cells[1].text = unicode('Situation à la rentrée prochaine', 'utf-8')
 	hdr_cells[2].text = unicode('Décision S1', "utf-8")
 	hdr_cells[3].text = unicode('Décision S2', "utf-8")
 	for etu in listeSem:
@@ -346,7 +346,7 @@ def generationPV_Semestre2():
 	paragraph_format.line_spacing
 
 	document.add_page_break()
-	document.save('static/documents/PV/PV_Semestre2.docx')
+	document.save('static/documents/PV/pv_semestre.docx')
 
 
 
@@ -435,7 +435,7 @@ def generationPV_Semestre3():
 	table.alignment = WD_TABLE_ALIGNMENT.CENTER
 	hdr_cells = table.rows[0].cells
 	hdr_cells[0].text = unicode('Nom - Prénom', "utf-8")
-	hdr_cells[1].text = unicode('Situations prochaine rentré', 'utf-8')
+	hdr_cells[1].text = unicode('Situation à la rentrée prochaine', 'utf-8')
 	hdr_cells[2].text = unicode('Décision S2', "utf-8")
 	hdr_cells[3].text = unicode('Décision S3', "utf-8")
 	for etu in listeSem:
@@ -492,7 +492,7 @@ def generationPV_Semestre3():
 	paragraph_format.line_spacing
 
 	document.add_page_break()
-	document.save('static/documents/PV/PV_Semestre3.docx')
+	document.save('static/documents/PV/pv_semestre.docx')
 
 
 
@@ -638,7 +638,7 @@ def generationPV_Semestre4():
 	paragraph_format.line_spacing
 
 	document.add_page_break()
-	document.save('static/documents/PV/PV_Semestre3.docx')
+	document.save('static/documents/PV/pv_semestre.docx')
 
 
 
@@ -693,7 +693,7 @@ def generationSemestre1():
 		ligne += 1
 		
 	nom_fichier = instSemestre.semestre.code_ppn
-	newFeuille.save('static/documents/resultat_semestre/'+ nom_fichier + '.xls')
+	newFeuille.save('static/documents/resultat_semestre/res_semestre.xls')
 
 
 
@@ -714,6 +714,9 @@ def genererDocuments(request):
 		if instSemestre.semestre.intitule == "Semestre 1":
 			generationPV_Semestre1()
 			generationSemestre1()
+			nom_fichier_pv = instSemestre.semestre.code_ppn+" - PV"
+			nom_fichier_semestre = instSemestre.semestre.code_ppn+" - Resultats"
+			res=True
 		else:
 			if instSemestre.semestre.intitule == "Semestre 2":
 				generationPV_Semestre2()
@@ -796,7 +799,8 @@ def genererDocuments(request):
 				ligne += 1
 				cp+=1
 				res=True
-			nom_fichier = instSemestre.semestre.code_ppn
+			nom_fichier_pv = instSemestre.semestre.code_ppn+" - PV"
+			nom_fichier_semestre = instSemestre.semestre.code_ppn+" - Resultats"
 			newFeuille.save('static/documents/res_semestre.xls')
 	else :
 		res=False
