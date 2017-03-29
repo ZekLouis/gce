@@ -24,7 +24,6 @@ urlpatterns = [
     url(r'^suppall$', views.suppall, name='suppall'),
     url(r'^importer_etu$', views.importer_etu, name='importer_etu'),
     url(r'^listeretu/(?P<id>\d+)$', views.listeretu),
-    url(r'^listerPromotion$', views.listerPromotion, name ='listerPromotion'),
     url(r'^ajouterEtudiant', views.ajouterEtudiant, name='ajouterEtudiant'),
     #url(r'^completer_etu', views.complement_etu, name='completer_etu'),
     url(r'^complement_etu', views.complement_etu, name='complement_etu'),

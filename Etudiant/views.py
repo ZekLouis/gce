@@ -26,27 +26,6 @@ def listeretu(request, id):
 	return render(request, 'contenu_html/listeretu.html', locals())
 
 
-def listerPromotion(request):
-	if request.method == 'POST':
-			instances = InstanceSemestre.objects.all()
-			form = SelectInstanceSemestre(request.POST, instanceSemestres=instances)
-
-			if form.is_valid() :
-				id_instance = form.cleaned_data['select']
-				request.session['id_instance'] = id_instance
-				request.session['instance'] = True
-				res = True
-				instance = InstanceSemestre.objects.get(id=id_instance)
-				resultatsJury = Resultat_Semestre.objects.filter(instance_semestre=request.session['id_instance'])
-			else :
-				print("ERREUR : resultatJury : VIEW resultatJury : formulaire")	
-	else :
-		Etudiants = Etu.objects.all()
-		request.session['etu'] = False
-		instances = InstanceSemestre.objects.all()
-		form = SelectInstanceSemestre(instanceSemestres=instances)
-	return render(request, 'contenu_html/listerPromotion.html', locals())
-
 """Cette vue permet de supprimer un etudiant"""
 def suppretu(request, id):
 	appartients = Appartient.objects.filter(etudiant__id=id)
