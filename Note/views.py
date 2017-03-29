@@ -78,7 +78,6 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,re
 		#Il faudra get l'élève ici avec son num apogée
 		for i in range(3,nb_elements_tab):
 			nb_ligne=nb_ligne+1
-			print(notes[i])
 			#On ajoutera ici chaque note à l'étudiant
 			#Le tableau notes contient le code de la note et ligne la note
 			if ligne[i] == "":
@@ -296,8 +295,6 @@ def renseignerResultat(request):
 							for note in notes :
 								if note.matiere.intitule == matiere.intitule :
 									note = Note.objects.get(etudiant=etu, matiere=matiere)
-									print("note" ,note)
-									print("mat" ,matiere.coefficient)
 									moy += (note.valeur*matiere.coefficient)
 									coeff += matiere.coefficient
 				if coeff==0:
