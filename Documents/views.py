@@ -72,8 +72,14 @@ def ordreListe(semestrePrec, semestre):
 		note1 = ""
 		note2 = ""
 		str = 0
-		semestre1 = InstanceSemestre.objects.get(id=semestrePrec)
-		semestre2 = InstanceSemestre.objects.get(id=semestre)
+		print("Ordre liste")
+		print(semestre)
+		instanceSemestres = InstanceSemestre.objects.all()
+		for ins in instanceSemestres:
+			print(ins.id)
+		semestre1 = InstanceSemestre.objects.filter(id=semestrePrec)
+		semestre2 = InstanceSemestre.objects.filter(id=semestre)
+		print("Ordre liste")
 		try:
 			note1 = Resultat_Semestre.objects.get(etudiant = etu, instance_semestre=semestre1)
 			str = testValidite(note1.resultat, 1000)
@@ -734,6 +740,7 @@ def genererDocuments(request):
 			ligne = 7
 			cp =0
 			semestrePrec = instSemestrePrec.semestre.id
+			print(instSemestreId)
 			liste = ordreListe(semestrePrec, instSemestreId)
 			for etu in liste:
 				etudi = Etu.objects.get(apogee=etu.numero)
@@ -788,18 +795,18 @@ def genererDocuments(request):
 					moyAn = (sem1+sem2)/2
 					newFeuille.get_sheet(0).write(ligne,colonne,moyAn, style)
 					colonne +=1
-					if resS == "VAL" and resS2 == "VAL":
+					if resS.resultat == "VAL" and resS2.resultat == "VAL":
 						jury = "VAL"
-					elif resS == "VAL" and resS2 == "VALC":
-    					jury = "VAL"
-					elif resS == "VAL" and resS2 == "VALC" or resS2 == "VAL" and resS == "VALC":
-    					jury = "VAL"
-					elif resS == "AJPC" and resS2 == "VAL" or resS2 == "AJPC" and resS == "VAL":
-    					jury = "NVAL"
-					elif resS == "NATB" or resS2 == "NATB":
-    					jury = "NVAL"
+					elif resS.resultat == "VAL" and resS2.resultat == "VALC":
+						jury = "VAL"
+					elif resS.resultat == "VAL" and resS2.resultat == "VALC" or resS2.resultat == "VAL" and resS.resultat == "VALC":
+						jury = "VAL"
+					elif resS.resultat == "AJPC" and resS2.resultat == "VAL" or resS2.resultat == "AJPC" and resS.resultat == "VAL":
+						jury = "NVAL"
+					elif resS.resultat == "NATB" or resS2.resultat == "NATB":
+						jury = "NVAL"
 					else:
-    					jury = "NVAL"
+						jury = "NVAL"
 					newFeuille.get_sheet(0).write(ligne,colonne,jury, style)
 				ligne += 1
 				cp+=1

@@ -35,7 +35,7 @@
 		<td style="border:1px solid black;">{{ resultat.resultat }}</td>
 		<td style="border:1px solid black;">{{ resultat.resultat_pre_jury }}</td>
 		<td style="border:1px solid black;">{{ resultat.resultat_jury }}</td>
-		<td style="border:1px solid black;"><a href="completerResultat/{{ id_etu }}/{{ resultat.instance_semestre.id }}"><button>Saisir les résultats du jury <i class="fa fa-chevron-right" aria-hidden="true"></i></button></a></td>
+		<td style="border:1px solid black;"><a href="completerResultat/{{ resultat.etudiant.id }}/{{ resultat.instance_semestre.id }}"><button>Saisir les résultats du jury <i class="fa fa-chevron-right" aria-hidden="true"></i></button></a></td>
 
 	</tr>
 	{% endfor %}
