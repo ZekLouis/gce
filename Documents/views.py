@@ -788,12 +788,18 @@ def genererDocuments(request):
 					moyAn = (sem1+sem2)/2
 					newFeuille.get_sheet(0).write(ligne,colonne,moyAn, style)
 					colonne +=1
-					if moyAn < 8:
-						jury = "Barre"
-					elif moyAn<10 and moyAn >= 8:
-						jury = "NVAL"
-					else:
+					if resS == "VAL" and resS2 == "VAL":
 						jury = "VAL"
+					elif resS == "VAL" and resS2 == "VALC":
+    					jury = "VAL"
+					elif resS == "VAL" and resS2 == "VALC" or resS2 == "VAL" and resS == "VALC":
+    					jury = "VAL"
+					elif resS == "AJPC" and resS2 == "VAL" or resS2 == "AJPC" and resS == "VAL":
+    					jury = "NVAL"
+					elif resS == "NATB" or resS2 == "NATB":
+    					jury = "NVAL"
+					else:
+    					jury = "NVAL"
 					newFeuille.get_sheet(0).write(ligne,colonne,jury, style)
 				ligne += 1
 				cp+=1
