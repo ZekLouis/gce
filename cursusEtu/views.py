@@ -9,3 +9,11 @@ def accueil(request):
 """Cette vue permet de faire afficher la page d'aides"""
 def aides(request):
 	return render(request, 'templates/contenu_html/aides.html')
+
+"""Cette vue permet de faire passer la variable de session de modeAdmin a True"""
+def onAdmin(request):
+	if request.session['admin']:
+		request.session['admin'] = False
+	else:
+		request.session['admin'] = True
+	return HttpResponse("<p>Ok</p>")

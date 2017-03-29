@@ -16,4 +16,5 @@ urlpatterns = [
      url(r'^Annee/',include('Annee.urls')),
     url(r'^Documents/',include('Documents.urls')),
     url(r'^aides', views.aides, name='aides'),
+    url(r'^onAdmin', views.onAdmin, name='onAdmin'),
 ]

@@ -24,15 +24,15 @@ class RenseignerNote(forms.Form):
 		for note in notes:
 			print(note)
 			if note.valeur is None:
-				self.fields[note.matiere.code]  = forms.CharField(max_length=100,required=False)
+				self.fields[note.matiere.code_apogee]  = forms.CharField(max_length=100,required=False)
 			else:
-				self.fields[note.matiere.code] = forms.CharField(max_length=100,required=False ,widget=forms.TextInput(attrs={'value': note.valeur}))
-				
+				self.fields[note.matiere.code_apogee] = forms.CharField(max_length=100,required=False ,widget=forms.TextInput(attrs={'value': note.valeur}))
+
 class CompleterResultat(forms.Form):
 	def __init__(self,*args,**kwargs):
 		resSem = kwargs.pop('res')
 		super(CompleterResultat,self).__init__(*args,**kwargs)
-	
+
 		if resSem.resultat_pre_jury is None:
 			self.fields['Resultat pre-jury']  = forms.CharField(max_length=100,required=False)
 		else:
@@ -41,4 +41,4 @@ class CompleterResultat(forms.Form):
 		if resSem.resultat_jury is None:
 			self.fields['Resultat jury']  = forms.CharField(max_length=100,required=False)
 		else:
-			self.fields['Resultat jury'] = forms.CharField(max_length=100,required=False ,widget=forms.TextInput(attrs={'value': resSem.resultat_jury}))	
+			self.fields['Resultat jury'] = forms.CharField(max_length=100,required=False ,widget=forms.TextInput(attrs={'value': resSem.resultat_jury}))

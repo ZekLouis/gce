@@ -12,7 +12,7 @@ from Diplome.models import Diplome
 
 """Cette vue permet d'ajouter un semestre"""
 def ajouterSemestre(request):
-	if request.method == 'POST':  
+	if request.method == 'POST':
 		form = SemestreForm(request.POST)
 		if form.is_valid():
 
@@ -24,7 +24,7 @@ def ajouterSemestre(request):
 					code_ppn=code_ppn,
 					code_apogee=code_apogee,
 					intitule=intitule,
-					diplome = dip,					
+					diplome = dip,
 	                )
 			sem.save()
 			res = True
@@ -32,7 +32,7 @@ def ajouterSemestre(request):
 			print("ERREUR : AJOUTER Semestre : VIEW ajouterUE : formulaire")
 	else :
 		diplomes = Diplome.objects.all()
-		form = SemestreForm(diplomes=diplomes) 
+		form = SemestreForm(diplomes=diplomes)
 	return render(request, 'contenu_html/ajouterSemestre.html', locals())
 
 """Cette vue permet de lister les semestres"""
@@ -76,15 +76,17 @@ def modifierSemestre(request):
 				semestre = get_object_or_404(Semestre, id=request.session['id_sem'])
 				if form.cleaned_data['intitule']:
 					semestre.intitule = form.cleaned_data['intitule']
-				if form.cleaned_data['code']:
-					semestre.code = form.cleaned_data['code']
+				if form.cleaned_data['code_apogee']:
+					semestre.code_apogee = form.cleaned_data['code_apogee']
+				if form.cleaned_data['code_ppn']:
+					semestre.code_apogee = form.cleaned_data['code_ppn']
 				if form.cleaned_data['diplome']:
 					semestre.diplome = form.cleaned_data['diplome']
-				semestre.save()	
+				semestre.save()
 				#request.session['mat'] = False
 				res2=True
 			else :
-				print("ERREUR : MODIFIER Semestre : VIEW modifierSemestre : formulaire")	
+				print("ERREUR : MODIFIER Semestre : VIEW modifierSemestre : formulaire")
 	else :
 		Semestres = Semestre.objects.all()
 		request.session['sem'] = False
@@ -93,17 +95,17 @@ def modifierSemestre(request):
 
 
 def ajouter_instance_semestre(request):
-	if request.method == 'POST':  
+	if request.method == 'POST':
 		form = InstanceSemestreForm(request.POST)
 		if form.is_valid():
 
 			annee = form.cleaned_data['annee']
 			semestre = form.cleaned_data['semestre']
-			
+
 			# L'instance du semestre
 			IS = InstanceSemestre(
 					annee=annee,
-					semestre = semestre,					
+					semestre = semestre,
 			)
 
 			IS.save()
@@ -126,14 +128,14 @@ def afficherInstanceSemestre(request):
 			listeEtu = Appartient.objects.filter(instance_semestre=instanceSemestre)
 			res = True
 		else:
-			print("ERREUR : Afficher promotion: VIEW afficher Promotion : formulaire")	
+			print("ERREUR : Afficher promotion: VIEW afficher Promotion : formulaire")
 	else:
 		instanceSemestres = InstanceSemestre.objects.all()
 		form = SelectInstanceSemestre(instanceSemestres=instanceSemestres)
 	return render(request, 'contenu_html/afficherInstanceSemestre.html', locals())
 
 """Cette vue permet de faire evoluer les semestres instanciées"""
-def faireEvoluerInstanceSemestre(request):  
+def faireEvoluerInstanceSemestre(request):
 	if request.method == 'POST':
 		if not request.session['inst']:
 			instances = InstanceSemestre.objects.all()
@@ -165,9 +167,9 @@ def faireEvoluerInstanceSemestre(request):
 					listeEvolution[i][0]=ligne.etudiant.nom
 					listeEvolution[i][1]=ligne.etudiant.prenom
 					listeEvolution[i][2]='Résultat inexistant'
-					listeEvolution[i][3]=ligne.etudiant.apogee	
+					listeEvolution[i][3]=ligne.etudiant.apogee
 					i+=1
-					print('Erreur, cet etudiant n\'a pas de Resultat_Semestre')	
+					print('Erreur, cet etudiant n\'a pas de Resultat_Semestre')
 			res = True
 			request.session['listeEvolution'] = listeEvolution
 			instances = InstanceSemestre.objects.all()
@@ -175,13 +177,13 @@ def faireEvoluerInstanceSemestre(request):
 			i=1
 			for ligne in listeAppartient:
 				listeEvolution[i][3] = str(form[str(ligne.etudiant.apogee)])
-				i +=1	
+				i +=1
 		else:
 			instances = InstanceSemestre.objects.all()
 			instance = get_object_or_404(InstanceSemestre, id=request.session['id_instance'])
 			listeAppartient=Appartient.objects.filter(instance_semestre=instance)
 			form = EvolutionSemestreForm(request.POST, listeAppartient=listeAppartient,instanceSemestres=instances)
-			
+
 			if form.is_valid() :
 				if form.cleaned_data['select']:
 						new_instance = form.cleaned_data['select']
@@ -195,9 +197,16 @@ def faireEvoluerInstanceSemestre(request):
 						appartient.save()
 				res2=True
 			else:
-				print("ERREUR : Afficher faire evoluer instance: VIEW faire evoluer instance : formulaire")	
+				print("ERREUR : Afficher faire evoluer instance: VIEW faire evoluer instance : formulaire")
 	else:
 		instances = InstanceSemestre.objects.all()
 		request.session['inst']=False
 		form = SelectInstanceSemestre(instanceSemestres=instances)
 	return render(request, 'contenu_html/faireEvoluerInstance.html',locals())
+
+"""Cette vue permet d'afficher les étudiants présents dans un Semestre"""
+def etudiants(request):
+	ISemestres = InstanceSemestre.objects.all().filter(semestre__code_apogee="Semestre 1")
+	App = Appartient.objects.all().filter(instance_semestre=ISemestres)
+	print App
+	return render(request, 'contenu_html/etudiants.html',locals())

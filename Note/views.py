@@ -19,21 +19,23 @@ import datetime
 """Cette vue permet d'afficher les résultats jury pour un étudiant"""
 def resultatJury(request):
 	if request.method == 'POST':
-			Etudiants = Etu.objects.all()
-			form = SelectEtu(request.POST, etus=Etudiants)
+			instances = InstanceSemestre.objects.all()
+			form = SelectInstanceSemestre(request.POST, instanceSemestres=instances)
+
 			if form.is_valid() :
-				id_etu = form.cleaned_data['select']
-				request.session['id_etu'] = id_etu
-				request.session['etu'] = True
+				id_instance = form.cleaned_data['select']
+				request.session['id_instance'] = id_instance
+				request.session['instance'] = True
 				res = True
-				etu = Etu.objects.get(id=id_etu)
-				resultatsJury = Resultat_Semestre.objects.filter(etudiant_id=request.session['id_etu'])
+				instance = InstanceSemestre.objects.get(id=id_instance)
+				resultatsJury = Resultat_Semestre.objects.filter(instance_semestre=request.session['id_instance'])
 			else :
 				print("ERREUR : resultatJury : VIEW resultatJury : formulaire")	
 	else :
 		Etudiants = Etu.objects.all()
 		request.session['etu'] = False
-		form = SelectEtu(etus=Etudiants)
+		instances = InstanceSemestre.objects.all()
+		form = SelectInstanceSemestre(instanceSemestres=instances)
 	return render(request, 'contenu_html/resultatJury.html', locals())
 
 
