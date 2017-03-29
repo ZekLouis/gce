@@ -12,8 +12,12 @@ def aides(request):
 
 """Cette vue permet de faire passer la variable de session de modeAdmin a True"""
 def onAdmin(request):
-	if request.session['admin']:
-		request.session['admin'] = False
-	else:
+	try:
+		if request.session['admin']:
+			request.session['admin'] = False
+		else:
+			request.session['admin'] = True
+	except:
 		request.session['admin'] = True
-	return HttpResponse("<p>Ok</p>")
+	finally:
+		return HttpResponse("<p>Ok</p>")

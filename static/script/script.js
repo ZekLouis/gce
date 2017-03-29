@@ -34,14 +34,15 @@ $(function(){
     });
 
 
-    $('.cb-value').on("click",function() {
-        console.log("bjr")
-        var mainParent = $(this).parent('.toggle-btn');
+    $('#modeAdmin').on("click",function() {
         $.get("/onAdmin");
-        if($(mainParent).hasClass('active')) {
-            $(mainParent).removeClass('active');
-        } else {
-            $(mainParent).addClass('active');
-        };
+        if($("#switchAdmin").hasClass('active')){
+            $("#switchAdmin").removeClass('active');
+            console.log("rem active");
+        }else{
+            $("#switchAdmin").addClass('active');
+            console.log("add active");
+
+        }
     })
 });
