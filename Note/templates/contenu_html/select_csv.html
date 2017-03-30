@@ -78,6 +78,7 @@
 
 		{% endif %}
 	{% else %}
+		<p>Le séparateur du fichier doit être le caractère ",". Chaque ligne doit comporter le même nombre de séparateur. Aucune ligne ne doit être vide même en fin de fichier.</p>
 		<form enctype="multipart/form-data" action="{% url "importer_csv" %}" method="post">
 			{% csrf_token %}
 			{{ form.as_p }}

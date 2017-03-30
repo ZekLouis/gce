@@ -145,15 +145,12 @@ def faireEvoluerInstanceSemestre(request):
 				request.session['id_instance'] = id_instance
 				request.session['inst']=True
 			instance = get_object_or_404(InstanceSemestre, id=request.session['id_instance'])
-			lignes= Appartient.objects.filter(instance_semestre=instance).count() + 1
+			lignes= Appartient.objects.filter(instance_semestre=instance).count()
 			listeEvolution=[[""]* 4 for _ in range(lignes)]
-			listeEvolution[0][0]= "Nom"
-			listeEvolution[0][1]= "Prénom"
-			listeEvolution[0][2]= "Résultat du Semestre"
 
 			listeAppartient=Appartient.objects.filter(instance_semestre=instance)
 			print(listeAppartient)
-			i=1
+			i=0
 			for ligne in listeAppartient:
 				print(ligne)
 				try:
@@ -174,7 +171,7 @@ def faireEvoluerInstanceSemestre(request):
 			request.session['listeEvolution'] = listeEvolution
 			instances = InstanceSemestre.objects.all()
 			form = EvolutionSemestreForm(listeAppartient=listeAppartient,instanceSemestres=instances)
-			i=1
+			i=0
 			for ligne in listeAppartient:
 				listeEvolution[i][3] = str(form[str(ligne.etudiant.apogee)])
 				i +=1

@@ -96,14 +96,19 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,re
 				#Cas classique ex :""4,5""
 				# print(notes[i],ligne[i])
 				note = ligne[i]
+				print note
 
 			try :
 				#si on lit un chaine contenant par "Semestre"	
 				if "Semestre" in notes[i] :
-					print(notes[i])
 					semestre_instance = InstanceSemestre.objects.get(semestre__code_ppn=notes[i])
 					note = note.replace(",",".")
-					note = float(note)
+					print("NOTE",type(note),note)
+					if type(note) is str and note == "null":
+						note = 0
+					else:
+						note = float(note)
+						
 
 					try:
 						ResSem = Resultat_Semestre.objects.get(
@@ -114,7 +119,6 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,re
 						ResSem.note = note
 						ResSem.save()
 					except Resultat_Semestre.DoesNotExist :
-						print("pas de res semestre")
 						ResSem = Resultat_Semestre(
 							etudiant = etudiant,
 							instance_semestre = semestre_instance,
@@ -128,7 +132,10 @@ def traitement_eleve(ligne,notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,re
 					#on commence par récupérer l'ue à l'aide de son code 
 					ue = UE.objects.get(code_ppn=notes[i])
 					note = note.replace(",", ".")
-					note = float(note)
+					if type(note) is str and note == "null":
+						note = 0
+					else:
+						note = float(note)
 					#on peut maintenant récupérer toutes les informations 
 					Res_Ue, create = Resultat_UE.objects.get_or_create(
 						instance_semestre= semestre_instance,
@@ -202,8 +209,6 @@ def importer_csv(request):
 			for row in read:
 				if row[0].isdigit():
 					ret_notes, ret_etu, ret_mat,ret_ue,ret_sem,compteur_eleve_error,nb_ligne,compteur_note_error,compteur_note,compteur_eleve = traitement_eleve(row,code_notes,code_eleve,diplome,ret_notes,ret_etu,ret_mat,ret_ue,ret_sem,compteur_eleve_error,nb_ligne,compteur_note_error,compteur_note,compteur_eleve)
-				elif "Bilan" in row[0]:
-					print(row[0])
 				elif row[0] == "" and row[1] == "" and row[2] == "" :
 					code_notes = row
 				elif "GMP" in row[0]:
@@ -232,7 +237,6 @@ def listernotes(request):
 """Cette vue permet de supprimer une note"""
 def supprnote(request, id):
 	note = Note.objects.filter(id=id)
-	print(note)
 	note.delete()
 	return render(request, 'contenu_html/supprnote.html', locals())
 
